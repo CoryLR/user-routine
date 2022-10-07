@@ -1,0 +1,34 @@
+{
+  "name": "minitest",
+  "version": "0.1.0",
+  "description": "Small, copy-paste-able e2e testing in JavaScript and TypeScript supporting SPA navigation, clicking, checking if things exist, etc.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "./node_modules/typescript/bin/tsc MiniTest.ts && ./node_modules/minify/bin/minify.js MiniTest.js > MiniTest.min.js && node utils/makeMiniTestBlob.js && ./node_modules/minify/bin/minify.js MiniTest.blob-working.js > MiniTest.blob.js && npm run buildCleanup",
+    "buildCleanup": "rm MiniTest.js && rm MiniTest.blob-working.js",
+    "test": "npm run build && node test/test.js -o",
+    "buildTests": "npm run build && npm run updateTests",
+    "updateTests": "node test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoryLR/minitest.git"
+  },
+  "author": "Cory Leigh Rahman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CoryLR/minitest/issues"
+  },
+  "homepage": "https://github.com/CoryLR/minitest#readme",
+  "devDependencies": {
+    "minify": "^9.1.0",
+    "open": "^8.4.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.1"
+  }
+}

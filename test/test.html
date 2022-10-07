@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test MiniTest</title>
+</head>
+<body>
+  <h1>Test Page For MiniTest</h1>
+  <h3>The MiniTest tests will interact with this page</h3>
+  <p>If any test fails, the test will stop and an error message will be found in the browser console.</p>
+  <label>Text:</label>
+  <input type="text">
+  <label>Count:</label>
+  <input type="number" min="0" max="9999">
+  <button>Duplicate!</button>
+  <pre></pre>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <h3>Here's another section</h3>
+  <p id="far-down">It's really far down... Can you see me?</p>
+  <br><br><br><br><br><br><br><br><br><br><br><br>
+  <script>
+    document.querySelector('button').addEventListener('click', () => {
+      const outputArea = document.querySelector('pre');
+      outputArea.textContent = '';
+      const text = document.querySelector('input[type="text"]').value;
+      const count = document.querySelector('input[type="number"]').value;
+      for (let i = 0; i < Number(count); i++) {
+        outputArea.textContent += (text + " ")
+      }
+    })
+  </script>
+  <style>
+    pre {
+      font-size: 16px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+  <script data-tests>"use strict";var __assign=this&&this.__assign||function(){return __assign=Object.assign||function(t){for(var e,i=1,n=arguments.length;i<n;i++)for(var s in e=arguments[i])Object.prototype.hasOwnProperty.call(e,s)&&(t[s]=e[s]);return t},__assign.apply(this,arguments)},MiniTest=function(){function t(e,i){this.continue=!0;var n=__assign(__assign({},t.defaultConfig),i);this.start(e,n)}return t.prototype.start=function(t,e){var i=this,n=e.message?this.displayMessage(e.message,e.messageStyle):void 0;t.forEach((function(t,n){var s=n*e.globalDelay;setTimeout((function(){i.continue&&i.do(t)}),s)})),n&&setTimeout((function(){n.remove()}),t.length*e.globalDelay)},t.prototype.do=function(t){var e=t.substring(0,3);if("nav"===e)window.location.href=t.split(" ")[1];else if("cli"===e)this.select(t.split(" ")[1]).click();else if("exi"===e)this.select(t.split(" ")[1]);else if("val"===e){var i=this.argSplit(t),n=(i[0],i[1]),s=i[2];this.select(n).value=s}else if("inc"===e){var o=this.argSplit(t),r=(o[0],n=o[1],o[2]);-1===this.select(n).innerText.indexOf(r)&&this.error("Text not found",r)}else if("wri"===e){var l=this.argSplit(t);l[0],n=l[1],r=l[2];this.select(n).textContent+=r}else if("log"===e){var a=t.split(/ (.*)/s);a[0],s=a[1];console.log(s)}},t.prototype.select=function(t){var e=document.querySelector(t);return e||(this.continue=!1,this.error("CSS Selector not found",t)),e},t.prototype.argSplit=function(t){return t.split(/ ([^\s]+) (.*)/s)},t.prototype.displayMessage=function(t,e){var i,n=document.createElement("p");return n.textContent=t,n.setAttribute("style",e),null===(i=document.querySelector("body"))||void 0===i||i.appendChild(n),n},t.prototype.error=function(t,e){throw new Error("[MiniTest] ".concat(t,": '").concat(e,"'. Halting execution."))},t.defaultConfig={globalDelay:500,message:"",messageStyle:"font-size:24px; padding:10px; z-index:9999; position:fixed; top:0; right:10%; color:black; background-color:rgba(222,222,222,0.8);"},t}();
+ 
+new MiniTest([
+  '',
+  'val input[type="text"] Hello, world!',
+  'val input[type="number"] 20',
+  'click button',
+  'includes pre world',
+  'nav #far-down',
+  '',
+  'write #far-down  - Back up we go!',
+  'exists body',
+  'nav #',
+  'write h3  - Test 1 completed successfully',
+  'log Test 1 complete!',
+], {message: 'Running Test 1'});
+</script>
+</body>
+</html>
