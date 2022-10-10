@@ -10,7 +10,7 @@ You can either download this Repo and import the Class,
 import { SpaCheck } from 'SpaCheck'
 ```
 
-or copy the portable version from [SpaCheck.blob.js](./SpaCheck.blob.js) (works if you paste into the a browser console).
+or copy-paste the portable version from [spa-check.blob.js](./spa-check.blob.js) (works if you paste into the a browser console).
 
 # Usage
 
