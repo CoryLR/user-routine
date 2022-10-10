@@ -103,8 +103,9 @@ spaCheck([
 
 ## Maintainers
 
-* To publish:
-  * bump the version number in the [package.json](./package.json)
-  * `npm i`
-  * `npm run build`
-  * `npm publish --access public`
+To publish:
+
+1. Bump the version number in the [package.json](./package.json)
+2. `npm i`
+3. `npm run build`
+4. `npm publish --access public`

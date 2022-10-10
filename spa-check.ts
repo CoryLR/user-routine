@@ -1,4 +1,4 @@
-import { SpaCheckAction, SpaCheckActionFunction, SpaCheckActionString, SpaCheckOptions, SpaCheckReturn } from './spa-check.d';
+import { SpaCheckAction, SpaCheckActionString, SpaCheckOptions, SpaCheckReturn } from './spa-check.d';
 
 /**
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.
@@ -43,12 +43,12 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     return { result, updateList: updateList };
   }
 
-  this.do = (action: SpaCheckAction) => {
+  this.do = async (action: SpaCheckAction) => {
     if (typeof action === 'string') {
       this.doActionString(action as SpaCheckActionString)
     } else if (typeof action === 'function') {
       try {
-        (action as SpaCheckActionFunction)();
+        await action();
       } catch (error) {
         this.error('Error running provided function', error + '; function: ' + action.toString());
       }

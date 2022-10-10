@@ -1,4 +1,5 @@
-export type SpaCheckAction = SpaCheckActionString | SpaCheckActionFunction;
+export type SpaCheckAction = SpaCheckActionString | (() => void) | Promise<void>;
+export type SpaCheckActionString = '' | `nav ${string}` | `click ${string}` | `exists ${string}` | `value ${string} ${string}` | `write ${string} ${string}` | `includes ${string} ${string}` | `log ${string}`;
 export type SpaCheckOptions = {
   continueOnFailure: boolean,
   globalDelay: number,
@@ -9,5 +10,3 @@ export type SpaCheckOptions = {
 }
 export type SpaCheckReturn = { result: boolean, updateList: string[] };
 
-export type SpaCheckActionString = '' | `nav ${string}` | `click ${string}` | `exists ${string}` | `value ${string} ${string}` | `write ${string} ${string}` | `includes ${string} ${string}` | `log ${string}`;
-export type SpaCheckActionFunction = () => void;

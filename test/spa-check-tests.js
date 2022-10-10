@@ -10,6 +10,7 @@ async function runTests() {
     'exists body',
     'nav #',
     () => { console.log('This was written by a custom function') },
+    async () => { await new Promise(resolve => setTimeout(()=>{console.log(1);resolve()}, 4000))},
   ], { message: 'Testing features', messageShowInDOM: true });
   
   await spaCheck([
