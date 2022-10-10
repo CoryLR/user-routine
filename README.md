@@ -99,8 +99,12 @@ spaCheck([
 
 # Development
 
-* To run the tests, use `npm install` to and then run `npm run test:build` and open up the `test/test.html` file
+* To run the tests, use `npm install` to and then run `npm run build` and open up the `test/test.html` file
 
 ## Maintainers
 
-* To publish, bump the version number in the [package.json](./package.json) and run `npm publish --access public`
+* To publish:
+  * bump the version number in the [package.json](./package.json)
+  * `npm i`
+  * `npm run build`
+  * `npm publish --access public`

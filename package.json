@@ -1,7 +1,7 @@
 {
   "name": "spa-check",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.",
   "main": "./spa-check.min.js",
   "types": "./spa-check.d.ts",
@@ -9,9 +9,8 @@
     "test": "test"
   },
   "scripts": {
-    "build": "./node_modules/typescript/bin/tsc --target es6 --lib es2015,dom spa-check.ts && ./node_modules/minify/bin/minify.js spa-check.js > spa-check.min.js && node utils/make-blob.js && ./node_modules/minify/bin/minify.js spa-check.blob-uncompressed.js > spa-check.blob.js && npm run build:cleanup && node utils/make-template.js",
+    "build": "./node_modules/typescript/bin/tsc --target es6 --lib es2015,dom spa-check.ts && ./node_modules/minify/bin/minify.js spa-check.js > spa-check.min.js && node utils/make-blob.js && ./node_modules/minify/bin/minify.js spa-check.blob-uncompressed.js > spa-check.blob.js && npm run build:cleanup && node utils/make-template.js && npm run test:update",
     "build:cleanup": "rm spa-check.js && rm spa-check.blob-uncompressed.js",
-    "test:build": "npm run build && npm run test:update",
     "test:update": "node test/test-index.cjs"
   },
   "repository": {
