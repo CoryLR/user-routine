@@ -1,22 +1,32 @@
-# MiniTest
+# SpaCheck
 
-Small, 0-dependency, transportable auto e2e testing in JavaScript and TypeScript for single-page application (SPA) navigation, clicking, validating, etc.
+Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.
+
+# Access
+
+You can either download this Repo and import the Class,
+
+```javascript
+import { SpaCheck } from 'SpaCheck'
+```
+
+or copy the portable version from [SpaCheck.blob.js](./SpaCheck.blob.js) (works if you paste into the a browser console).
 
 # Usage
 
-Just pass an array of strings where each string is an action to take.
+Just pass an array of strings where each string is an action to take. You can also pass a function for custum functionality.
 
 ## Action String Syntax
 
-`'(Action) (Selector) (Data)'`
+`'Action selector data'`
 
-* Available actions: nav, click, exists, value, write, includes, log
+* Available actions: click, exists, includes, log, nav, value, write
 * Selector: CSS selector like `button.class-name`
 * Data: Only relevant for value, write, includes, and log
 
 Action string examples:
 
-* `'value input#name John Doe'`
+* `'value input#fullname John Doe'`
 * `'click button.class-name'`
 
 ## Examples
@@ -24,7 +34,7 @@ Action string examples:
 Fill inputs with `value` and interact with `click` using Selectors:
 
 ```javascript
-new MiniTest([
+new SpaCheck([
   'value input[type="text"] Hello, world!',
   'value input[type="number"] 20',
   'click button.some-class',
@@ -34,7 +44,7 @@ new MiniTest([
 Navigate within a page using `nav` followed by an ID or hash routing path, if applicable:
 
 ```javascript
-new MiniTest([
+new SpaCheck([
   'nav #some-id',
   'nav #/some/hash/routing/path',
   'nav #', // Back to the top
@@ -44,7 +54,7 @@ new MiniTest([
 Validate the DOM with `exists` and `includes`:
 
 ```javascript
-new MiniTest([
+new SpaCheck([
   'exists div.some-class',
   '', // Leave some extra time
   'includes p.output some text we want to make sure exists',
@@ -53,7 +63,7 @@ new MiniTest([
 
 Add notes with `write` and `log`:
 ```javascript
-new MiniTest([
+new SpaCheck([
   'write h1  - Testing successful!', // adds to the end
   'log The testing is complete.',
 ]);
@@ -64,7 +74,7 @@ new MiniTest([
 You can also pass options as a second argument:
 
 ```javascript
-new MiniTest([
+new SpaCheck([
   'value input.name Cory',
   'click button[type="submit"]',
 ], { globalDelay: 1000 });
@@ -73,19 +83,18 @@ new MiniTest([
 
 Available options are:
 
+* `continueOnFailure`: (default: false) Continue to run actions even if one fails
+* `done`: Callback function to run once complete
+* `globalDelay`: (default: 500) time between actions in milliseconds
+* `logUpdates`: (default: true) Show progress in the browser console
+* `message`: (default: '') Text to show while the text runs
+* `messageShowInDOM`: (default: false) Show the message visually on the page
+* `messageStyle`: Override the default message style
+
+
 * `globalDelay`: time between actions
 * `message`: Text to show while the text runs
 * `messageStyle`: Override the default message style
-
-# Access
-
-You can either download this Repo and import the Class,
-
-```javascript
-import { MiniTest } from 'MiniTest'
-```
-
-or copy the portable version from [MiniTest.blob.js](./MiniTest.blob.js) (works if you paste into the a browser console too).
 
 # Development
 

@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "description": "Small, copy-paste-able e2e testing in JavaScript and TypeScript supporting SPA navigation, clicking, checking if things exist, etc.",
   "main": "index.js",
+  "types": "./SpaCheck.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "./node_modules/typescript/bin/tsc MiniTest.ts && ./node_modules/minify/bin/minify.js MiniTest.js > MiniTest.min.js && node utils/makeMiniTestBlob.js && ./node_modules/minify/bin/minify.js MiniTest.blob-working.js > MiniTest.blob.js && npm run buildCleanup",
-    "buildCleanup": "rm MiniTest.js && rm MiniTest.blob-working.js",
-    "test": "npm run build && node test/test.js -o",
-    "buildTests": "npm run build && npm run updateTests",
-    "updateTests": "node test/test.js"
+    "build": "./node_modules/typescript/bin/tsc --target es6 --lib es2015,dom spa-check.ts && ./node_modules/minify/bin/minify.js spa-check.js > spa-check.min.js && node utils/make-spa-check-blob.js && ./node_modules/minify/bin/minify.js spa-check.blob-uncompressed.js > spa-check.blob.js && npm run buildCleanup",
+    "buildCleanup": "rm spa-check.js && rm spa-check.blob-uncompressed.js",
+    "testsBuild": "npm run build && npm run testsUpdate",
+    "testsUpdate": "node test/test-index.js"
   },
   "repository": {
     "type": "git",
