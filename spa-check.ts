@@ -4,50 +4,46 @@ import { SpaCheckAction, SpaCheckActionFunction, SpaCheckActionString, SpaCheckO
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.
  * @example new SpaCheck(['click button.some-class', 'value form>input Hello, world!', 'exists .success-message'], {message: "See if the feature works", globalDelay: 1000});
  * @param actionList Available actions types: click, exists, includes, log, nav, value, write, or provide a custom function
- * @param options Available options: continueOnFailure, done (callback function), globalDelay, logUpdates, message, messageStyle, messageShowInDOM
+ * @param options Available options: continueOnFailure, globalDelay, logUpdates, message, messageStyle, messageShowInDOM
  */
-export class SpaCheck {
+export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckOptions) {
 
-  public static defaultConfig = {
+  const defaultConfig = {
     continueOnFailure: false,
-    done: (success: boolean, log: string[]) => { console.log('Success:', success) },
     globalDelay: 500,
     logUpdates: true,
     message: '',
     messageShowInDOM: false,
     messageStyle: 'font-size:24px; padding:10px; z-index:9999; position:fixed; top:0; right:10%; color:black; background-color:rgba(222,222,222,0.8);',
   };
-  public updateList: string[] = [];
-  public startTime = new Date();
+  const updateList: string[] = [];
+  const config: SpaCheckOptions = { ...defaultConfig, ...options };
+  let errorOccurred = false;
+  let msgElement: HTMLElement | undefined = undefined;
+  let continueActions = true;
 
-  private config: typeof SpaCheck.defaultConfig;
-  private continue = true;
-  private errorOccurred = false;
-  private msgElement;
-
-  constructor(actionList: SpaCheckAction[], options?: SpaCheckOptions) {
-    this.config = { ...SpaCheck.defaultConfig, ...options };
-    this.start(actionList);
-  }
-
-  private async start(actionList: SpaCheckAction[]) {
-    try {
-      this.messageStart();
-      for (const action of actionList) {
-        if (!this.config.continueOnFailure && this.continue) {
-          await this.sleep(this.config.globalDelay);
-          await this.do(action);
-        }
+  this.main = async (actionList: SpaCheckAction[]) => {
+    this.messageStart();
+    for (const action of actionList) {
+      if (!continueActions) { return this.finish() }
+      await this.sleep(config.globalDelay);
+      try {
+        await this.do(action);
+      } catch (error) {
+        console.error('Unexpected error received', error);
       }
-      this.messageEnd();
-      const success = !this.errorOccurred;
-      this.config.done(success, this.updateList);
-    } catch (error) {
-      this.error('Unepected error received', error, false);
     }
+    return this.finish();
+  }
+  
+  this.finish = () => {
+    const result = !errorOccurred;
+    this.log(`Done, success: ${result}`);
+    this.messageEnd();
+    return { result, updateList: updateList };
   }
 
-  private async do(action: SpaCheckAction) {
+  this.do = (action: SpaCheckAction) => {
     if (typeof action === 'string') {
       this.doActionString(action as SpaCheckActionString)
     } else if (typeof action === 'function') {
@@ -61,7 +57,7 @@ export class SpaCheck {
     }
   }
 
-  private doActionString(action: SpaCheckActionString) {
+  this.doActionString = (action: SpaCheckActionString) => {
     const actionCode = action.substring(0, 3);
     if (actionCode === 'nav') {
       const location = action.split(' ')[1]
@@ -74,22 +70,29 @@ export class SpaCheck {
 
     } else if (actionCode === 'cli') {
       const selector = action.split(' ')[1];
-      this.select(selector).click();
+      const element = this.select(selector);
+      if (!element) return;
+      element.click();
       this.log(`Clicked on ${selector}`);
 
     } else if (actionCode === 'exi') {
       const selector = action.split(' ')[1];
-      this.select(selector);
+      const element = this.select(selector);
+      if (!element) return;
       this.log(`Verified ${selector} exists`);
 
     } else if (actionCode === 'val') {
       const [_, selector, value] = this.argSplit(action);
+      const element = this.select(selector);
+      if (!element) return;
       this.select(selector).value = value;
       this.log(`Set the value of ${selector} to ${value}`);
 
     } else if (actionCode === 'inc') {
       const [_, selector, text] = this.argSplit(action);
-      if (this.select(selector).innerText.indexOf(text) === -1) {
+      const element = this.select(selector);
+      if (!element) return;
+      if (element.innerText.indexOf(text) === -1) {
         this.error('Text not found', text);
       } else {
         this.log(`Verified ${selector} includes "${text}"`);
@@ -97,28 +100,30 @@ export class SpaCheck {
 
     } else if (actionCode === 'wri') {
       const [_, selector, text] = this.argSplit(action);
-      this.select(selector).textContent += text;
+      const element = this.select(selector);
+      if (!element) return;
+      element.textContent += text;
       this.log(`Wrote "${text}" at the end of ${selector}`);
 
     } else if (actionCode === 'log') {
       const [_, value] = action.split(/ (.*)/s);
-      console.log(value);
+      console.log('* ' + value);
     } else if (action === '') {
+      /* Do nothing, just add an extra globalDelay */
     } else {
       this.error('Action string keyword not recognized, got', action);
     }
   }
 
-  private select(selector: string): HTMLElement & HTMLInputElement {
+  this.select = (selector: string): HTMLElement & HTMLInputElement => {
     const element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
     if (!element) {
-      this.continue = false;
       this.error('CSS Selector not found', selector);
     }
     return element;
   }
 
-  private argSplit(action): string[] {
+  this.argSplit = (action): string[] => {
     const split = action.split(/ ([^\s]+) (.*)/s);
     if (split.length < 3) {
       this.error(`Unexpected ${split[0]} input, got:`, action);
@@ -126,17 +131,17 @@ export class SpaCheck {
     return split
   }
 
-  private messageStart() {
-    console.group(`[SpaCheck] ${this.config.message}`);
-    this.msgElement = this.config.messageShowInDOM && this.config.message ? this.displayMessageInDOM(this.config.message, this.config.messageStyle) : undefined;
+  this.messageStart = () => {
+    console.group(`[SPA Check] ${config.message}`);
+    msgElement = config.messageShowInDOM && config.message ? this.displayMessageInDOM(config.message, config.messageStyle) : undefined;
   }
 
-  private messageEnd() {
-    if (this.msgElement) { this.msgElement.remove() };
+  this.messageEnd = () => {
+    if (msgElement) { msgElement.remove() };
     console.groupEnd();
   }
 
-  private displayMessageInDOM(message: string, messageStyle: string) {
+  this.displayMessageInDOM = (message: string, messageStyle: string) => {
     const msgElement = document.createElement('p');
     msgElement.textContent = message;
     msgElement.setAttribute('style', messageStyle);
@@ -144,27 +149,29 @@ export class SpaCheck {
     return msgElement;
   }
 
-  private log(message: string) {
+  this.log = (message: string) => {
+    updateList.push(message);
     const updateMessage = `* ${message}`;
-    this.updateList.push(updateMessage);
-    if (this.config.logUpdates) {
+    if (config.logUpdates) {
       console.log(updateMessage);
     }
   }
 
-  private error(message: string, value: string, continueOnFailure = this.config.continueOnFailure) {
-    const errorMessage = `* ${message}: '${value}'`;
-    this.updateList.push(errorMessage);
+  this.error = (message: string, value: string, continueOnFailure = config.continueOnFailure) => {
+    errorOccurred = true;
+    const errorMessage = `${message}: '${value}'`;
+    updateList.push(errorMessage);
     if (continueOnFailure) {
-      console.error(`${errorMessage}. Continuing execution.`);
+      console.error(`* ${errorMessage}. Continuing execution.`);
     } else {
-      this.config.done(false, this.updateList);
+      continueActions = false;
       throw new Error(`${errorMessage}. Halting execution.`);
     }
   }
 
-  private sleep(milliseconds) {
+  this.sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds));
   }
 
+  return await this.main(actionList);
 }
