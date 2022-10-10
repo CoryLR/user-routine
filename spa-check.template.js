@@ -58,7 +58,6 @@ Parameter details:
     * Data: Argument for `value`, `write`, `includes`, and `log`
 * 2: Options (optional): Object
   * `continueOnFailure`: (default: false) Continue to run actions even if one fails
-  * `done`: Callback function to run once complete
   * `globalDelay`: (default: 500) time between actions in milliseconds
   * `logUpdates`: (default: true) Show progress in the browser console
   * `message`: (default: '') Text to show while the text runs
