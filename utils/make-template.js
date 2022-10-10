@@ -14,7 +14,7 @@ const template =`
 
 /* SPA Check minified, provides function 'spaCheck': */
 ${spaCheckJsBlob}
-/* Examples: */
+/* Example running multiple sequential tests using async/await: */
 ${exampleTests}
 
 /*

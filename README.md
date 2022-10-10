@@ -18,19 +18,19 @@ SPA Check is served as a function named `spaCheck`. Example:
 
 ```javascript
 spaCheck(
-  ['value .some-form>input Hello', 'click button.some-class'], // Actions
+  ['value .myform>input Hello', 'click button.myclass'], // Actions
   { message: 'Example: Submit form', globalDelay: 1000 } // Options
 );
 ```
 
 Parameter details:
 
-* 1) Action List: Array of strings or functions
+* 1: Action List: Array of strings or functions
   * If using string, separate parts by spaces like so: `['action selector data']`
     * Actions: `click`, `exists`, `includes`, `log`, `nav`, `value`, `write`
     * Selector: CSS selector like `button.class-name`
     * Data: Argument for `value`, `write`, `includes`, and `log`
-* 2) Options (optional): Object
+* 2: Options (optional): Object
   * `continueOnFailure`: (default: false) Continue to run actions even if one fails
   * `done`: Callback function to run once complete
   * `globalDelay`: (default: 500) time between actions in milliseconds

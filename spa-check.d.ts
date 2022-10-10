@@ -7,5 +7,7 @@ export type SpaCheckOptions = {
   messageShowInDOM: boolean,
   messageStyle: string,
 }
+export type SpaCheckReturn = { result: boolean, updateList: string[] };
+
 export type SpaCheckActionString = '' | `nav ${string}` | `click ${string}` | `exists ${string}` | `value ${string} ${string}` | `write ${string} ${string}` | `includes ${string} ${string}` | `log ${string}`;
 export type SpaCheckActionFunction = () => void;

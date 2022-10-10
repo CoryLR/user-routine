@@ -1,4 +1,4 @@
-import { SpaCheckAction, SpaCheckActionFunction, SpaCheckActionString, SpaCheckOptions } from './spa-check.d';
+import { SpaCheckAction, SpaCheckActionFunction, SpaCheckActionString, SpaCheckOptions, SpaCheckReturn } from './spa-check.d';
 
 /**
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.
@@ -6,7 +6,7 @@ import { SpaCheckAction, SpaCheckActionFunction, SpaCheckActionString, SpaCheckO
  * @param actionList Available actions types: click, exists, includes, log, nav, value, write, or provide a custom function
  * @param options Available options: continueOnFailure, globalDelay, logUpdates, message, messageStyle, messageShowInDOM
  */
-export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckOptions) {
+export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckOptions): Promise<SpaCheckReturn> {
 
   const defaultConfig = {
     continueOnFailure: false,
@@ -36,7 +36,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     return this.finish();
   }
   
-  this.finish = () => {
+  this.finish = (): SpaCheckReturn => {
     const result = !errorOccurred;
     this.log(`Done, success: ${result}`);
     this.messageEnd();
