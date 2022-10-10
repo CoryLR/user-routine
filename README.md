@@ -16,8 +16,6 @@ const { spaCheck } = require('spa-check');
 
 2) Or copy-paste the portable template from [spa-check.template.js](./spa-check.template.js) (works if you paste into the a browser console)
 
-You can either download this Repo and import the Class:
-
 # Usage
 
 SPA Check is served as a function named `spaCheck`. Example:
