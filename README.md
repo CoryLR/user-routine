@@ -4,13 +4,19 @@ Automated testing for single-page applications (SPAs). Small, portable, and easy
 
 # Access
 
-You can either download this Repo and import the Class:
+Options:
+
+1) Install using `npm install --save-dev spa-check`
 
 ```javascript
 import { spaCheck } from 'spa-check';
+// or
+const { spaCheck } = require('spa-check');
 ```
 
-Or copy-paste the portable template from [spa-check.template.js](./spa-check.template.js) (works if you paste into the a browser console).
+2) Or copy-paste the portable template from [spa-check.template.js](./spa-check.template.js) (works if you paste into the a browser console)
+
+You can either download this Repo and import the Class:
 
 # Usage
 

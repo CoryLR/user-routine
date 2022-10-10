@@ -1,8 +1,8 @@
 {
   "name": "spa-check",
-  "version": "0.1.0",
-  "description": "Small, copy-paste-able e2e testing in JavaScript and TypeScript supporting SPA navigation, clicking, checking if things exist, etc.",
-  "main": "index.js",
+  "version": "0.3.0",
+  "description": "Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.",
+  "main": "spa-check.min.js",
   "types": "./spa-check.d.ts",
   "directories": {
     "test": "test"
@@ -25,8 +25,11 @@
   "homepage": "https://github.com/CoryLR/spa-check#readme",
   "devDependencies": {
     "minify": "^9.1.0",
+    "node-html-parser": "^6.1.1",
     "open": "^8.4.0",
-    "typescript": "^4.8.4",
-    "node-html-parser": "^6.1.1"
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "spa-check": "^0.1.0"
   }
 }
