@@ -103,3 +103,7 @@ spaCheck([
 # Development
 
 * To run the tests, use `npm install` to and then run `npm run testsBuild`
+
+## Maintainers
+
+* To publish, bump the version number in the [package.json](./package.json) and run `npm publish --access public`
