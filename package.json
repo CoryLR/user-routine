@@ -1,9 +1,9 @@
 {
-  "name": "minitest",
+  "name": "spa-check",
   "version": "0.1.0",
   "description": "Small, copy-paste-able e2e testing in JavaScript and TypeScript supporting SPA navigation, clicking, checking if things exist, etc.",
   "main": "index.js",
-  "types": "./SpaCheck.d.ts",
+  "types": "./spa-check.d.ts",
   "directories": {
     "test": "test"
   },
@@ -15,20 +15,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CoryLR/minitest.git"
+    "url": "git+https://github.com/CoryLR/spa-check.git"
   },
   "author": "Cory Leigh Rahman",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CoryLR/minitest/issues"
+    "url": "https://github.com/CoryLR/spa-check/issues"
   },
-  "homepage": "https://github.com/CoryLR/minitest#readme",
+  "homepage": "https://github.com/CoryLR/spa-check#readme",
   "devDependencies": {
     "minify": "^9.1.0",
     "open": "^8.4.0",
-    "typescript": "^4.8.4"
-  },
-  "dependencies": {
+    "typescript": "^4.8.4",
     "node-html-parser": "^6.1.1"
   }
 }
