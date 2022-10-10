@@ -1,7 +1,7 @@
 /* Create a SPA Check template that's easy to copy-paste */
 /* Run from root */
 
-const fs = require('fs');
+import fs from 'fs';
 const spaCheckJsBlob = fs.readFileSync('spa-check.blob.js', 'utf8');
 const exampleTests = fs.readFileSync('test/spa-check-tests.js', 'utf8');
 
