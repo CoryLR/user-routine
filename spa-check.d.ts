@@ -1,5 +1,9 @@
 export type SpaCheckAction = SpaCheckActionString | (() => void) | Promise<void>;
-export type SpaCheckActionString = '' | `nav ${string}` | `click ${string}` | `exists ${string}` | `value ${string} ${string}` | `write ${string} ${string}` | `includes ${string} ${string}` | `log ${string}`;
+type ActionSimple = 'await' | 'click' | 'exists' | 'log' | 'nav' | 'wait';
+type ActionComplex = 'await' |'append' | 'exists' | 'value' | 'write';
+type StringSimple = `${ActionSimple} ${string}`;
+type StringComplex = `${ActionComplex} ${string} ${string}`;
+export type SpaCheckActionString = '' | StringSimple | StringComplex;
 export type SpaCheckOptions = {
   awaitTimeout: number,
   continueOnFailure: boolean,
@@ -9,5 +13,5 @@ export type SpaCheckOptions = {
   messageShowInDOM: boolean,
   messageStyle: string,
 }
-export type SpaCheckReturn = { result: boolean, updateList: string[] };
+export type SpaCheckReturn = { success: boolean, log: string[], message: string };
 

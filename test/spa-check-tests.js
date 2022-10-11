@@ -1,6 +1,6 @@
 async function runTests() {
   await spaCheck([
-    '',
+    'wait 1000',
     'val input[type="text"] Hello, world!',
     'val input[type="number"] 20',
     'click button',
@@ -13,8 +13,8 @@ async function runTests() {
     'log Next is an async function, waiting 1.5 seconds...',
     async () => { await new Promise(resolve => setTimeout(()=>{resolve()}, 1500))},
     'click button.process',
-    'log Awaiting span.output>p...',
     'await span.output>p',
+    'await span.output>p process complete',
   ], { message: 'Testing features', messageShowInDOM: true, globalDelay: 250 });
   
   await spaCheck([
@@ -23,16 +23,18 @@ async function runTests() {
     () => { throw new Error('This function should error') },
     'await does-not-exist',
     'await body>main this text should not exist anywhere'
-  ], { message: 'Testing error handling', messageShowInDOM: true, continueOnFailure: true, awaitTimeout: 600 });
+  ], { message: 'Testing error handling (expect success: false)', messageShowInDOM: true, continueOnFailure: true, awaitTimeout: 600 });
 
   await spaCheck([
     'log Should halt after the following error',
     'click does-not-exist',
-    'write h1 This should not appear',
-  ], { message: 'Testing graceful fail', messageShowInDOM: true });
+    'write h1 This text should not appear',
+  ], { message: 'Testing graceful fail (expect success: false)', messageShowInDOM: true });
 
   await spaCheck([
     'append #progress  Done! Check the browser console for results.',
-  ], { globalDelay: 0 });
+  ], { globalDelay: 0, logUpdates: false });
+
+  console.log('Done! See above for results.');
 }
 runTests();

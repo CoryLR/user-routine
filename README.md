@@ -6,7 +6,7 @@ Automated testing for single-page applications (SPAs). Small, portable, and easy
 
 Options:
 
-1) Install using `npm install --save-dev spa-check`
+1. Install using `npm install --save-dev spa-check` and import:
 
 ```javascript
 import { spaCheck } from 'spa-check';
@@ -14,7 +14,7 @@ import { spaCheck } from 'spa-check';
 const { spaCheck } = require('spa-check');
 ```
 
-2) Or copy-paste the portable template from [spa-check.template.js](./spa-check.template.js) (works if you paste into the a browser console)
+2. Or copy-paste the portable template from [spa-check.template.js](./spa-check.template.js) (works if you paste into the a browser console)
 
 # Usage
 
@@ -27,35 +27,53 @@ spaCheck(
 );
 ```
 
-Parameter details:
+Input details:
 
-* 1: Action List: Array of strings or functions
-  * If using string, separate parts by spaces like so: `['action selector data']`
-    * Action strings:
-      * `await`, e.g. `'await .modal.success-message'` or `'await h1 With This Text'`
-      * `click`, e.g. `'click button.submit'`
-      * `exists`, e.g. `'exists .class-name'` or `'exists h1 With This Text'`
-      * `log`, e.g. `'log Some message'`
-      * `nav`, e.g. `'nav #id'` or `'nav #/some/hash/routing/path'`
-      * `value`, e.g. `'value form>input.name Cory Rahman'`
-      * `wait`, e.g. `'wait 3000'` (3 seconds)
-      * `write`, e.g. `'write p  - Adding some text'`
-    * Selector: CSS selector like `button.class-name`, should not contain spaces
-    * Data: Argument for `value`, `write`, `log`, and optionally `exists`
-* 2: Options (optional): Object
+* Parameter 1: Actions (Array of strings like `['action selector? data?']`, can also substitute a function for custom actions)
+  * Action keywords:
+    * `append`, e.g. `'append p  - Appended text'`
+    * `await`, e.g. `'await .modal.success-message'` or `'await h1 With This Text'`
+    * `click`, e.g. `'click button.submit'`
+    * `exists`, e.g. `'exists .class-name'` or `'exists h1 With This Text'`
+    * `log`, e.g. `'log Some message'`
+    * `nav`, e.g. `'nav #id'` or `'nav #/some/hash/routing/path'`
+    * `value`, e.g. `'value form>input.name Cory Rahman'`
+    * `wait`, e.g. `'wait 3000'` (3 seconds)
+    * `write`, e.g. `'write p Overwritten text'`
+  * Selector: CSS selector like `button.class-name` (should not contain spaces)
+  * Data: Argument for `value`, `write`, `log`, and optionally `exists` and `await`
+* Parameter 2: Options (Object, optional)
   * `awaitTimeout`: (default: 15000) How long in milliseconds to wait for an element using the await command
   * `continueOnFailure`: (default: false) Continue to run actions even if one fails
   * `globalDelay`: (default: 500) time between actions in milliseconds
   * `logUpdates`: (default: true) Show progress in the browser console
-  * `message`: (default: '') Text to show while the text runs
-  * `messageShowInDOM`: (default: false) Show the message visually on the page
-  * `messageStyle`: Override the default message style
+  * `message`: (default: '') Label to show in the console and optionally in the DOM
+  * `messageShowInDOM`: (default: false) Show the message visually on the page / DOM
+  * `messageStyle`: Override the default message style when showing the message in the DOM
 
-# Multiple sequential tests
+Output details:
 
-You can also run multiple `spaCheck`s sequentially using async/await, see the [spa-check.template.js](./spa-check.template.js) for an example.
+* The `spaCheck` function returns type `SpaCheckReturn`:
+  * `export type SpaCheckReturn = { success: boolean, log: string[] };`
+* Updates are also logged to the browser console
+  * Disable by setting the `logUpdates` option to `false`
+  * The console output appears like so:
 
-## Examples
+```
+[SPA Check] Message
+  * Awaiting "form.myclass"...
+  * ...Found "form.myclass"
+  * Set the value of form.myclass>input.name to "Cory"
+  * Clicked on button[type="submit"]
+```
+
+# Examples
+
+## Template
+
+See the [spa-check.template.js](./spa-check.template.js) for examples of running multiple sequential tests using async/await.
+
+## Use-cases
 
 ### Fill inputs with `value` and interact with `click` using Selectors:
 
@@ -90,7 +108,7 @@ spaCheck([
 
 * Note: The default await timeout is 15000 ms (15 seconds), overwrite using the `awaitTimeout` option.
 
-### Navigate within a page using `nav`:
+### Navigate within a single-page application using `nav`:
 
 ```javascript
 spaCheck([
@@ -100,11 +118,12 @@ spaCheck([
 ]);
 ```
 
-### Add notes with `write` and `log`:
+### Add notes with `append`, `log`, and `write`:
 
 ```javascript
 spaCheck([
-  'write h1  - Testing successful!', // adds to the end
+  'write h1 Testing successful!', // overwrites the h1's textContent
+  'append h1  - Testing successful!', // appends to the h1's textContent
   'log The testing is complete.',
 ]);
 ```
@@ -116,8 +135,10 @@ spaCheck([
   'value input.name Cory',
   'click button[type="submit"]',
 ], { globalDelay: 1000 });
-// Options object with 1 second between actions
+// ^ Options object with 1 second between actions
 ```
+
+* Note: See [Usage](#Usage) for a list of options
 
 # Development
 
@@ -130,4 +151,5 @@ To publish:
 1. Bump the version number in the [package.json](./package.json)
 2. `npm i`
 3. `npm run build`
-4. `npm publish --access public`
+4. Test one last time
+5. `npm publish --access public`
