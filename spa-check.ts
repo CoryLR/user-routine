@@ -3,14 +3,15 @@ import { SpaCheckAction, SpaCheckActionString, SpaCheckOptions, SpaCheckReturn }
 /**
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.
  * @example new SpaCheck(['click button.some-class', 'value form>input Hello, world!', 'exists .success-message'], {message: "See if the feature works", globalDelay: 1000});
- * @param actionList Available actions types: click, exists, includes, log, nav, value, write, or provide a custom function
- * @param options Available options: continueOnFailure, globalDelay, logUpdates, message, messageStyle, messageShowInDOM
+ * @param actionList Available actions types: append, await, click, exists, log, nav, value, write, or provide a custom function
+ * @param options Available options: awaitTimeout, continueOnFailure, globalDelay, logUpdates, message, messageStyle, messageShowInDOM
  */
 export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckOptions): Promise<SpaCheckReturn> {
 
   const defaultConfig = {
     continueOnFailure: false,
     globalDelay: 500,
+    awaitTimeout: 15000,
     logUpdates: true,
     message: '',
     messageShowInDOM: false,
@@ -45,7 +46,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
 
   this.do = async (action: SpaCheckAction) => {
     if (typeof action === 'string') {
-      this.doActionString(action as SpaCheckActionString)
+      await this.doActionString(action as SpaCheckActionString)
     } else if (typeof action === 'function') {
       try {
         await action();
@@ -57,7 +58,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     }
   }
 
-  this.doActionString = (action: SpaCheckActionString) => {
+  this.doActionString = async (action: SpaCheckActionString) => {
     const actionCode = action.substring(0, 3);
     if (actionCode === 'nav') {
       const location = action.split(' ')[1]
@@ -76,10 +77,16 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
       this.log(`Clicked on ${selector}`);
 
     } else if (actionCode === 'exi') {
-      const selector = action.split(' ')[1];
-      const element = this.select(selector);
-      if (!element) return;
-      this.log(`Verified ${selector} exists`);
+      const spaceSplit = action.split(' ');
+      const [_, selector, value] = spaceSplit.length > 2 ? this.argSplit(action) : spaceSplit;
+      const element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
+      const found = value ? element && element.textContent?.toLowerCase().includes(value.toLowerCase()) : element;
+      const existsTarget = `"${selector}"` + (value ? ` containing text "${value}"` : '');
+      if (found) {
+        this.log(`Exists: ${existsTarget}`);
+      } else {
+        this.error(`Does not exist`, existsTarget);
+      }
 
     } else if (actionCode === 'val') {
       const [_, selector, value] = this.argSplit(action);
@@ -88,26 +95,53 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
       this.select(selector).value = value;
       this.log(`Set the value of ${selector} to ${value}`);
 
-    } else if (actionCode === 'inc') {
+    } else if (actionCode === 'wri' || actionCode === 'app') {
       const [_, selector, text] = this.argSplit(action);
       const element = this.select(selector);
       if (!element) return;
-      if (element.innerText.indexOf(text) === -1) {
-        this.error('Text not found', text);
+      if (actionCode === 'wri') {
+        element.textContent = text;
+        this.log(`Wrote "${text}" over ${selector}`);
       } else {
-        this.log(`Verified ${selector} includes "${text}"`);
+        element.textContent += text;
+        this.log(`Appended "${text}" to ${selector}`);
       }
-
-    } else if (actionCode === 'wri') {
-      const [_, selector, text] = this.argSplit(action);
-      const element = this.select(selector);
-      if (!element) return;
-      element.textContent += text;
-      this.log(`Wrote "${text}" at the end of ${selector}`);
 
     } else if (actionCode === 'log') {
       const [_, value] = action.split(/ (.*)/s);
       console.log('* ' + value);
+
+    } else if (actionCode === 'wai') {
+      const [_, value] = action.split(' ');
+      this.log(`Waiting ${Number(value) / 1000} seconds`);
+      await this.sleep(Number(value));
+
+    } else if (actionCode === 'awa') {
+      const spaceSplit = action.split(' ');
+      const [_, selector, value] = spaceSplit.length > 2 ? this.argSplit(action) : spaceSplit;
+      const loopCount = config.awaitTimeout / config.globalDelay;
+      let element;
+      let found;
+      for (let i = 0; i < loopCount; i++) {
+        element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
+        found = value ? element && element.textContent.toLowerCase().includes(value.toLowerCase()) : element;
+        if (found) {
+          break;
+        } else {
+          await this.sleep(config.globalDelay);
+        }
+      }
+      const awaitingTarget = `"${selector}"` + (value ? ` containing text "${value}"` : '');
+      if (found) {
+        this.log(`Awaited ${awaitingTarget}`);
+      } else {
+        this.error(`Timed out after ${config.awaitTimeout / 1000} seconds awaiting`, awaitingTarget);
+      }
+      // const element = this.select(selector);
+      // if (!element) return;
+      // this.select(selector).value = value;
+      // this.log(`Set the value of ${selector} to ${value}`);
+
     } else if (action === '') {
       /* Do nothing, just add an extra globalDelay */
     } else {

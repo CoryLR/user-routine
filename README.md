@@ -31,10 +31,19 @@ Parameter details:
 
 * 1: Action List: Array of strings or functions
   * If using string, separate parts by spaces like so: `['action selector data']`
-    * Actions: `click`, `exists`, `includes`, `log`, `nav`, `value`, `write`
-    * Selector: CSS selector like `button.class-name`
-    * Data: Argument for `value`, `write`, `includes`, and `log`
+    * Action strings:
+      * `await`, e.g. `'await .modal.success-message'` or `'await h1 With This Text'`
+      * `click`, e.g. `'click button.submit'`
+      * `exists`, e.g. `'exists .class-name'` or `'exists h1 With This Text'`
+      * `log`, e.g. `'log Some message'`
+      * `nav`, e.g. `'nav #id'` or `'nav #/some/hash/routing/path'`
+      * `value`, e.g. `'value form>input.name Cory Rahman'`
+      * `wait`, e.g. `'wait 3000'` (3 seconds)
+      * `write`, e.g. `'write p  - Adding some text'`
+    * Selector: CSS selector like `button.class-name`, should not contain spaces
+    * Data: Argument for `value`, `write`, `log`, and optionally `exists`
 * 2: Options (optional): Object
+  * `awaitTimeout`: (default: 15000) How long in milliseconds to wait for an element using the await command
   * `continueOnFailure`: (default: false) Continue to run actions even if one fails
   * `globalDelay`: (default: 500) time between actions in milliseconds
   * `logUpdates`: (default: true) Show progress in the browser console
@@ -48,17 +57,40 @@ You can also run multiple `spaCheck`s sequentially using async/await, see the [s
 
 ## Examples
 
-Fill inputs with `value` and interact with `click` using Selectors:
+### Fill inputs with `value` and interact with `click` using Selectors:
 
 ```javascript
 spaCheck([
-  'value input[type="text"] Hello, world!',
+  'value input[type="text"] Hello, world!', // Fills in the input
   'value input[type="number"] 20',
-  'click button.some-class',
+  'click button.some-class', // Clicks a button
 ]);
 ```
 
-Navigate within a page using `nav` followed by an ID or hash routing path, if applicable:
+* Note: Don't include spaces in the CSS Selectors
+
+### Validate the DOM with `exists`:
+
+```javascript
+spaCheck([
+  'exists p.some-class', // Checks for the existance of this selector
+  'exists p.some-class With this text', // Also checks if it includes some text
+]);
+```
+
+### Deal with timing using `await` and `wait`:
+
+```javascript
+spaCheck([
+  'exists div.some-popup', // Awaits the existance of this selector
+  'exists div.some-popup With this text', // Also waits for it to include some text
+  'wait 3000', // waits 3 seconds
+]);
+```
+
+* Note: The default await timeout is 15000 ms (15 seconds), overwrite using the `awaitTimeout` option.
+
+### Navigate within a page using `nav`:
 
 ```javascript
 spaCheck([
@@ -68,17 +100,7 @@ spaCheck([
 ]);
 ```
 
-Validate the DOM with `exists` and `includes`:
-
-```javascript
-spaCheck([
-  'exists div.some-class',
-  '', // Leave some extra time
-  'includes p.output some text we want to make sure exists',
-]);
-```
-
-Add notes with `write` and `log`:
+### Add notes with `write` and `log`:
 
 ```javascript
 spaCheck([
@@ -87,7 +109,7 @@ spaCheck([
 ]);
 ```
 
-You can also pass options as a second argument:
+### Pass options as a second argument:
 
 ```javascript
 spaCheck([

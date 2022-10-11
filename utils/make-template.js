@@ -7,7 +7,7 @@ const exampleTests = fs.readFileSync('test/spa-check-tests.js', 'utf8');
 
 /* Extract usage documentation */
 const readme = fs.readFileSync('README.md', 'utf8');
-const usage = readme.match(/# (Usage[\s\S]*?)#/gm);
+const usage = readme.match(/# (Usage[\s\S]*?)# /gm);
 const packageJson = JSON.parse(fs.readFileSync('package.json'));
 const version = packageJson.version;
 

@@ -4,29 +4,35 @@ async function runTests() {
     'val input[type="text"] Hello, world!',
     'val input[type="number"] 20',
     'click button',
-    'includes pre world',
+    'exists pre hello',
     'nav #far-down',
-    'write #far-down  - Back up we go!',
+    'write #far-down Back up we go!',
     'exists body',
     'nav #',
-    () => { console.log('This was written by a custom function') },
-    async () => { await new Promise(resolve => setTimeout(()=>{console.log(1);resolve()}, 4000))},
-  ], { message: 'Testing features', messageShowInDOM: true });
+    () => { console.log('This is a regular function') },
+    'log Next is an async function, waiting 1.5 seconds...',
+    async () => { await new Promise(resolve => setTimeout(()=>{resolve()}, 1500))},
+    'click button.process',
+    'log Awaiting span.output>p...',
+    'await span.output>p',
+  ], { message: 'Testing features', messageShowInDOM: true, globalDelay: 250 });
   
   await spaCheck([
     'click does-not-exist',
     'invalidkeyword test',
     () => { throw new Error('This function should error') },
-  ], { message: 'Testing error handling', messageShowInDOM: true, continueOnFailure: true });
+    'await does-not-exist',
+    'await body>main this text should not exist anywhere'
+  ], { message: 'Testing error handling', messageShowInDOM: true, continueOnFailure: true, awaitTimeout: 600 });
 
   await spaCheck([
     'log Should halt after the following error',
     'click does-not-exist',
-    'write h1  - This should not appear',
+    'write h1 This should not appear',
   ], { message: 'Testing graceful fail', messageShowInDOM: true });
 
   await spaCheck([
-    'write #progress Done! Check the browser console for results.',
+    'append #progress  Done! Check the browser console for results.',
   ], { globalDelay: 0 });
 }
 runTests();
