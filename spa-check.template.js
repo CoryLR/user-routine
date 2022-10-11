@@ -1,7 +1,7 @@
 
 /* 
  * SPA Check template for quick copy-pasting
- * Version 1.1.0
+ * Version 2.0.0
 */
 
 /* Minified SPA Check code, provides function 'spaCheck': */
