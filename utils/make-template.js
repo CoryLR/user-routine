@@ -17,7 +17,7 @@ const template =`
  * Version ${version}
 */
 
-/* Minified SPA Check code, provides function 'spaCheck': */
+/* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
 ${spaCheckJsBlob}
 /* Examples: */
 ${exampleTests}

@@ -8,6 +8,8 @@ export type SpaCheckOptions = {
   awaitTimeout: number,
   continueOnFailure: boolean,
   globalDelay: number,
+  logCollapse: boolean,
+  logResult: boolean,
   logUpdates: boolean,
   message: string,
   messageShowInDOM: boolean,

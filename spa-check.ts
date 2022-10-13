@@ -12,6 +12,8 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     continueOnFailure: false,
     globalDelay: 500,
     awaitTimeout: 15000,
+    logCollapse: false,
+    logResult: true,
     logUpdates: true,
     message: '',
     messageShowInDOM: false,
@@ -19,19 +21,23 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
   };
   const updateList: string[] = [];
   const config: SpaCheckOptions = { ...defaultConfig, ...options };
+  const spaCheckLogTitle = config.message ? `[SPA Check] ${config.message}` : '[SPA Check]';
   let errorOccurred = false;
   let msgElement: HTMLElement | undefined = undefined;
   let continueActions = true;
 
   this.main = async (actionList: SpaCheckAction[]) => {
-    this.messageStart();
+    await this.messageStart();
+    const inputsValid = this.validateInputs(actionList, options);
+    if (!inputsValid) return this.finish();
+
     for (const action of actionList) {
       if (!continueActions) { return this.finish() }
       await this.sleep(config.globalDelay);
       try {
         await this.do(action);
       } catch (error) {
-        console.error('FAIL: Unexpected error received', error);
+        this.error('Unexpected error: ' + error.message);
       }
     }
     return this.finish();
@@ -72,22 +78,50 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
       }
 
     } else if (actionCode === 'cli') {
-      const selector = action.split(' ')[1];
-      const element = this.select(selector);
-      if (!element) return;
-      element.click();
-      this.log(`Clicked ${selector}`);
+      const [_, selector, value] = this.argSplitComplex(action);
+      const clickTarget = this.getTargetText(selector, value);
+      if (value) {
+        const elements = document.querySelectorAll(selector);
+        let found = false;
+        for (const element of elements) {
+          if (element && element.textContent && element.textContent.toLowerCase().includes(value.toLowerCase())) {
+            found = true;
+            element.click();
+            break;
+          }
+        }
+        if (found) {
+          this.log(`Clicked ${clickTarget}`);
+        } else {
+          this.error(`Could not find selector to click`, clickTarget);
+        }
+      } else {
+        const element = this.select(selector);
+        if (!element) return;
+        element.click();
+        this.log(`Clicked ${clickTarget}`);
+      }
 
     } else if (actionCode === 'exi') {
-      const spaceSplit = action.split(' ');
-      const [_, selector, value] = spaceSplit.length > 2 ? this.argSplit(action) : spaceSplit;
-      const element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
-      const found = value ? element && element.textContent?.toLowerCase().includes(value.toLowerCase()) : element;
-      const existsTarget = `'${selector}'` + (value ? ` containing text '${value}'` : '');
-      if (found) {
-        this.log(`Exists: ${existsTarget}`);
+      const [_, selector, value] = this.argSplitComplex(action);
+      const existsTarget = this.getTargetText(selector, value);
+      let found = false;
+      if (value) {
+        const elements = document.querySelectorAll(selector);
+        for (const element of elements) {
+          if (element && element.textContent && element.textContent.toLowerCase().includes(value.toLowerCase())) {
+            found = true;
+            break;
+          }
+        }
       } else {
-        this.error(`Does not exist`, existsTarget);
+        const element = document.querySelector(selector);
+        if (element) found = true;
+      }
+      if (found) {
+        this.log(`Did exist: ${existsTarget}`);
+      } else {
+        this.error(`Did not exist`, existsTarget);
       }
 
     } else if (actionCode === 'val') {
@@ -119,21 +153,28 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
       await this.sleep(Number(value));
 
     } else if (actionCode === 'awa') {
-      const spaceSplit = action.split(' ');
-      const [_, selector, value] = spaceSplit.length > 2 ? this.argSplit(action) : spaceSplit;
+      const [_, selector, value] = this.argSplitComplex(action);
       const loopCount = config.awaitTimeout / config.globalDelay;
-      let element;
-      let found;
-      const awaitingTarget = `'${selector}'` + (value ? ` containing text '${value}'` : '');
+      let found = false;
+      const awaitingTarget = this.getTargetText(selector, value);
       this.log(`Awaiting ${awaitingTarget}...`);
       for (let i = 0; i < loopCount; i++) {
-        element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
-        found = value ? element && element.textContent.toLowerCase().includes(value.toLowerCase()) : element;
-        if (found) {
-          break;
+        if (value) {
+          /* Check for text */
+          const elements: (HTMLElement & HTMLInputElement)[] = Array.from(document.querySelectorAll(selector));
+          for (const element of elements) {
+            if (element && element.textContent && element.textContent.toLowerCase().includes(value.toLowerCase())) {
+              found = true;
+              break;
+            }
+          }
         } else {
-          await this.sleep(config.globalDelay);
+          /* Just check for element */
+          const element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
+          if (element) found = true;
         }
+        if (found) break;
+        await this.sleep(config.globalDelay);
       }
       if (found) {
         this.log(`... Found ${awaitingTarget}`);
@@ -155,6 +196,10 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     return element;
   }
 
+  this.getTargetText = (selector: string, value?: string) => {
+    return `'${selector}'` + (value ? ` containing text '${value}'` : '');
+  }
+
   this.argSplit = (action): string[] => {
     const split = action.split(/ ([^\s]+) (.*)/s);
     if (split.length < 3) {
@@ -163,14 +208,27 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     return split;
   }
 
-  this.messageStart = () => {
-    if (config.logUpdates) console.group(`[SPA Check] ${config.message}`);
+  this.argSplitComplex = (action: string): string[] => {
+    const spaceSplit = action.split(' ');
+    return spaceSplit.length > 2 ? this.argSplit(action) : spaceSplit;
+  }
+
+  this.messageStart = async () => {
+    await this.sleep(0);
+    if (config.logUpdates) {
+      if (config.logCollapse) {
+        console.groupCollapsed(spaCheckLogTitle);
+      } else {
+        console.group(spaCheckLogTitle);
+      }
+    }
     msgElement = config.messageShowInDOM && config.message ? this.displayMessageInDOM(config.message, config.messageStyle) : undefined;
   }
 
   this.messageEnd = (returnPayload) => {
     if (msgElement) { msgElement.remove() };
-    if (config.logUpdates) console.log('Result:', returnPayload);
+    const resultPrepend = config.logUpdates ? '' : spaCheckLogTitle;
+    if (config.logResult) console.log(`${resultPrepend} Result:`, returnPayload);
     if (config.logUpdates) console.groupEnd();
   }
 
@@ -182,6 +240,22 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     return msgElement;
   }
 
+  this.validateInputs = (actionList: SpaCheckAction[], options?: SpaCheckOptions): boolean => {
+    let inputsValid = true;
+    if (actionList === undefined) {
+      inputsValid = false;
+      this.error('Missing required argument Action List', '', false);
+    } else if (!Array.isArray(actionList)) {
+      inputsValid = false;
+      this.error('Action list argument is not an Array', '', false);
+    }
+    if (options !== undefined && (typeof options !== 'object' || Array.isArray(options))) {
+      inputsValid = false;
+      this.error('Options argument is not an Object', '', false);
+    }
+    return inputsValid;
+  }
+
   this.log = (message: string) => {
     updateList.push(message);
     const updateMessage = `* ${message}`;
@@ -190,19 +264,18 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     }
   }
 
-  this.error = (message: string, value: string, continueOnFailure = config.continueOnFailure) => {
+  this.error = (message: string, value?: string, continueOnFailure = config.continueOnFailure) => {
     errorOccurred = true;
-    let errorMessage = `FAIL: ${message}: '${value}'`;
+    const valuePart = value ? `: '${value}'` : '';
+    let errorMessage = `FAIL: ${message}` + valuePart;
     if (continueOnFailure) {
       errorMessage += '. Continuing execution.';
-      updateList.push(errorMessage);
-      console.error(errorMessage);
     } else {
       continueActions = false;
       errorMessage += '. Halting execution.';
-      updateList.push(errorMessage);
-      throw new Error(errorMessage);
     }
+    updateList.push(errorMessage);
+    console.error(errorMessage);
   }
 
   this.sleep = (milliseconds) => {

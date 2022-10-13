@@ -33,7 +33,7 @@ Input details:
   * Action keywords:
     * `append`, e.g. `'append p  - Appended text'`
     * `await`, e.g. `'await .modal.success-message'` or `'await h1 With This Text'`
-    * `click`, e.g. `'click button.submit'`
+    * `click`, e.g. `'click button.submit'` or `'click button With This Text'`
     * `exists`, e.g. `'exists .class-name'` or `'exists h1 With This Text'`
     * `log`, e.g. `'log Some message'`
     * `nav`, e.g. `'nav #id'` or `'nav #/some/hash/routing/path'`
@@ -46,7 +46,9 @@ Input details:
   * `awaitTimeout`: (default: 15000) How long in milliseconds to wait for an element using the await command
   * `continueOnFailure`: (default: false) Continue to run actions even if one fails
   * `globalDelay`: (default: 500) time between actions in milliseconds
-  * `logUpdates`: (default: true) Show progress in the browser console
+  * `logCollapse`: (default: false) Initializes the console group collapsed
+  * `logResult`: (default: true) Show the final result in the browser console
+  * `logUpdates`: (default: true) Show real-time progress in the browser console
   * `message`: (default: '') Label to show in the console and optionally in the DOM
   * `messageShowInDOM`: (default: false) Show the message visually on the page / DOM
   * `messageStyle`: Override the default message style when showing the message in the DOM
@@ -82,6 +84,7 @@ spaCheck([
   'value input[type="text"] Hello, world!', // Fills in the input
   'value input[type="number"] 20',
   'click button.some-class', // Clicks a button
+  'click div With certain text', // Clicks a div that has certain text
 ]);
 ```
 
@@ -92,7 +95,7 @@ spaCheck([
 ```javascript
 spaCheck([
   'exists p.some-class', // Checks for the existance of this selector
-  'exists p.some-class With this text', // Also checks if it includes some text
+  'exists p.some-class With certain text', // Also checks if it includes certain text
 ]);
 ```
 
@@ -100,8 +103,8 @@ spaCheck([
 
 ```javascript
 spaCheck([
-  'exists div.some-popup', // Awaits the existance of this selector
-  'exists div.some-popup With this text', // Also waits for it to include some text
+  'await div.some-popup', // Awaits the existance of this selector
+  'await div.some-popup With certain text', // Also waits for it to include certain text
   'wait 3000', // waits 3 seconds
 ]);
 ```
