@@ -56,17 +56,17 @@ Input details:
 Output details:
 
 * The `spaCheck` function returns type `SpaCheckReturn`:
-  * `export type SpaCheckReturn = { success: boolean, log: string[] };`
-* Updates are also logged to the browser console
-  * Disable by setting the `logUpdates` option to `false`
-  * The console output appears like so:
+  * `export type SpaCheckReturn = { success: boolean, log: string[], message: string };`
+* Updates are also logged to the browser console like so:
 
 ```
 [SPA Check] Message
-  * Awaiting "form.myclass"...
-  * ...Found "form.myclass"
-  * Set the value of form.myclass>input.name to "Cory"
+  * Set the value of form>input.name to 'Cory'
   * Clicked on button[type="submit"]
+  * Awaiting 'div.success-message'...
+  * ...Found 'div.success-message'
+  * Done, success: true
+  Result: { success: true, log: Array(4), message: 'Message' }
 ```
 
 # Examples

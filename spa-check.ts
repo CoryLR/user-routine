@@ -177,7 +177,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
         await this.sleep(config.globalDelay);
       }
       if (found) {
-        this.log(`... Found ${awaitingTarget}`);
+        this.log(`...Found ${awaitingTarget}`);
       } else {
         this.error(`Timed out after ${config.awaitTimeout / 1000} second(s) awaiting`, awaitingTarget);
       }
