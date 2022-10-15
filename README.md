@@ -84,7 +84,7 @@ spaCheck([
   'value input[type="text"] Hello, world!', // Fills in the input
   'value input[type="number"] 20',
   'click button.some-class', // Clicks a button
-  'click div With certain text', // Clicks a div that has certain text
+  'click div With certain text', // Clicks on the given text within a div
 ]);
 ```
 

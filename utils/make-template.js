@@ -13,7 +13,7 @@ const version = packageJson.version;
 
 const template =`
 /* 
- * SPA Check template for quick copy-pasting
+ * SPA Check template for quick copy-paste
  * Version ${version}
 */
 

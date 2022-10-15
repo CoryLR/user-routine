@@ -82,16 +82,10 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       const clickTarget = this.getTargetText(selector, value);
       if (value) {
         const elements = document.querySelectorAll(selector);
-        let found = false;
-        for (const element of elements) {
-          if (element && element.textContent && element.textContent.toLowerCase().includes(value.toLowerCase())) {
-            found = true;
-            element.click();
-            break;
-          }
-        }
-        if (found) {
-          this.log(`Clicked ${clickTarget}`);
+        const element = this.findTextInClickableChildElementRecursive(elements, value);
+        if (element) {
+          element.click();
+          this.log(`Clicked element with text '${value}' inside ${selector} (clicked on ${element.tagName.toLowerCase()})`);
         } else {
           this.error(`Could not find selector to click`, clickTarget);
         }
@@ -99,7 +93,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
         const element = this.select(selector);
         if (!element) return;
         element.click();
-        this.log(`Clicked ${clickTarget}`);
+        this.log(`Clicked ${selector}`);
       }
 
     } else if (actionCode === 'exi') {
@@ -109,7 +103,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       if (value) {
         const elements = document.querySelectorAll(selector);
         for (const element of elements) {
-          if (element && element.textContent && element.textContent.toLowerCase().includes(value.toLowerCase())) {
+          if (this.checkIfElementContainsText(element, value)) {
             found = true;
             break;
           }
@@ -194,6 +188,32 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       this.error('CSS Selector not found', selector);
     }
     return element;
+  }
+
+  /**
+   * Finds a child element where it contains the text AND has no childNodes
+   */
+  this.findTextInClickableChildElementRecursive = (elements: NodeList | HTMLElement[], text: string): Node | undefined => {
+    if (elements.length < 1) return;
+    const lowerText = text.toLowerCase();
+    for (const element of elements) {
+      const elementContainsText = this.checkIfElementContainsText(element, text);
+      if (elementContainsText) {
+        const clickableChildNodes = Array.from(element.childNodes).filter(e => (e as HTMLElement).click)
+        if (clickableChildNodes.length === 0) {
+          return element
+        } else {
+          return this.findTextInClickableChildElementRecursive(clickableChildNodes, lowerText)
+        }
+      }
+    }
+  }
+
+  this.checkIfElementContainsText = (element: HTMLElement | HTMLInputElement, text: string) => {
+    const lowerText = text.toLowerCase();
+    const foundInTextContent = element.textContent && element.textContent.toLowerCase().includes(lowerText);
+    const foundInValue = typeof ((element as HTMLInputElement)).value === 'string' && ((element as HTMLInputElement)).value.toLocaleLowerCase().includes(lowerText);
+    return foundInTextContent || foundInValue;
   }
 
   this.getTargetText = (selector: string, value?: string) => {
