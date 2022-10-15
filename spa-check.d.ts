@@ -5,15 +5,15 @@ type StringSimple = `${ActionSimple} ${string}`;
 type StringComplex = `${ActionComplex} ${string} ${string}`;
 export type SpaCheckActionString = '' | StringSimple | StringComplex;
 export type SpaCheckOptions = {
-  awaitTimeout: number,
-  continueOnFailure: boolean,
-  globalDelay: number,
-  logCollapse: boolean,
-  logResult: boolean,
-  logUpdates: boolean,
-  message: string,
-  messageShowInDOM: boolean,
-  messageStyle: string,
+  awaitTimeout?: number,
+  continueOnFailure?: boolean,
+  globalDelay?: number,
+  logCollapse?: boolean,
+  logResult?: boolean,
+  logUpdates?: boolean,
+  message?: string,
+  messageShowInDOM?: boolean,
+  messageStyle?: string,
 }
 export type SpaCheckReturn = { success: boolean, log: string[], message: string };
 

@@ -6,7 +6,7 @@ import { SpaCheckAction, SpaCheckActionString, SpaCheckOptions, SpaCheckReturn }
  * @param actionList Available actions types: append, await, click, exists, log, nav, value, write, or provide a custom function
  * @param options Available options: awaitTimeout, continueOnFailure, globalDelay, logUpdates, message, messageStyle, messageShowInDOM
  */
-export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckOptions): Promise<SpaCheckReturn> {
+export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOptions = {}): Promise<SpaCheckReturn> {
 
   const defaultConfig = {
     continueOnFailure: false,
@@ -20,7 +20,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     messageStyle: 'font-size:24px; padding:10px; z-index:9999; position:fixed; top:0; right:10%; color:black; background-color:rgba(222,222,222,0.8);',
   };
   const updateList: string[] = [];
-  const config: SpaCheckOptions = { ...defaultConfig, ...options };
+  const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const spaCheckLogTitle = config.message ? `[SPA Check] ${config.message}` : '[SPA Check]';
   let errorOccurred = false;
   let msgElement: HTMLElement | undefined = undefined;
@@ -32,7 +32,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options?: SpaCheckO
     if (!inputsValid) return this.finish();
 
     for (const action of actionList) {
-      if (!continueActions) { return this.finish() }
+      if (!continueActions) { return this.finish(); }
       await this.sleep(config.globalDelay);
       try {
         await this.do(action);
