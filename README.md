@@ -83,8 +83,9 @@ See the [spa-check.template.js](./spa-check.template.js) for examples of running
 spaCheck([
   'value input[type="text"] Hello, world!', // Fills in the input
   'value input[type="number"] 20',
-  'click button.some-class', // Clicks a button
+  'click button.some-class', // Clicks a button with class 'some-class'
   'click div With certain text', // Clicks on the given text within a div
+  'click * With certain text', // Clicks on the given text regardless of containing element
 ]);
 ```
 

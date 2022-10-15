@@ -1,7 +1,7 @@
 
 /* 
  * SPA Check template for quick copy-paste
- * Version 3.2.0
+ * Version 3.2.1
 */
 
 /* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
