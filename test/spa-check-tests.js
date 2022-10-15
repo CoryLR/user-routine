@@ -14,7 +14,7 @@ async function runSpaChecks() {
     async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 1000)) },
     'click button long process',
     'await p.output>p',
-    'await p process complete',
+    'await p.output process complete',
   ], { message: 'Testing features', messageShowInDOM: true, globalDelay: 250 });
 
   await spaCheck([

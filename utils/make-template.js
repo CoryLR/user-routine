@@ -10,11 +10,13 @@ const readme = fs.readFileSync('README.md', 'utf8');
 const usage = readme.match(/# (Usage[\s\S]*?)# /gm);
 const packageJson = JSON.parse(fs.readFileSync('package.json'));
 const version = packageJson.version;
+const description = packageJson.description;
 
 const template =`
 /* 
  * SPA Check template for quick copy-paste
  * Version ${version}
+ * ${description}
 */
 
 /* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */

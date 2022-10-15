@@ -1,7 +1,8 @@
 
 /* 
  * SPA Check template for quick copy-paste
- * Version 3.2.1
+ * Version 3.2.2
+ * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.
 */
 
 /* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
@@ -24,7 +25,7 @@ async function runSpaChecks() {
     async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 1000)) },
     'click button long process',
     'await p.output>p',
-    'await p process complete',
+    'await p.output process complete',
   ], { message: 'Testing features', messageShowInDOM: true, globalDelay: 250 });
 
   await spaCheck([
