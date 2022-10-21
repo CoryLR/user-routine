@@ -86,8 +86,8 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
         clickableTextElement = undefined;
         this.findClickableElementWithText(elements, value);
         if (clickableTextElement) {
-          clickableTextElement.click();
-          this.log(`Clicked text '${value}' inside ${selector} (clicked on ${clickableTextElement.tagName.toLowerCase()})`);
+          (clickableTextElement as HTMLElement).click();
+          this.log(`Clicked text '${value}' inside ${selector} (clicked on ${(clickableTextElement as HTMLElement).tagName.toLowerCase()})`);
         } else {
           this.error(`Could not find selector to click`, clickTarget);
         }
@@ -196,7 +196,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   /**
    * Finds the smallest element containing the given text and assigns it to clickableTextElement
    */
-  this.findClickableElementWithText = (elements: NodeList | HTMLElement[], text: string): void => {
+  this.findClickableElementWithText = (elements: HTMLElement[], text: string): void => {
     for (const element of elements) {
       const elementContainsText = this.checkIfElementContainsText(element, text);
       if (!elementContainsText) continue;

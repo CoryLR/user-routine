@@ -1,7 +1,7 @@
 
 /* 
  * SPA Check template for quick copy-paste
- * Version 3.2.2
+ * Version 3.3.1
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.
 */
 
