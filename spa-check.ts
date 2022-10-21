@@ -25,6 +25,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   let errorOccurred = false;
   let msgElement: HTMLElement | undefined = undefined;
   let continueActions = true;
+  let clickableTextElement: HTMLElement | undefined = undefined;
 
   this.main = async (actionList: SpaCheckAction[]) => {
     await this.messageStart();
@@ -82,13 +83,15 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       const clickTarget = this.getTargetText(selector, value);
       if (value) {
         const elements = document.querySelectorAll(selector);
-        const element = this.findTextInClickableChildElementRecursive(elements, value);
-        if (element) {
-          element.click();
-          this.log(`Clicked element with text '${value}' inside ${selector} (clicked on ${element.tagName.toLowerCase()})`);
+        clickableTextElement = undefined;
+        this.findClickableElementWithText(elements, value);
+        if (clickableTextElement) {
+          clickableTextElement.click();
+          this.log(`Clicked text '${value}' inside ${selector} (clicked on ${clickableTextElement.tagName.toLowerCase()})`);
         } else {
           this.error(`Could not find selector to click`, clickTarget);
         }
+        clickableTextElement = undefined;
       } else {
         const element = this.select(selector);
         if (!element) return;
@@ -191,21 +194,15 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   }
 
   /**
-   * Finds a child element where it contains the text AND has no childNodes
+   * Finds the smallest element containing the given text and assigns it to clickableTextElement
    */
-  this.findTextInClickableChildElementRecursive = (elements: NodeList | HTMLElement[], text: string): Node | undefined => {
-    if (elements.length < 1) return;
-    const lowerText = text.toLowerCase();
+  this.findClickableElementWithText = (elements: NodeList | HTMLElement[], text: string): void => {
     for (const element of elements) {
       const elementContainsText = this.checkIfElementContainsText(element, text);
-      if (elementContainsText) {
-        const clickableChildNodes = Array.from(element.childNodes).filter(e => (e as HTMLElement).click)
-        if (clickableChildNodes.length === 0) {
-          return element
-        } else {
-          return this.findTextInClickableChildElementRecursive(clickableChildNodes, lowerText)
-        }
-      }
+      if (!elementContainsText) continue;
+      clickableTextElement = element;
+      const clickableChildNodes = Array.from(element.childNodes).filter(e => (e as HTMLElement).click)
+      this.findClickableElementWithText(clickableChildNodes, text);
     }
   }
 
