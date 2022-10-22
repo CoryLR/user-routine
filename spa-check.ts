@@ -84,7 +84,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       if (value) {
         const elements = document.querySelectorAll(selector);
         clickableTextElement = undefined;
-        this.findClickableElementWithText(elements, value);
+        this.findClickableElementWithTextRecursive(elements, value);
         if (clickableTextElement) {
           (clickableTextElement as HTMLElement).click();
           this.log(`Clicked text '${value}' inside ${selector} (clicked on ${(clickableTextElement as HTMLElement).tagName.toLowerCase()})`);
@@ -196,14 +196,20 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   /**
    * Finds the smallest element containing the given text and assigns it to clickableTextElement
    */
-  this.findClickableElementWithText = (elements: HTMLElement[], text: string): void => {
+  this.findClickableElementWithTextRecursive = (elements: HTMLElement[], text: string): void => {
     for (const element of elements) {
       const elementContainsText = this.checkIfElementContainsText(element, text);
       if (!elementContainsText) continue;
-      clickableTextElement = element;
-      const clickableChildNodes = Array.from(element.childNodes).filter(e => (e as HTMLElement).click)
-      this.findClickableElementWithText(clickableChildNodes, text);
+      if (this.checkIfElementIsClickable(element)) {
+        clickableTextElement = element
     }
+      const clickableChildNodes = Array.from(element.childNodes).filter(e => {if(this.checkIfElementIsClickable(e)) return e} )
+      this.findClickableElementWithTextRecursive(clickableChildNodes, text);
+    }
+  }
+
+  this.checkIfElementIsClickable = (element: HTMLElement) => {
+    return (element as HTMLElement).click && element.tagName !== 'SCRIPT';
   }
 
   this.checkIfElementContainsText = (element: HTMLElement | HTMLInputElement, text: string) => {
