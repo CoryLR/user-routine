@@ -1,53 +1,52 @@
 
 /* 
  * SPA Check template for quick copy-paste
- * Version 3.3.2
+ * Version 4.0.0
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.
 */
 
 /* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
-var that={},__awaiter=that&&that.__awaiter||function(t,e,o,a){return new(o||(o=Promise))((function(n,i){function r(t){try{s(a.next(t))}catch(t){i(t)}}function l(t){try{s(a.throw(t))}catch(t){i(t)}}function s(t){var e;t.done?n(t.value):(e=t.value,e instanceof o?e:new o((function(t){t(e)}))).then(r,l)}s((a=a.apply(t,e||[])).next())}))};function spaCheck(t,e={}){return __awaiter(that,void 0,void 0,(function*(){const o=[],a=Object.freeze(Object.assign(Object.assign({},{continueOnFailure:!1,globalDelay:500,awaitTimeout:15e3,logCollapse:!1,logResult:!0,logUpdates:!0,message:"",messageShowInDOM:!1,messageStyle:"font-size:24px; padding:10px; z-index:9999; position:fixed; top:0; right:10%; color:black; background-color:rgba(222,222,222,0.8);"}),e)),n=a.message?`[SPA Check] ${a.message}`:"[SPA Check]";let i,r,l=!1,s=!0;return that.main=t=>__awaiter(that,void 0,void 0,(function*(){yield that.messageStart();if(!that.validateInputs(t,e))return that.finish();for(const e of t){if(!s)return that.finish();yield that.sleep(a.globalDelay);try{yield that.do(e)}catch(t){that.error("Unexpected error: "+t.message)}}return that.finish()})),that.finish=()=>{const t=!l,e={success:t,log:o,message:a.message};return that.log(`Done, success: ${t}`),that.messageEnd(e),e},that.do=t=>__awaiter(that,void 0,void 0,(function*(){if("string"==typeof t)yield that.doActionString(t);else if("function"==typeof t)try{yield t(),that.log("Ran provided function")}catch(e){that.error("Error running provided function",e+"; function: "+t.toString())}else that.error("Action is not of type string or function, got",typeof t)})),that.doActionString=t=>__awaiter(that,void 0,void 0,(function*(){const e=t.substring(0,3);if("nav"===e){const e=t.split(" ")[1];e&&"#"===e[0]?(window.location.href=e,that.log(`Navigated to ${e}`)):that.error("Unexpected nav action, got",t)}else if("cli"===e){const[e,o,a]=that.argSplitComplex(t),n=that.getTargetText(o,a);if(a){const t=document.querySelectorAll(o);r=void 0,that.findClickableElementWithTextRecursive(t,a),r?(r.click(),that.log(`Clicked text '${a}' inside ${o} (clicked on ${r.tagName.toLowerCase()})`)):that.error("Could not find selector to click",n),r=void 0}else{const t=that.select(o);if(!t)return;t.click(),that.log(`Clicked ${o}`)}}else if("exi"===e){const[e,o,a]=that.argSplitComplex(t),n=that.getTargetText(o,a);let i=!1;if(a){const t=document.querySelectorAll(o);for(const e of t)if(that.checkIfElementContainsText(e,a)){i=!0;break}}else{document.querySelector(o)&&(i=!0)}i?that.log(`Did exist: ${n}`):that.error("Did not exist",n)}else if("val"===e){const[e,o,a]=that.argSplit(t);if(!that.select(o))return;that.select(o).value=a,that.log(`Set the value of ${o} to ${a}`)}else if("wri"===e||"app"===e){const[o,a,n]=that.argSplit(t),i=that.select(a);if(!i)return;"wri"===e?(i.textContent=n,that.log(`Wrote '${n}' over ${a}`)):(i.textContent+=n,that.log(`Appended '${n}' to ${a}`))}else if("log"===e){const[e,o]=t.split(/ (.*)/s);that.log(o)}else if("wai"===e){const[e,o]=t.split(" ");that.log(`Waiting ${Number(o)/1e3} second(s)`),yield that.sleep(Number(o))}else if("awa"===e){const[e,o,n]=that.argSplitComplex(t),i=a.awaitTimeout/a.globalDelay;let r=!1;const l=that.getTargetText(o,n);that.log(`Awaiting ${l}...`);for(let t=0;t<i;t++){if(n){const t=Array.from(document.querySelectorAll(o));for(const e of t)if(e&&e.textContent&&e.textContent.toLowerCase().includes(n.toLowerCase())){r=!0;break}}else{document.querySelector(o)&&(r=!0)}if(r)break;yield that.sleep(a.globalDelay)}r?that.log(`...Found ${l}`):that.error(`Timed out after ${a.awaitTimeout/1e3} second(s) awaiting`,l)}else""===t||that.error("Action string keyword not recognized, got",t)})),that.select=t=>{const e=document.querySelector(t);return e||that.error("CSS Selector not found",t),e},that.findClickableElementWithTextRecursive=(t,e)=>{for(const o of t){if(!that.checkIfElementContainsText(o,e))continue;that.checkIfElementIsClickable(o)&&(r=o);const t=Array.from(o.childNodes).filter((t=>{if(that.checkIfElementIsClickable(t))return t}));that.findClickableElementWithTextRecursive(t,e)}},that.checkIfElementIsClickable=t=>t.click&&"SCRIPT"!==t.tagName,that.checkIfElementContainsText=(t,e)=>{const o=e.toLowerCase(),a=t.textContent&&t.textContent.toLowerCase().includes(o),n="string"==typeof t.value&&t.value.toLocaleLowerCase().includes(o);return a||n},that.getTargetText=(t,e)=>`'${t}'`+(e?` containing text '${e}'`:""),that.argSplit=t=>{const e=t.split(/ ([^\s]+) (.*)/s);return e.length<3&&that.error(`Unexpected ${e[0]} input with data, got:`,t),e},that.argSplitComplex=t=>{const e=t.split(" ");return e.length>2?that.argSplit(t):e},that.messageStart=()=>__awaiter(that,void 0,void 0,(function*(){yield that.sleep(0),a.logUpdates&&(a.logCollapse?console.groupCollapsed(n):console.group(n)),i=a.messageShowInDOM&&a.message?that.displayMessageInDOM(a.message,a.messageStyle):void 0})),that.messageEnd=t=>{i&&i.remove();const e=a.logUpdates?"":n;a.logResult&&console.log(`${e} Result:`,t),a.logUpdates&&console.groupEnd()},that.displayMessageInDOM=(t,e)=>{var o;const a=document.createElement("p");return a.textContent=t,a.setAttribute("style",e),null===(o=document.querySelector("body"))||void 0===o||o.appendChild(a),a},that.validateInputs=(t,e)=>{let o=!0;return void 0===t?(o=!1,that.error("Missing required argument Action List","",!1)):Array.isArray(t)||(o=!1,that.error("Action list argument is not an Array","",!1)),void 0===e||"object"==typeof e&&!Array.isArray(e)||(o=!1,that.error("Options argument is not an Object","",!1)),o},that.log=t=>{o.push(t);const e=`* ${t}`;a.logUpdates&&console.log(e)},that.error=(t,e,n=a.continueOnFailure)=>{l=!0;let i=`FAIL: ${t}`+(e?`: '${e}'`:"");n?i+=". Continuing execution.":(s=!1,i+=". Halting execution."),o.push(i),console.error(i)},that.sleep=t=>new Promise((e=>setTimeout(e,t))),yield that.main(t)}))}
+var that={},__awaiter=that&&that.__awaiter||function(t,e,o,i){return new(o||(o=Promise))((function(a,n){function r(t){try{l(i.next(t))}catch(t){n(t)}}function s(t){try{l(i.throw(t))}catch(t){n(t)}}function l(t){var e;t.done?a(t.value):(e=t.value,e instanceof o?e:new o((function(t){t(e)}))).then(r,s)}l((i=i.apply(t,e||[])).next())}))};function spaCheck(t,e={}){return __awaiter(that,void 0,void 0,(function*(){const o={awaitTimeout:15e3,continueOnFailure:!1,displayProgress:!0,globalDelay:500,logCollapse:!1,logResult:!0,logProgress:!0,message:"SPA Check",overrideCss:""},i=[],a=Object.freeze(Object.assign(Object.assign({},o),e)),n=a.message?`[SPA Check] ${a.message}`:"[SPA Check]";let r,s=!1,l=!0;const d={arrow:void 0,arrowShadow:void 0,focusBox:void 0,message:void 0,style:void 0,tooltip:void 0,tooltipShadow:void 0},c=150;return that.main=t=>__awaiter(that,void 0,void 0,(function*(){yield that.messageStart();if(!(yield that.validateInputs(t,e)))return that.finish();for(const e of t){if(!l)return that.finish();yield that.sleep(a.globalDelay);try{yield that.do(e)}catch(t){yield that.error("Unexpected error: "+t.message)}}return that.finish()})),that.do=t=>__awaiter(that,void 0,void 0,(function*(){if("string"==typeof t)yield that.doActionString(t);else if("function"==typeof t)try{yield that.performAction(t,"Running provided function"),that.log("Ran provided function")}catch(e){yield that.animateTooltipClose(),yield that.error("Error running provided function",e+"; function: "+t.toString())}else yield that.error("Action is not of type string or function, got",typeof t)})),that.doActionString=t=>__awaiter(that,void 0,void 0,(function*(){const e=t.substring(0,3);if("nav"===e){const e=t.split(" ")[1];e&&"#"===e[0]?(yield that.performAction((()=>{window.location.href=e}),`Navigating to ${e}`),that.log(`Navigated to ${e}`)):yield that.error("Unexpected nav action, got",t)}else if("cli"===e){const[e,o,i]=yield that.argSplitComplex(t),a=that.getTargetText(o,i);if(i){const t=document.querySelectorAll(o);r=void 0,that.findClickableElementWithTextRecursive(t,i),r?(yield that.performAction((()=>{r.click()}),`Clicking ${r.tagName.toLowerCase()} with text '${i}'`,r),that.log(`Clicked text '${i}' inside ${o} (clicked on ${r.tagName.toLowerCase()})`)):yield that.error("Could not find selector to click",a),r=void 0}else{const t=yield that.select(o);if(!t)return;yield that.performAction((()=>{t.click()}),`Clicking ${o}`,t),that.log(`Clicked ${o}`)}}else if("exi"===e){const[e,o,i]=yield that.argSplitComplex(t),a=that.getTargetText(o,i);let n,s=!1;if(i){const t=document.querySelectorAll(o);for(const e of t)if(that.checkIfElementContainsText(e,i)){s=!0,r=void 0,that.findClickableElementWithTextRecursive([e],i),n=r;break}}else{const t=document.querySelector(o);t&&(s=!0,n=t)}s?(yield that.animateTooltipOpen(n,`Confirmed exists: ${a}`,"info"),yield that.animateTooltipClose(),that.log(`Confirmed exists: ${a}`)):yield that.error("Did not exist",a),r=void 0}else if("val"===e){const[e,o,i]=yield that.argSplit(t),a=yield that.select(o);if(!a)return;yield that.performAction((()=>{a.value=i}),`Filling value of ${a.tagName.toLowerCase()}`,a),that.log(`Set the value of ${o} to ${i}`)}else if("wri"===e||"app"===e){const[o,i,a]=yield that.argSplit(t),n=yield that.select(i);if(!n)return;"wri"===e?(yield that.performAction((()=>{n.textContent=a}),`Writing over ${i}`,n),that.log(`Wrote '${a}' over ${i}`)):(yield that.performAction((()=>{n.textContent+=a}),`Appending text to ${i}`,n),that.log(`Appended '${a}' to ${i}`))}else if("log"===e){const[e,o]=t.split(/ (.*)/s);yield that.performAction((()=>{that.log(o)}),`${o}`)}else if("wai"===e){const[e,o]=t.split(" ");that.log(`Waiting ${Number(o)/1e3} second(s)`),yield that.performAction((()=>__awaiter(that,void 0,void 0,(function*(){yield that.sleep(Number(o))}))),`Waiting ${Number(o)/1e3} second(s)`)}else if("awa"===e){const[e,o,i]=yield that.argSplitComplex(t),n=a.awaitTimeout/a.globalDelay;let s,l=!1;const c=that.getTargetText(o,i);that.log(`Awaiting ${c}...`),yield that.animateTooltipOpen(d.message,`Awaiting ${c}...`,"info",!0);for(let t=0;t<n;t++){if(i){const t=Array.from(document.querySelectorAll(o));for(const e of t)if(e&&e.textContent&&e.textContent.toLowerCase().includes(i.toLowerCase())){l=!0,r=void 0,that.findClickableElementWithTextRecursive([e],i),s=r;break}}else{const t=document.querySelector(o);t&&(l=!0,s=t)}if(l)break;yield that.sleep(a.globalDelay)}yield that.animateTooltipClose(),l?(yield that.animateTooltipOpen(s,`...Found ${c}`,"info"),yield that.animateTooltipClose(),that.log(`...Found ${c}`)):yield that.error(`Timed out after ${a.awaitTimeout/1e3} second(s) awaiting`,c)}else""===t||(yield that.error("Action string keyword not recognized, got",t))})),that.performAction=(t,e,o)=>__awaiter(that,void 0,void 0,(function*(){let i=!1;o||(o=d.message?d.message:document.body,i=!0),yield that.animateTooltipOpen(o,e,"info",i),yield t(),yield that.animateTooltipClose()})),that.select=t=>__awaiter(that,void 0,void 0,(function*(){const e=document.querySelector(t);return e||(yield that.error("CSS Selector not found",t)),e})),that.findClickableElementWithTextRecursive=(t,e)=>{for(const o of t){if(!that.checkIfElementContainsText(o,e))continue;that.checkIfElementIsClickable(o)&&(r=o);const t=Array.from(o.childNodes).filter((t=>{if(that.checkIfElementIsClickable(t))return t}));that.findClickableElementWithTextRecursive(t,e)}},that.checkIfElementIsClickable=t=>t.click&&"SCRIPT"!==t.tagName,that.checkIfElementContainsText=(t,e)=>{const o=e.toLowerCase(),i=t.textContent&&t.textContent.toLowerCase().includes(o),a="string"==typeof t.value&&t.value.toLocaleLowerCase().includes(o);return i||a},that.getTargetText=(t,e)=>`'${t}'`+(e?` containing text '${e}'`:""),that.argSplit=t=>__awaiter(that,void 0,void 0,(function*(){const e=t.split(/ ([^\s]+) (.*)/s);return e.length<3&&(yield that.error(`Unexpected ${e[0]} input with data, got:`,t)),e})),that.argSplitComplex=t=>__awaiter(that,void 0,void 0,(function*(){const e=t.split(" ");return e.length>2?yield that.argSplit(t):e})),that.messageStart=()=>__awaiter(that,void 0,void 0,(function*(){a.displayProgress&&that.addCss(),yield that.sleep(0),a.logProgress&&(a.logCollapse?console.groupCollapsed(n):console.group(n)),a.displayProgress&&that.displayMessageInDOM(a.message)})),that.messageEnd=t=>{d.message&&d.message.remove(),d.style&&d.style.remove();const e=a.logProgress?"":n;a.logResult&&console.log(`${e} Result:`,t),a.logProgress&&console.groupEnd()},that.finish=()=>{that.ensureCleanDOM();const t=!s,e={success:t,log:i,message:a.message};return that.log(`Done, success: ${t}`),that.messageEnd(e),e},that.ensureCleanDOM=()=>{for(const t in d)d[t]&&d[t].parentNode&&d[t].remove&&d[t].remove()},that.addCss=()=>{var t;d.style=document.createElement("style"),d.style.textContent="\n .spa-check-message {\n font: 20px Georgia;\n padding: 18px 12px 6px 12px;\n z-index: 9999;\n position: fixed;\n top: 0;\n right: 10%;\n color: black;\n background-color: rgba(245,245,245,0.9);\n text-align: right;\n border-radius: 0 0 12px 12px;\n max-width: 80vw;\n overflow: hidden;\n white-space: nowrap;\n text-overflow: ellipsis;\n border: 2px solid rgb(180,180,180);\n border-top: 0;\n }\n .spa-check-message>div {\n font-size: 12px;\n color: dimgray;\n }\n .spa-check-focus-box {\n z-index: 9997;\n visibility: hidden;\n position: absolute;\n background-color: rgba(255,255,255,0.2);\n border: 2px solid white;\n box-shadow: 0 0 70px 10px rgba(0,0,0,0.4);\n }\n .spa-check-tooltip {\n z-index: 9999;\n visibility: hidden;\n font: 14px Georgia;\n position: absolute;\n background-color: rgb(245,245,245);\n color: black;\n text-align: center;\n padding: 10px;\n border-radius: 10px;\n max-width: 200px;\n }\n .spa-check-tooltip-error {\n color: darkred;\n }\n .spa-check-arrow {\n z-index: 9999;\n visibility: hidden;\n width: 0;\n height: 0;\n position: absolute;\n border-left: 10px solid transparent;\n border-right: 10px solid transparent;\n border-bottom: 10px solid rgb(245,245,245); \n }\n .spa-check-arrow-shadow {\n z-index: 9998;\n border-left: 14px solid transparent;\n border-right: 14px solid transparent;\n border-bottom: 14px solid rgb(180,180,180);\n margin: -3px 0 0 -4px;\n }\n .spa-check-tooltip-shadow {\n z-index: 9998;\n color: transparent;\n border: 2px solid rgb(180,180,180);\n background-color: rgb(180,180,180);\n margin: -2px 0 0 -2px;\n border-radius: 12px;\n }\n .spa-check-fade-in {\n visibility: visible;\n animation: spaCheckfadeIn 150ms; \n }\n .spa-check-fade-out {\n opacity: 0;\n animation: spaCheckfadeOut 150ms; \n }\n @keyframes spaCheckfadeIn {\n 0% { opacity: 0; }\n 100% { opacity: 1; }\n }\n @keyframes spaCheckfadeOut {\n 0% { opacity: 1; }\n 100% { opacity: 0; }\n }\n ",d.style.textContent+=a.overrideCss,null===(t=document.querySelector("body"))||void 0===t||t.appendChild(d.style)},that.displayMessageInDOM=t=>{var e;d.message=document.createElement("div");const i=t===o.message?"":"<div>SPA Check</div>";d.message.innerHTML=t+i,d.message.classList.add("spa-check-message"),null===(e=document.querySelector("body"))||void 0===e||e.appendChild(d.message)},that.animateTooltipOpen=(t,e,o="info",i)=>__awaiter(that,void 0,void 0,(function*(){if(!a.displayProgress)return;const n=document.body.getBoundingClientRect(),r=t.getBoundingClientRect(),s=i?0:window.pageYOffset||t.scrollTop||document.body.scrollTop,l=window.pageXOffset||t.scrollLeft||document.body.scrollLeft;d.focusBox=document.createElement("div"),d.focusBox.classList.add("spa-check-focus-box"),d.arrow=document.createElement("div"),d.arrow.classList.add("spa-check-arrow"),d.tooltip=document.createElement("div"),d.tooltip.classList.add("spa-check-tooltip"),"error"===o&&d.tooltip.classList.add("spa-check-tooltip-error"),d.tooltip.textContent=e,document.body.appendChild(d.focusBox),document.body.appendChild(d.arrow),document.body.appendChild(d.tooltip);const c=d.tooltip.getBoundingClientRect().width;let h=r.bottom+10+s,p=r.left+l+r.width/2-10,g=r.left+l+r.width/2-c/2;p<8?p=8:n.right+l-p<20&&(p=n.right+l-20),g<0&&(g=0),i&&(d.focusBox.style.display="none",d.arrow.style.display="none",d.tooltip.style.position="fixed",p-=l,h-=5,g-=l),d.arrow.style.top=String(r.bottom+s+2)+"px",d.arrow.style.left=String(p)+"px",d.tooltip.style.top=String(h+2)+"px",d.tooltip.style.left=String(g)+"px",d.focusBox.style.top=String(r.top+s-2)+"px",d.focusBox.style.left=String(r.left+l-2)+"px",d.focusBox.style.width=String(r.width)+"px",d.focusBox.style.height=String(r.height)+"px",d.arrowShadow=d.arrow.cloneNode(!0),d.tooltipShadow=d.tooltip.cloneNode(!0),d.arrowShadow.classList.add("spa-check-arrow-shadow"),d.tooltipShadow.classList.add("spa-check-tooltip-shadow"),document.body.appendChild(d.arrowShadow),document.body.appendChild(d.tooltipShadow),yield that.scrollIntoViewIfNeeded(t),d.focusBox.classList.add("spa-check-fade-in"),d.arrowShadow.classList.add("spa-check-fade-in"),d.tooltipShadow.classList.add("spa-check-fade-in"),d.arrow.classList.add("spa-check-fade-in"),d.tooltip.classList.add("spa-check-fade-in");const u=30*e.length<2e3?30*e.length:2e3;yield that.sleep(650+u)})),that.animateTooltipClose=()=>__awaiter(that,void 0,void 0,(function*(){if(!(a.displayProgress&&d.focusBox&&d.arrow&&d.tooltip&&d.arrowShadow&&d.tooltipShadow))return;yield that.sleep(500),d.focusBox.classList.add("spa-check-fade-out"),d.arrow.classList.add("spa-check-fade-out"),d.tooltip.classList.add("spa-check-fade-out"),d.arrowShadow.classList.add("spa-check-fade-out"),d.tooltipShadow.classList.add("spa-check-fade-out"),yield that.sleep(c),d.focusBox.remove(),d.tooltip.remove(),d.arrow.remove(),d.tooltipShadow.remove(),d.arrowShadow.remove()})),that.scrollIntoViewIfNeeded=t=>__awaiter(that,void 0,void 0,(function*(){that.checkVisible(t)||(t.scrollIntoView({behavior:"smooth"}),yield that.sleep(700))})),that.checkVisible=t=>{var e=t.getBoundingClientRect(),o=Math.max(document.documentElement.clientHeight,window.innerHeight);return!(e.bottom<0||e.top-o>=0)},that.validateInputs=(t,e)=>__awaiter(that,void 0,void 0,(function*(){let o=!0;return void 0===t?(o=!1,yield that.error("Missing required argument Action List","",!1)):Array.isArray(t)||(o=!1,yield that.error("Action list argument is not an Array","",!1)),void 0===e||"object"==typeof e&&!Array.isArray(e)||(o=!1,yield that.error("Options argument is not an Object","",!1)),o})),that.log=t=>{i.push(t);const e=`* ${t}`;a.logProgress&&console.log(e)},that.error=(t,e,o=a.continueOnFailure)=>__awaiter(that,void 0,void 0,(function*(){s=!0;let a=`FAIL: ${t}`+(e?`: '${e}'`:"");o?a+=". Continuing execution.":(l=!1,a+=". Halting execution."),i.push(a),console.error(a),yield that.animateTooltipOpen(d.message,a,"error",!0),yield that.animateTooltipClose()})),that.sleep=t=>new Promise((e=>setTimeout(e,t))),yield that.main(t)}))}
 
 /* Examples: */
 async function runSpaChecks() {
-  await spaCheck([
-    'wait 500',
+  await spaCheck([    
+    'log Tests starting',
     'val input[type="text"] Hello, world!',
     'val input[type="number"] 20',
     'click button',
     'exists pre hello',
-    'nav #far-down',
     'write #far-down Back up we go!',
-    'exists body',
     'nav #',
-    () => { console.log('This is a regular function') },
-    'log Next is an async function',
-    async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 1000)) },
+    'log Next are custom functions',
+    () => { console.log('This is logging from a custom function, next is a custom async function!') },
+    async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 300)) },
     'click button long process',
-    'await p.output>p',
-    'await p.output process complete',
-  ], { message: 'Testing features', messageShowInDOM: true, globalDelay: 250 });
+    'await .output process complete',
+  ], { message: 'Testing features', globalDelay: 100 });
 
   await spaCheck([
+    'log Expect success: false',
     'click does-not-exist',
     'invalidkeyword test',
     () => { throw new Error('This function should error') },
     'await does-not-exist',
     'await body>main this text should not exist anywhere'
   ], {
-    message: 'Testing error handling (expect success: false)', messageShowInDOM: true,
-    continueOnFailure: true, globalDelay: 100, awaitTimeout: 250,
+    message: 'Testing error handling',
+    continueOnFailure: true, awaitTimeout: 600, globalDelay: 50
   });
 
   await spaCheck([
-    'log Should halt after the following error',
+    'log Expect success: false, should halt after next error',
     'click does-not-exist',
-    'write h1 This text should not appear',
-  ], { message: 'Testing graceful fail (expect success: false)', messageShowInDOM: true });
+    'log If you see this, it did not work',
+  ], { message: 'Testing graceful fail', globalDelay: 50 });
 
   await spaCheck([
     'append #progress  Done! Check the browser console for results.',
-  ], { globalDelay: 0, logUpdates: false, logResult: false });
+    'log All done!',
+  ], { globalDelay: 0, logProgress: false, logResult: false });
 
   console.log('Done! See above for results.');
 }
@@ -56,40 +55,42 @@ runSpaChecks();
 /*
 # Usage
 
-SPA Check is served as a function named `spaCheck`. Example:
+SPA Check is served as a function named `spaCheck`.
+
+Example:
 
 ```javascript
 spaCheck(
-  ['value .myform>input Hello', 'click button.myclass'], // Actions
-  { message: 'Example: Submit form', globalDelay: 1000 } // Options
+  ['click button', 'await .result Result Text'], // Actions
+  { message:'Example Test', globalDelay: 1000 }, // Options
 );
 ```
 
-Input details:
+Input parameters:
 
-* Parameter 1: Actions (Array of strings like `['action selector? data?']`, can also substitute a function for custom actions)
-  * Action keywords:
-    * `append`, e.g. `'append p  - Appended text'`
-    * `await`, e.g. `'await .modal.success-message'` or `'await h1 With This Text'`
-    * `click`, e.g. `'click button.submit'` or `'click button With This Text'`
-    * `exists`, e.g. `'exists .class-name'` or `'exists h1 With This Text'`
-    * `log`, e.g. `'log Some message'`
-    * `nav`, e.g. `'nav #id'` or `'nav #/some/hash/routing/path'`
-    * `value`, e.g. `'value form>input.name Cory Rahman'`
-    * `wait`, e.g. `'wait 3000'` (3 seconds)
-    * `write`, e.g. `'write p Overwritten text'`
+* 1: Actions List (Array of strings or custom functions)
+  * Action strings & examples:
+    * `append` - `'append p Appended text'`
+    * `await` - `'await .modal.success-message'` or `'await h1 With This Text'`
+    * `click` - `'click button.submit'` or `'click button With This Text'`
+    * `exists` - `'exists .class-name'` or `'exists h1 With This Text'`
+    * `log` - `'log Some message'`
+    * `nav` - `'nav #id'` or `'nav #/some/hash/routing/path'`
+    * `value` - `'value form>input.name Cory Rahman'`
+    * `wait` - `'wait 3000'` (3 seconds)
+    * `write` - `'write p Overwritten text'`
   * Selector: CSS selector like `button.class-name` (should not contain spaces)
   * Data: Argument for `value`, `write`, `log`, and optionally `exists` and `await`
-* Parameter 2: Options (Object, optional)
-  * `awaitTimeout`: (default: 15000) How long in milliseconds to wait for an element using the await command
-  * `continueOnFailure`: (default: false) Continue to run actions even if one fails
-  * `globalDelay`: (default: 500) time between actions in milliseconds
-  * `logCollapse`: (default: false) Initializes the console group collapsed
-  * `logResult`: (default: true) Show the final result in the browser console
-  * `logUpdates`: (default: true) Show real-time progress in the browser console
-  * `message`: (default: '') Label to show in the console and optionally in the DOM
-  * `messageShowInDOM`: (default: false) Show the message visually on the page / DOM
-  * `messageStyle`: Override the default message style when showing the message in the DOM
+* 2: Options (Object, optional)
+  * `awaitTimeout`: (*default: 15000*) How long in milliseconds to wait for an element using the await command
+  * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
+  * `displayProgress`: (*default: true*) Show the message and animations visually on the page / DOM
+  * `globalDelay`: (*default: 500*) time between actions in milliseconds
+  * `logCollapse`: (*default: false*) Initializes the console group collapsed
+  * `logProgress`: (*default: true*) Show real-time progress in the browser console
+  * `logResult`: (*default: true*) Show the final result in the browser console
+  * `message`: (*default: ''*) Label to show in the console and optionally in the DOM
+  * `overrideCss`: (*default: ''*) Override default SPA Check CSS, target classes such as .spa-check-message, .spa-check-focus-box, or .spa-check-tooltip
 
 Output details:
 

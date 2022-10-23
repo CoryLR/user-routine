@@ -1,42 +1,41 @@
 async function runSpaChecks() {
-  await spaCheck([
-    'wait 500',
+  await spaCheck([    
+    'log Tests starting',
     'val input[type="text"] Hello, world!',
     'val input[type="number"] 20',
     'click button',
     'exists pre hello',
-    'nav #far-down',
     'write #far-down Back up we go!',
-    'exists body',
     'nav #',
-    () => { console.log('This is a regular function') },
-    'log Next is an async function',
-    async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 1000)) },
+    'log Next are custom functions',
+    () => { console.log('This is logging from a custom function, next is a custom async function!') },
+    async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 300)) },
     'click button long process',
-    'await p.output>p',
-    'await p.output process complete',
-  ], { message: 'Testing features', messageShowInDOM: true, globalDelay: 250 });
+    'await .output process complete',
+  ], { message: 'Testing features', globalDelay: 100 });
 
   await spaCheck([
+    'log Expect success: false',
     'click does-not-exist',
     'invalidkeyword test',
     () => { throw new Error('This function should error') },
     'await does-not-exist',
     'await body>main this text should not exist anywhere'
   ], {
-    message: 'Testing error handling (expect success: false)', messageShowInDOM: true,
-    continueOnFailure: true, globalDelay: 100, awaitTimeout: 250,
+    message: 'Testing error handling',
+    continueOnFailure: true, awaitTimeout: 600, globalDelay: 50
   });
 
   await spaCheck([
-    'log Should halt after the following error',
+    'log Expect success: false, should halt after next error',
     'click does-not-exist',
-    'write h1 This text should not appear',
-  ], { message: 'Testing graceful fail (expect success: false)', messageShowInDOM: true });
+    'log If you see this, it did not work',
+  ], { message: 'Testing graceful fail', globalDelay: 50 });
 
   await spaCheck([
     'append #progress  Done! Check the browser console for results.',
-  ], { globalDelay: 0, logUpdates: false, logResult: false });
+    'log All done!',
+  ], { globalDelay: 0, logProgress: false, logResult: false });
 
   console.log('Done! See above for results.');
 }

@@ -18,40 +18,42 @@ const { spaCheck } = require('spa-check');
 
 # Usage
 
-SPA Check is served as a function named `spaCheck`. Example:
+SPA Check is served as a function named `spaCheck`.
+
+Example:
 
 ```javascript
 spaCheck(
-  ['value .myform>input Hello', 'click button.myclass'], // Actions
-  { message: 'Example: Submit form', globalDelay: 1000 } // Options
+  ['click button', 'await .result Result Text'], // Actions
+  { message:'Example Test', globalDelay: 1000 }, // Options
 );
 ```
 
-Input details:
+Input parameters:
 
-* Parameter 1: Actions (Array of strings like `['action selector? data?']`, can also substitute a function for custom actions)
-  * Action keywords:
-    * `append`, e.g. `'append p  - Appended text'`
-    * `await`, e.g. `'await .modal.success-message'` or `'await h1 With This Text'`
-    * `click`, e.g. `'click button.submit'` or `'click button With This Text'`
-    * `exists`, e.g. `'exists .class-name'` or `'exists h1 With This Text'`
-    * `log`, e.g. `'log Some message'`
-    * `nav`, e.g. `'nav #id'` or `'nav #/some/hash/routing/path'`
-    * `value`, e.g. `'value form>input.name Cory Rahman'`
-    * `wait`, e.g. `'wait 3000'` (3 seconds)
-    * `write`, e.g. `'write p Overwritten text'`
+* 1: Actions List (Array of strings or custom functions)
+  * Action strings & examples:
+    * `append` - `'append p Appended text'`
+    * `await` - `'await .modal.success-message'` or `'await h1 With This Text'`
+    * `click` - `'click button.submit'` or `'click button With This Text'`
+    * `exists` - `'exists .class-name'` or `'exists h1 With This Text'`
+    * `log` - `'log Some message'`
+    * `nav` - `'nav #id'` or `'nav #/some/hash/routing/path'`
+    * `value` - `'value form>input.name Cory Rahman'`
+    * `wait` - `'wait 3000'` (3 seconds)
+    * `write` - `'write p Overwritten text'`
   * Selector: CSS selector like `button.class-name` (should not contain spaces)
   * Data: Argument for `value`, `write`, `log`, and optionally `exists` and `await`
-* Parameter 2: Options (Object, optional)
-  * `awaitTimeout`: (default: 15000) How long in milliseconds to wait for an element using the await command
-  * `continueOnFailure`: (default: false) Continue to run actions even if one fails
-  * `globalDelay`: (default: 500) time between actions in milliseconds
-  * `logCollapse`: (default: false) Initializes the console group collapsed
-  * `logResult`: (default: true) Show the final result in the browser console
-  * `logUpdates`: (default: true) Show real-time progress in the browser console
-  * `message`: (default: '') Label to show in the console and optionally in the DOM
-  * `messageShowInDOM`: (default: false) Show the message visually on the page / DOM
-  * `messageStyle`: Override the default message style when showing the message in the DOM
+* 2: Options (Object, optional)
+  * `awaitTimeout`: (*default: 15000*) How long in milliseconds to wait for an element using the await command
+  * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
+  * `displayProgress`: (*default: true*) Show the message and animations visually on the page / DOM
+  * `globalDelay`: (*default: 500*) time between actions in milliseconds
+  * `logCollapse`: (*default: false*) Initializes the console group collapsed
+  * `logProgress`: (*default: true*) Show real-time progress in the browser console
+  * `logResult`: (*default: true*) Show the final result in the browser console
+  * `message`: (*default: ''*) Label to show in the console and optionally in the DOM
+  * `overrideCss`: (*default: ''*) Override default SPA Check CSS, target classes such as .spa-check-message, .spa-check-focus-box, or .spa-check-tooltip
 
 Output details:
 

@@ -7,13 +7,22 @@ export type SpaCheckActionString = '' | StringSimple | StringComplex;
 export type SpaCheckOptions = {
   awaitTimeout?: number,
   continueOnFailure?: boolean,
+  displayProgress?: boolean,
   globalDelay?: number,
   logCollapse?: boolean,
+  logProgress?: boolean,
   logResult?: boolean,
-  logUpdates?: boolean,
   message?: string,
-  messageShowInDOM?: boolean,
-  messageStyle?: string,
+  overrideCss?: string,
 }
 export type SpaCheckReturn = { success: boolean, log: string[], message: string };
+export type DomElements = {
+  arrow?: HTMLElement,
+  arrowShadow?: HTMLElement,
+  focusBox?: HTMLElement,
+  message?: HTMLElement,
+  style?: HTMLElement,
+  tooltip?: HTMLElement
+  tooltipShadow?: HTMLElement
+}
 
