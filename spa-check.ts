@@ -155,7 +155,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       const element = await this.select(selector);
       if (!element) return;
       await this.performAction(
-        () => { element.value = value },
+        () => { element.value = value; element.dispatchEvent(new InputEvent('input')); },
         `Filling value of ${element.tagName.toLowerCase()}`,
         element
       )
