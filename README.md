@@ -47,7 +47,8 @@ Input parameters:
 * 2: Options (Object, optional)
   * `awaitTimeout`: (*default: 15000*) How long in milliseconds to wait for an element using the await command
   * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
-  * `displayProgress`: (*default: true*) Show the message and animations visually on the page / DOM
+  * `displayMessage`: (*default: true*) Show message at the top of the page
+  * `displayProgress`: (*default: true*) Show animations of actions visually on the page using tooltips
   * `globalDelay`: (*default: 500*) time between actions in milliseconds
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
@@ -88,10 +89,11 @@ spaCheck([
   'click button.some-class', // Clicks a button with class 'some-class'
   'click div With certain text', // Clicks on the given text within a div
   'click * With certain text', // Clicks on the given text regardless of containing element
+  'click body>>.nested-div', // Use `>>` instead of spaces in CSS selectors
 ]);
 ```
 
-* Note: Don't include spaces in the CSS Selectors
+* Note: Use `>>` instead of spaces as the descendant combinator in CSS Selectors. For example, use `body>>.class` instead of `body .class`. This is the only divergence from regular CSS selector syntax.
 
 ### Validate the DOM with `exists`:
 

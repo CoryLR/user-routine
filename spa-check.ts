@@ -3,19 +3,20 @@ import { DomElements, SpaCheckAction, SpaCheckActionString, SpaCheckOptions, Spa
 /**
  * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, check if things exist, etc.
  * @example new SpaCheck(['click button.some-class', 'value form>input Hello, world!', 'exists .success-message'], {message: 'See if the feature works', globalDelay: 1000});
- * @param actionList Available actions types: append, await, click, exists, log, nav, value, write, or provide a custom function
- * @param options Available options: awaitTimeout, continueOnFailure, globalDelay, logProgress, message, messageStyle, displayProgress
+ * @param actionList Available actions types: append, await, click, exists, log, nav, value, wait, write, or provide a custom function
+ * @param options Available options: awaitTimeout, continueOnFailure, displayMessage, displayProgress, globalDelay, logCollapse, logProgress, logResult, message, overrideCss
  */
 export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOptions = {}): Promise<SpaCheckReturn> {
 
   const defaultConfig = {
     awaitTimeout: 15000,
     continueOnFailure: false,
+    displayMessage: true,
     displayProgress: true,
     globalDelay: 500,
     logCollapse: false,
-    logResult: true,
     logProgress: true,
+    logResult: true,
     message: 'SPA Check',
     overrideCss: '',
   };
@@ -92,17 +93,15 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       const [_, selector, value] = await this.argSplitComplex(action);
       const clickTarget = this.getTargetText(selector, value);
       if (value) {
-        const elements = document.querySelectorAll(selector);
+        const elements = this.selectorAll(selector);
         clickableTextElement = undefined;
         this.findClickableElementWithTextRecursive(elements, value);
         if (clickableTextElement) {
-          // if (config.displayProgress && config.animate) await this.animate(clickableTextElement, `Clicking ${(clickableTextElement as HTMLElement).tagName.toLowerCase()} with text '${value}'`);
           await this.performAction(
             () => { (clickableTextElement as HTMLElement).click() },
             `Clicking ${(clickableTextElement as HTMLElement).tagName.toLowerCase()} with text '${value}'`,
             clickableTextElement
           )
-          // (clickableTextElement as HTMLElement).click();
           this.log(`Clicked text '${value}' inside ${selector} (clicked on ${(clickableTextElement as HTMLElement).tagName.toLowerCase()})`);
         } else {
           await this.error(`Could not find selector to click`, clickTarget);
@@ -111,13 +110,11 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       } else {
         const element = await this.select(selector);
         if (!element) return;
-        // if (config.displayProgress && config.animate) await this.animate(element, `Clicking ${selector}`);
         await this.performAction(
           () => { element.click(); },
           `Clicking ${selector}`,
           element
         )
-        // element.click();
         this.log(`Clicked ${selector}`);
       }
 
@@ -127,7 +124,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       let found = false;
       let foundElement;
       if (value) {
-        const elements = document.querySelectorAll(selector);
+        const elements = this.selectorAll(selector);
         for (const element of elements) {
           if (this.checkIfElementContainsText(element, value)) {
             found = true;
@@ -138,7 +135,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
           }
         }
       } else {
-        const element = document.querySelector(selector);
+        const element = this.selector(selector);
         if (element) {
           found = true;
           foundElement = element;
@@ -157,8 +154,6 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       const [_, selector, value] = await this.argSplit(action);
       const element = await this.select(selector);
       if (!element) return;
-      // if (config.displayProgress && config.animate) await this.animate(element, 'Filling value')
-      // await this.select(selector).value = value;
       await this.performAction(
         () => { element.value = value },
         `Filling value of ${element.tagName.toLowerCase()}`,
@@ -212,7 +207,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       for (let i = 0; i < loopCount; i++) {
         if (value) {
           /* Check for text */
-          const elements: (HTMLElement & HTMLInputElement)[] = Array.from(document.querySelectorAll(selector));
+          const elements: (HTMLElement & HTMLInputElement)[] = Array.from(this.selectorAll(selector.replace(/>>/g)));
           for (const element of elements) {
             if (element && element.textContent && element.textContent.toLowerCase().includes(value.toLowerCase())) {
               found = true;
@@ -224,7 +219,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
           }
         } else {
           /* Just check for element */
-          const element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
+          const element = this.selector(selector) as HTMLElement & HTMLInputElement;
           if (element) {
             found = true;
             foundElement = element;
@@ -260,11 +255,19 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   }
 
   this.select = async (selector: string): Promise<HTMLElement & HTMLInputElement> => {
-    const element = document.querySelector(selector) as HTMLElement & HTMLInputElement;
+    const element = this.selector(selector) as HTMLElement & HTMLInputElement;
     if (!element) {
-      await this.error('CSS Selector not found', selector);
+      await this.error('CSS Selector not found', selector.replace(/>>/g, ' '));
     }
     return element;
+  }
+
+  this.selector = (selector: string) => {
+    return document.querySelector(selector.replace(/>>/g, ' '));
+  }
+
+  this.selectorAll = (selector: string) => {
+    return document.querySelectorAll(selector.replace(/>>/g, ' '));
   }
 
   /**
@@ -294,7 +297,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   }
 
   this.getTargetText = (selector: string, value?: string) => {
-    return `'${selector}'` + (value ? ` containing text '${value}'` : '');
+    return `'${selector.replace(/>>/g, ' ')}'` + (value ? ` containing text '${value}'` : '');
   }
 
   this.argSplit = async (action): Promise<string[]> => {
@@ -302,16 +305,19 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
     if (split.length < 3) {
       await this.error(`Unexpected ${split[0]} input with data, got:`, action);
     }
+    split[1] = split[1].replace(/>>/g, ' ');
     return split;
   }
-
+  
   this.argSplitComplex = async (action: string): Promise<string[]> => {
     const spaceSplit = action.split(' ');
-    return spaceSplit.length > 2 ? await this.argSplit(action) : spaceSplit;
+    if (spaceSplit.length > 2) return await this.argSplit(action);
+    spaceSplit[1] = spaceSplit[1].replace(/>>/g, ' ');
+    return spaceSplit;
   }
 
   this.messageStart = async () => {
-    if (config.displayProgress) this.addCss();
+    if (config.displayMessage || config.displayProgress) this.addCss();
     await this.sleep(0);
     if (config.logProgress) {
       if (config.logCollapse) {
@@ -320,7 +326,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
         console.group(spaCheckLogTitle);
       }
     }
-    if (config.displayProgress) this.displayMessageInDOM(config.message);
+    this.displayMessageInDOM(config.message);
   }
 
   this.messageEnd = (returnPayload) => {
@@ -352,102 +358,103 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
     domElements.style = document.createElement('style');
     domElements.style.textContent = `
       .spa-check-message {
-        font: 20px Georgia;
-        padding: 18px 12px 6px 12px;
-        z-index: 9999;
-        position: fixed;
-        top: 0;
-        right: 10%;
-        color: black;
-        background-color: rgba(245,245,245,0.9);
-        text-align: right;
-        border-radius: 0 0 12px 12px;
-        max-width: 80vw;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        border: 2px solid rgb(180,180,180);
-        border-top: 0;
+        font: 20px Georgia !important;
+        padding: 18px 12px 6px 12px !important;
+        z-index: 9999 !important;
+        position: fixed !important;
+        top: 0 !important;
+        right: 10% !important;
+        color: black !important;
+        background-color: rgba(245,245,245,0.9) !important;
+        text-align: right !important;
+        border-radius: 0 0 12px 12px !important;
+        max-width: 80vw !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        text-overflow: ellipsis !important;
+        border: 2px solid rgb(180,180,180) !important;
+        border-top: 0 !important;
       }
-      .spa-check-message>div {
-        font-size: 12px;
-        color: dimgray;
+      .spa-check-message>.spa-check-attribution {
+        font-size: 12px !important;
+        color: dimgray !important;
       }
       .spa-check-focus-box {
-        z-index: 9997;
-        visibility: hidden;
-        position: absolute;
-        background-color: rgba(255,255,255,0.2);
-        border: 2px solid white;
-        box-shadow: 0 0 70px 10px rgba(0,0,0,0.4);
+        z-index: 9997 !important;
+        visibility: hidden !important;
+        position: absolute !important;
+        background-color: rgba(255,255,255,0.2) !important;
+        border: 2px solid white !important;
+        box-shadow: 0 0 0 2px rgb(0,0,0) !important;
       }
       .spa-check-tooltip {
-        z-index: 9999;
-        visibility: hidden;
-        font: 14px Georgia;
-        position: absolute;
-        background-color: rgb(245,245,245);
-        color: black;
-        text-align: center;
-        padding: 10px;
-        border-radius: 10px;
-        max-width: ${animationTooltipMaxWidth}px;
+        z-index: 9999 !important;
+        visibility: hidden !important;
+        font: 14px Georgia !important;
+        position: absolute !important;
+        background-color: rgb(245,245,245) !important;
+        color: black !important;
+        text-align: center !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+        max-width: ${animationTooltipMaxWidth}px !important;
       }
       .spa-check-tooltip-error {
-        color: darkred;
+        color: darkred !important;
       }
       .spa-check-arrow {
-        z-index: 9999;
-        visibility: hidden;
-        width: 0;
-        height: 0;
-        position: absolute;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid rgb(245,245,245); 
+        z-index: 9999 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        position: absolute !important;
+        border-left: 10px solid transparent !important;
+        border-right: 10px solid transparent !important;
+        border-bottom: 10px solid rgb(245,245,245) !important; 
       }
       .spa-check-arrow-shadow {
-        z-index: 9998;
-        border-left: 14px solid transparent;
-        border-right: 14px solid transparent;
-        border-bottom: 14px solid rgb(180,180,180);
-        margin: -3px 0 0 -4px;
+        z-index: 9998 !important;
+        border-left: 14px solid transparent !important;
+        border-right: 14px solid transparent !important;
+        border-bottom: 14px solid rgb(180,180,180) !important;
+        margin: -3px 0 0 -4px !important;
       }
       .spa-check-tooltip-shadow {
-        z-index: 9998;
-        color: transparent;
-        border: 2px solid rgb(180,180,180);
-        background-color: rgb(180,180,180);
-        margin: -2px 0 0 -2px;
-        border-radius: 12px;
+        z-index: 9998 !important;
+        color: transparent !important;
+        border: 2px solid rgb(180,180,180) !important;
+        background-color: rgb(180,180,180) !important;
+        margin: -2px 0 0 -2px !important;
+        border-radius: 12px !important;
       }
       .spa-check-fade-in {
-        visibility: visible;
-        animation: spaCheckfadeIn ${animationFadeTime}ms; 
+        visibility: visible !important;
+        animation: spaCheckfadeIn ${animationFadeTime}ms !important; 
       }
       .spa-check-fade-out {
-        opacity: 0;
-        animation: spaCheckfadeOut ${animationFadeTime}ms; 
+        opacity: 0 !important;
+        animation: spaCheckfadeOut ${animationFadeTime}ms !important; 
       }
       @keyframes spaCheckfadeIn {
-        0% { opacity: 0; }
-        100% { opacity: 1; }
+        0% { opacity: 0 !important; }
+        100% { opacity: 1 !important; }
       }
       @keyframes spaCheckfadeOut {
-        0% { opacity: 1; }
-        100% { opacity: 0; }
+        0% { opacity: 1 !important; }
+        100% { opacity: 0 !important; }
       }
     `;
     domElements.style.textContent += config.overrideCss;
-    document.querySelector('body')?.appendChild(domElements.style);
+    this.selector('body')?.appendChild(domElements.style);
   }
 
   this.displayMessageInDOM = (message: string) => {
     domElements.message = document.createElement('div');
-    const subtitle = message === defaultConfig.message ? '' : '<div>SPA Check</div>';
+    const subtitle = message === defaultConfig.message ? '' : '<div class="spa-check-attribution">SPA Check</div>';
     domElements.message.innerHTML = message + subtitle;
     domElements.message.classList.add('spa-check-message')
-    document.querySelector('body')?.appendChild(domElements.message);
+    if (!config.displayMessage) domElements.message.style.visibility = 'hidden';
+    this.selector('body')?.appendChild(domElements.message);
   }
 
   this.animateTooltipOpen = async (element: HTMLElement, actionMessage: string, type: 'info' | 'error' = 'info', pinnedOverride?: boolean) => {
@@ -467,7 +474,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
     domElements.tooltip = document.createElement('div');
     domElements.tooltip.classList.add('spa-check-tooltip');
     if (type === 'error') domElements.tooltip.classList.add('spa-check-tooltip-error');
-    domElements.tooltip.textContent = actionMessage;
+    domElements.tooltip.textContent = actionMessage.replace(/>>/g, ' ');
 
     document.body.appendChild(domElements.focusBox);
     document.body.appendChild(domElements.arrow);

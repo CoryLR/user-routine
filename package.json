@@ -1,7 +1,7 @@
 {
   "name": "spa-check",
   "type": "module",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.",
   "main": "./spa-check.min.js",
   "types": "./spa-check.d.ts",

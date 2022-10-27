@@ -7,6 +7,7 @@ export type SpaCheckActionString = '' | StringSimple | StringComplex;
 export type SpaCheckOptions = {
   awaitTimeout?: number,
   continueOnFailure?: boolean,
+  displayMessage?: boolean,
   displayProgress?: boolean,
   globalDelay?: number,
   logCollapse?: boolean,
