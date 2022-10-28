@@ -20,6 +20,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
     logResult: true,
     message: 'SPA Check',
     overrideCss: '',
+    separator: ' ',
   };
   const updateList: string[] = [];
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
@@ -79,7 +80,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   this.doActionString = async (action: SpaCheckActionString) => {
     const actionCode = action.substring(0, 3);
     if (actionCode === 'nav') {
-      const location = action.split(' ')[1];
+      const location = action.split(config.separator)[1];
       if (location && location[0] === '#') {
         await this.performAction(
           () => { window.location.href = location; },
@@ -120,10 +121,16 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       }
 
     } else if (actionCode === 'exi') {
-      const [_, selector, value] = await this.argSplitComplex(action);
+      let [_, selector, value] = await this.argSplitComplex(action);
+      let notOperator = false;
+      if (selector[0] === '!') {
+        selector = selector.substring(1);
+        notOperator = true;
+      }
       const existsTarget = this.getTargetText(selector, value);
       let found = false;
       let foundElement;
+
       if (value) {
         const elements = this.selectorAll(selector);
         for (const element of elements) {
@@ -142,12 +149,20 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
           foundElement = element;
         }
       }
-      if (found) {
+      if (found && !notOperator) {
         await this.animateTooltipOpen(foundElement, `Confirmed exists: ${existsTarget}`, 'info');
         await this.animateTooltipClose();
         this.log(`Confirmed exists: ${existsTarget}`);
-      } else {
+      } else if (!found && !notOperator) {
         await this.error(`Did not exist`, existsTarget);
+      } else if (found && notOperator) {
+        await this.animateTooltipOpen(foundElement, `Confirmed exists: ${existsTarget}`, 'error');
+        await this.animateTooltipClose();
+        await this.error(`Confirmed exists: ${existsTarget}`);
+      } else if (!found && notOperator) {
+        await this.animateTooltipOpen(domElements.message, `Confirmed does not exist: ${existsTarget}`, 'info');
+        await this.animateTooltipClose();
+        this.log(`Confirmed does not exist: ${existsTarget}`);
       }
       clickableTextElement = undefined;
 
@@ -190,7 +205,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       );
       
     } else if (actionCode === 'wai') {
-      const [_, value] = action.split(' ');
+      const [_, value] = action.split(config.separator);
       this.log(`Waiting ${Number(value) / 1000} second(s)`);
       await this.performAction(
         async () => {await this.sleep(Number(value));},
@@ -198,13 +213,20 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
       );
 
     } else if (actionCode === 'awa') {
-      const [_, selector, value] = await this.argSplitComplex(action);
+      let [_, selector, value] = await this.argSplitComplex(action);
+      let notOperator = false;
+      if (selector[0] === '!') {
+        selector = selector.substring(1);
+        notOperator = true;
+      }
+
       const loopCount = config.awaitTimeout / config.globalDelay;
       let found = false;
       let foundElement;
       const awaitingTarget = this.getTargetText(selector, value);
       this.log(`Awaiting ${awaitingTarget}...`);
-      await this.animateTooltipOpen(domElements.message, `Awaiting ${awaitingTarget}...`, 'info', true);
+      const tooltipText = notOperator ? `Awaiting ${awaitingTarget} to not exist...` : `Awaiting ${awaitingTarget}...`;
+      await this.animateTooltipOpen(domElements.message, tooltipText, 'info', true);
       for (let i = 0; i < loopCount; i++) {
         if (value) {
           /* Check for text */
@@ -226,16 +248,27 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
             foundElement = element;
           }
         }
-        if (found) break;
+        if (found && !notOperator) break;
+        if (!found && notOperator) break;
+        found = false;
         await this.sleep(config.globalDelay);
       }
       await this.animateTooltipClose();
-      if (found) {
+      
+      // TODO: Test and make sure the new notOperator syntax works as expected
+
+      if (found && !notOperator) {
         await this.animateTooltipOpen(foundElement, `...Found ${awaitingTarget}`, 'info');
         await this.animateTooltipClose();
         this.log(`...Found ${awaitingTarget}`);
-      } else {
+      } else if(!found && !notOperator) {
         await this.error(`Timed out after ${config.awaitTimeout / 1000} second(s) awaiting`, awaitingTarget);
+      } else if (found && notOperator) {
+        await this.animateTooltipOpen(foundElement, `...Timed out awaiting ${awaitingTarget} to not exist`, 'error');
+        await this.animateTooltipClose();
+        await this.error(`...Timed out awaiting ${awaitingTarget} to not exist`);
+      } else if (!found && notOperator) {
+        this.log(`...${awaitingTarget} disappeared`);
       }
     } else if (action === '') {
       /* Do nothing, just add an extra globalDelay */
@@ -298,23 +331,23 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   }
 
   this.getTargetText = (selector: string, value?: string) => {
-    return `'${selector.replace(/>>/g, ' ')}'` + (value ? ` containing text '${value}'` : '');
+    return `'${selector}'` + (value ? ` containing text '${value}'` : '');
   }
 
   this.argSplit = async (action): Promise<string[]> => {
+    if (config.separator !== ' ') return action.split(config.separator);
     const split = action.split(/ ([^\s]+) (.*)/s);
-    if (split.length < 3) {
-      await this.error(`Unexpected ${split[0]} input with data, got:`, action);
-    }
+    if (split.length < 3) await this.error(`Unexpected ${split[0]} input with data, got:`, action);
     split[1] = split[1].replace(/>>/g, ' ');
     return split;
   }
   
   this.argSplitComplex = async (action: string): Promise<string[]> => {
-    const spaceSplit = action.split(' ');
-    if (spaceSplit.length > 2) return await this.argSplit(action);
-    spaceSplit[1] = spaceSplit[1].replace(/>>/g, ' ');
-    return spaceSplit;
+    const regularSplit = action.split(config.separator);
+    if (config.separator !== ' ') return regularSplit;
+    if (regularSplit.length > 2) return await this.argSplit(action);
+    regularSplit[1] = regularSplit[1].replace(/>>/g, ' ');
+    return regularSplit;
   }
 
   this.messageStart = async () => {

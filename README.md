@@ -1,12 +1,12 @@
 # SPA Check
 
-Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.
+Automated testing for single-page applications (SPAs). Small, easy to use, and zero setup. Click on things, fill in values, await for things exist, etc.
 
 # Access
 
 Options:
 
-1. Install using `npm install --save-dev spa-check` and import:
+**1.** Install using `npm install --save-dev spa-check` and import:
 
 ```javascript
 import { spaCheck } from 'spa-check';
@@ -14,7 +14,8 @@ import { spaCheck } from 'spa-check';
 const { spaCheck } = require('spa-check');
 ```
 
-2. Or copy-paste the portable template from [spa-check.template.js](./spa-check.template.js) (works if you paste into the a browser console)
+**2.** Or copy the portable template from here: [spa-check.template.js](./spa-check.template.js)
+* This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
@@ -23,20 +24,29 @@ SPA Check is served as a function named `spaCheck`.
 Example:
 
 ```javascript
+spaCheck([
+  'click button',
+  'await .result Result Text'
+]);
+```
+
+You can also add options:
+
+```javascript
 spaCheck(
   ['click button', 'await .result Result Text'], // Actions
   { message:'Example Test', globalDelay: 1000 }, // Options
 );
 ```
 
-Input parameters:
+Input parameter details:
 
 * 1: Actions List (Array of strings or custom functions)
   * Action strings & examples:
     * `append` - `'append p Appended text'`
-    * `await` - `'await .modal.success-message'` or `'await h1 With This Text'`
+    * `await` - `'await .modal.success-message'`, `'await h1 With This Text'`, or `'await !h1 To disappear'`
     * `click` - `'click button.submit'` or `'click button With This Text'`
-    * `exists` - `'exists .class-name'` or `'exists h1 With This Text'`
+    * `exists` - `'exists .class-name'`, `'exists h1 With This Text'`, or `'exists !h1 Incorrect text'`
     * `log` - `'log Some message'`
     * `nav` - `'nav #id'` or `'nav #/some/hash/routing/path'`
     * `value` - `'value form>input.name Cory Rahman'`
@@ -49,13 +59,14 @@ Input parameters:
   * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
   * `displayMessage`: (*default: true*) Show message at the top of the page
   * `displayProgress`: (*default: true*) Show animations of actions visually on the page using tooltips
-  * `displaySpeed`: (*default: 1*) Animation speed for displayProgress (0.5 = half speed, 2 = double speed, etc)
+  * `displaySpeed`: (*default: 1*) Animation speed for displayProgress tooltips (0.5 = half speed, 2 = double speed, etc)
   * `globalDelay`: (*default: 500*) Time between actions in milliseconds
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
-  * `message`: (*default: ''*) Label to show in the console and optionally in the DOM
+  * `message`: (*default: 'SPA Check'*) Label to show in the console and in the DOM
   * `overrideCss`: (*default: ''*) Override default SPA Check CSS, target classes such as .spa-check-message, .spa-check-focus-box, or .spa-check-tooltip
+  * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `selector` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'` without worrying about spaces breaking the CSS selector. Alternatively you can use `>>` instead of spaces without customizing the separator, like `await .container>>div Result Text`.
 
 Output details:
 
@@ -94,14 +105,16 @@ spaCheck([
 ]);
 ```
 
-* Note: Use `>>` instead of spaces as the descendant combinator in CSS Selectors. For example, use `body>>.class` instead of `body .class`. This is the only divergence from regular CSS selector syntax.
+* Note: To use spaces in CSS selectors, either replace the spaces with `>>` (like `body>>.class` instead of `body .class`) or define a custom separator using the `separator` option (like `separator: '; '`).
 
 ### Validate the DOM with `exists`:
 
 ```javascript
 spaCheck([
-  'exists p.some-class', // Checks for the existance of this selector
+  'exists p.some-class', // Checks for the existence of this element
   'exists p.some-class With certain text', // Also checks if it includes certain text
+  'exists !p.some-class', // Ensures the element does not exist
+  'exists !p.some-class With certain text', // Ensures the element does not exist with certain text
 ]);
 ```
 
@@ -109,8 +122,10 @@ spaCheck([
 
 ```javascript
 spaCheck([
-  'await div.some-popup', // Awaits the existance of this selector
+  'await div.some-popup', // Awaits the existence of this element
   'await div.some-popup With certain text', // Also waits for it to include certain text
+  'await !div.some-spinner', // Awaits the non-existence of this element
+  'await !div.some-popup With certain text', // Also waits for it to not include certain text
   'wait 3000', // waits 3 seconds
 ]);
 ```

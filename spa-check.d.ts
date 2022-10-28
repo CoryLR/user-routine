@@ -16,6 +16,7 @@ export type SpaCheckOptions = {
   logResult?: boolean,
   message?: string,
   overrideCss?: string,
+  separator?: string,
 }
 export type SpaCheckReturn = { success: boolean, log: string[], message: string };
 export type DomElements = {
