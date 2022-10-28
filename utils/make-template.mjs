@@ -21,7 +21,9 @@ const template =`
 
 /* Examples: */
 async function runSpaChecks() {
-  ${exampleTests}
+
+  ${exampleTests.replaceAll(/\n/g, '\n  ')}
+
 }
 
 /*
