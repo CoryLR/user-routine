@@ -15,11 +15,17 @@ const description = packageJson.description;
 const template =`
 /* 
  * SPA Check Template
- * Version ${version}
- * ${description}
+ *
+ * Run tests with zero setup by copy-pasting this file's contents
+ * into a browser console or into any client-side JavaScript
+ *
+ * Version: ${version}
+ * Description: ${description}
 */
 
-/* Examples: */
+/**
+ * SPA Check examples, replace with your tests
+ */
 async function runSpaChecks() {
 
   ${exampleTests.replaceAll(/\n/g, '\n  ')}

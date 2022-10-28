@@ -1,11 +1,17 @@
 
 /* 
  * SPA Check Template
- * Version 4.2.4
- * Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.
+ *
+ * Run tests with zero setup by copy-pasting this file's contents
+ * into a browser console or into any client-side JavaScript
+ *
+ * Version: 4.2.5
+ * Description: Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.
 */
 
-/* Examples: */
+/**
+ * SPA Check examples, replace with your tests
+ */
 async function runSpaChecks() {
 
   await spaCheck([
