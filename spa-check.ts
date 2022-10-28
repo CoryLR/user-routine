@@ -358,91 +358,91 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
   this.addCss = () => {
     domElements.style = document.createElement('style');
     domElements.style.textContent = `
-      .spa-check-message {
-        font: 20px Georgia !important;
-        padding: 18px 12px 6px 12px !important;
-        z-index: 9999 !important;
-        position: fixed !important;
-        top: 0 !important;
-        right: 10% !important;
-        color: black !important;
-        background-color: rgba(245,245,245,0.9) !important;
-        text-align: right !important;
-        border-radius: 0 0 12px 12px !important;
-        max-width: 80vw !important;
-        overflow: hidden !important;
-        white-space: nowrap !important;
-        text-overflow: ellipsis !important;
-        border: 2px solid rgb(180,180,180) !important;
-        border-top: 0 !important;
+      body > .spa-check-message {
+        font: 20px Georgia;
+        padding: 18px 12px 6px 12px;
+        z-index: 9999;
+        position: fixed;
+        top: 0;
+        right: 10%;
+        color: black;
+        background-color: rgba(245,245,245,0.9);
+        text-align: right;
+        border-radius: 0 0 12px 12px;
+        max-width: 80vw;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        border: 2px solid rgb(180,180,180);
+        border-top: 0;
       }
-      .spa-check-message>.spa-check-attribution {
-        font-size: 12px !important;
-        color: dimgray !important;
+      body > .spa-check-message>.spa-check-attribution {
+        font-size: 12px;
+        color: dimgray;
       }
-      .spa-check-focus-box {
-        z-index: 9997 !important;
-        visibility: hidden !important;
-        position: absolute !important;
-        background-color: rgba(255,255,255,0.2) !important;
-        border: 2px solid white !important;
-        box-shadow: 0 0 0 2px rgb(0,0,0) !important;
+      body > .spa-check-focus-box {
+        z-index: 9997;
+        visibility: hidden;
+        position: absolute;
+        background-color: rgba(255,255,255,0.2);
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px rgb(0,0,0);
       }
-      .spa-check-tooltip {
-        z-index: 9999 !important;
-        visibility: hidden !important;
-        font: 14px Georgia !important;
-        position: absolute !important;
-        background-color: rgb(245,245,245) !important;
-        color: black !important;
-        text-align: center !important;
-        padding: 10px !important;
-        border-radius: 10px !important;
-        max-width: ${animationTooltipMaxWidth}px !important;
+      body > .spa-check-tooltip {
+        z-index: 9999;
+        visibility: hidden;
+        font: 14px Georgia;
+        position: absolute;
+        background-color: rgb(245,245,245);
+        color: black;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: ${animationTooltipMaxWidth}px;
       }
-      .spa-check-tooltip-error {
-        color: darkred !important;
+      body > .spa-check-tooltip-error {
+        color: darkred;
       }
-      .spa-check-arrow {
-        z-index: 9999 !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
-        position: absolute !important;
-        border-left: 10px solid transparent !important;
-        border-right: 10px solid transparent !important;
-        border-bottom: 10px solid rgb(245,245,245) !important; 
+      body > .spa-check-arrow {
+        z-index: 9999;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+        position: absolute;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid rgb(245,245,245); 
       }
-      .spa-check-arrow-shadow {
-        z-index: 9998 !important;
-        border-left: 14px solid transparent !important;
-        border-right: 14px solid transparent !important;
-        border-bottom: 14px solid rgb(180,180,180) !important;
-        margin: -3px 0 0 -4px !important;
+      body > .spa-check-arrow-shadow {
+        z-index: 9998;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-bottom: 14px solid rgb(180,180,180);
+        margin: -3px 0 0 -4px;
       }
-      .spa-check-tooltip-shadow {
-        z-index: 9998 !important;
-        color: transparent !important;
-        border: 2px solid rgb(180,180,180) !important;
-        background-color: rgb(180,180,180) !important;
-        margin: -2px 0 0 -2px !important;
-        border-radius: 12px !important;
+      body > .spa-check-tooltip-shadow {
+        z-index: 9998;
+        color: transparent;
+        border: 2px solid rgb(180,180,180);
+        background-color: rgb(180,180,180);
+        margin: -2px 0 0 -2px;
+        border-radius: 12px;
       }
-      .spa-check-fade-in {
-        visibility: visible !important;
-        animation: spaCheckfadeIn ${animationFadeTime}ms !important; 
+      body > .spa-check-fade-in {
+        visibility: visible;
+        animation: spaCheckfadeIn ${animationFadeTime}ms; 
       }
-      .spa-check-fade-out {
-        opacity: 0 !important;
-        animation: spaCheckfadeOut ${animationFadeTime}ms !important; 
+      body > .spa-check-fade-out {
+        opacity: 0;
+        animation: spaCheckfadeOut ${animationFadeTime}ms; 
       }
       @keyframes spaCheckfadeIn {
-        0% { opacity: 0 !important; }
-        100% { opacity: 1 !important; }
+        0% { opacity: 0; }
+        100% { opacity: 1; }
       }
       @keyframes spaCheckfadeOut {
-        0% { opacity: 1 !important; }
-        100% { opacity: 0 !important; }
+        0% { opacity: 1; }
+        100% { opacity: 0; }
       }
     `;
     domElements.style.textContent += config.overrideCss;
