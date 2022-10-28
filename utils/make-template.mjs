@@ -3,7 +3,7 @@
 
 import fs from 'fs';
 const spaCheckJsBlob = fs.readFileSync('spa-check.blob.js', 'utf8');
-const exampleTests = fs.readFileSync('test/spa-check-tests.js', 'utf8');
+const exampleTests = fs.readFileSync('test/tests.js', 'utf8');
 
 /* Extract usage documentation */
 const readme = fs.readFileSync('README.md', 'utf8');
@@ -14,20 +14,23 @@ const description = packageJson.description;
 
 const template =`
 /* 
- * SPA Check template for quick copy-paste
+ * SPA Check Template
  * Version ${version}
  * ${description}
 */
 
-/* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
-${spaCheckJsBlob}
 /* Examples: */
-${exampleTests}
+async function runSpaChecks() {
+  ${exampleTests}
+}
 
 /*
 ${usage}
 */
 
+/* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
+${spaCheckJsBlob}
+runSpaChecks();
 `;
 
 fs.writeFileSync('spa-check.template.js', template, { encoding: 'utf8', flag: 'w' });
