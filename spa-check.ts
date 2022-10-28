@@ -160,7 +160,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
         await this.animateTooltipClose();
         await this.error(`Confirmed exists: ${existsTarget}`);
       } else if (!found && notOperator) {
-        await this.animateTooltipOpen(domElements.message, `Confirmed does not exist: ${existsTarget}`, 'info');
+        await this.animateTooltipOpen(domElements.message, `Confirmed does not exist: ${existsTarget}`, 'info', true);
         await this.animateTooltipClose();
         this.log(`Confirmed does not exist: ${existsTarget}`);
       }
