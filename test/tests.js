@@ -1,7 +1,7 @@
 await spaCheck([
   'log Tests starting',
-  'val input[type="text"] Hello, world!',
-  'val input[type="number"] 20',
+  'value input[type="text"] Hello, world!',
+  'value input[type="number"] 20',
   'click button',
   'exists pre hello',
   'write #far-down Back up we go!',
