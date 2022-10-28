@@ -49,7 +49,8 @@ Input parameters:
   * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
   * `displayMessage`: (*default: true*) Show message at the top of the page
   * `displayProgress`: (*default: true*) Show animations of actions visually on the page using tooltips
-  * `globalDelay`: (*default: 500*) time between actions in milliseconds
+  * `displaySpeed`: (*default: 1*) Animation speed for displayProgress (0.5 = half speed, 2 = double speed, etc)
+  * `globalDelay`: (*default: 500*) Time between actions in milliseconds
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console

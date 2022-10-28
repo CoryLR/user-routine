@@ -9,6 +9,7 @@ export type SpaCheckOptions = {
   continueOnFailure?: boolean,
   displayMessage?: boolean,
   displayProgress?: boolean,
+  displaySpeed?: number,
   globalDelay?: number,
   logCollapse?: boolean,
   logProgress?: boolean,

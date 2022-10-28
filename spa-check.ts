@@ -13,6 +13,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
     continueOnFailure: false,
     displayMessage: true,
     displayProgress: true,
+    displaySpeed: 1,
     globalDelay: 500,
     logCollapse: false,
     logProgress: true,
@@ -523,14 +524,15 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
 
     await this.scrollIntoViewIfNeeded(element);
 
-    domElements.focusBox.classList.add('spa-check-fade-in')
-    domElements.arrowShadow.classList.add('spa-check-fade-in')
-    domElements.tooltipShadow.classList.add('spa-check-fade-in')
-    domElements.arrow.classList.add('spa-check-fade-in')
-    domElements.tooltip.classList.add('spa-check-fade-in')
+    domElements.focusBox.classList.add('spa-check-fade-in');
+    domElements.arrowShadow.classList.add('spa-check-fade-in');
+    domElements.tooltipShadow.classList.add('spa-check-fade-in');
+    domElements.arrow.classList.add('spa-check-fade-in');
+    domElements.tooltip.classList.add('spa-check-fade-in');
     const findTime = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300ms)
-    const readTime = actionMessage.length * 30 < 2000 ? actionMessage.length * 30 : 2000; // Reading covers one letter per 30ms in sentences
-    await this.sleep(animationFadeTime + findTime + readTime);
+    let readTime = actionMessage.length * 30 < 2000 ? actionMessage.length * 30 : 2000; // Reading covers one letter per 30ms in sentences
+    readTime = readTime;
+    await this.sleep((animationFadeTime + findTime + readTime) / config.displaySpeed);
   }
 
   this.animateTooltipClose = async () => {
