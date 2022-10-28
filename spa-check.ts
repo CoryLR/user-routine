@@ -366,7 +366,7 @@ export async function spaCheck(actionList: SpaCheckAction[], options: SpaCheckOp
         top: 0;
         right: 10%;
         color: black;
-        background-color: rgba(245,245,245,0.9);
+        background-color: rgba(250,250,250,0.8);
         text-align: right;
         border-radius: 0 0 12px 12px;
         max-width: 80vw;
