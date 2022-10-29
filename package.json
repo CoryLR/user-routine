@@ -9,7 +9,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "./node_modules/typescript/bin/tsc --target es6 --lib es2015,dom,dom.iterable spa-check.ts && ./node_modules/minify/bin/minify.js spa-check.js > spa-check.min.js && node utils/make-blob.mjs && ./node_modules/minify/bin/minify.js spa-check.blob-uncompressed.js > spa-check.blob.js && npm run build:cleanup && node utils/make-template.mjs && npm run test:update",
+    "build": "npx tsc --target es6 --lib es2015,dom,dom.iterable spa-check.ts && npx minify spa-check.js > spa-check.min.js && node utils/make-blob.mjs && npx minify spa-check.blob-uncompressed.js > spa-check.blob.js && npm run build:cleanup && node utils/make-template.mjs && npm run test:update",
     "build:cleanup": "rm spa-check.js && rm spa-check.blob-uncompressed.js",
     "test:update": "node test/update-html.mjs"
   },
