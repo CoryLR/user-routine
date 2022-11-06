@@ -1,17 +1,19 @@
 {
   "name": "spa-check",
-  "type": "module",
   "version": "4.3.1",
-  "description": "Automated testing for single-page applications (SPAs). Small, portable, and easy to use. Click on things, fill in values, await for things exist, etc.",
-  "main": "./spa-check.min.js",
-  "types": "./spa-check.d.ts",
+  "description": "Automated routines for single-page applications (SPAs), useful for end-to-end-testing and guided tutorials. Small, portable, and easy to use. Click buttons, fill values, await results, guide users, etc.",
+  "main": "./lib/spa-check.min.js",
+  "types": "./lib/spa-check.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "npx tsc --target es6 --lib es2015,dom,dom.iterable spa-check.ts && npx minify spa-check.js > spa-check.min.js && node utils/make-blob.mjs && npx minify spa-check.blob-uncompressed.js > spa-check.blob.js && npm run build:cleanup && node utils/make-template.mjs && npm run test:update",
-    "build:cleanup": "rm spa-check.js && rm spa-check.blob-uncompressed.js",
-    "test:update": "node test/update-html.mjs"
+    "build": "npm run build:lib && npm run build:blob && npm run build:template && npm run build:demo",
+    "build:blob": "webpack --config webpack.config.blob.cjs",
+    "build:demo": "webpack --config webpack.config.demo.cjs && node utils/update-demo.cjs",
+    "build:lib": "webpack --config webpack.config.min.cjs",
+    "build:local": "npm run build:lib && npm run build:demo",
+    "build:template": "node utils/make-template.mjs"
   },
   "repository": {
     "type": "git",
@@ -37,9 +39,21 @@
     "test"
   ],
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.2.0",
+    "css-loader": "^6.7.1",
+    "flickity": "^3.0.0",
+    "highlight.js": "^11.6.0",
+    "html-webpack-plugin": "^5.5.0",
     "minify": "^9.1.0",
     "node-html-parser": "^6.1.1",
     "open": "^8.4.0",
-    "typescript": "^4.8.4"
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "flickity-hash": "^2.0.1"
   }
 }

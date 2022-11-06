@@ -1,0 +1,180 @@
+@import '~flickity/css/flickity';
+
+/* Full page */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+main {
+  width: 80%;
+  margin: auto;
+}
+
+/* Code Carousel with Flickity */
+.code-carousel {
+  margin-left: -10vw;
+  width: 100vw;
+}
+.flickity-button:disabled {
+  opacity: 0;
+}
+.flickity-page-dots {
+  bottom: -15px;
+}
+.flickity-prev-next-button.previous {
+  left: 5px;
+}
+.flickity-prev-next-button.next {
+  right: 5px;
+}
+
+/* Code Carousel Details */
+.code-carousel figure {
+  margin: 10px;
+}
+.code-carousel figure:first-child {
+  padding-left: 10vw;
+}
+.code-carousel figure:last-child {
+  padding-right: 10vw;
+}
+.code-carousel figure .code-card {
+  display: flex;
+  flex-direction: column;
+  width: 310px;
+  height: 200px;
+  background-color: rgb(240, 240, 240);
+  border-radius: 15px;
+}
+.code-carousel .code-card .code-card-header {
+  background-color: rgb(220,220,220);
+  padding: 10px 15px 5px 15px;
+  border-radius: 15px 15px 0 0;
+  flex: 0 1 auto;
+}
+.code-carousel .code-card pre {
+  flex: 0 1 auto;
+  padding: 5px 15px 0 15px;
+  margin: 0;
+}
+.code-carousel .code-card pre code {
+  background-color: inherit;
+  padding: 0;
+}
+.code-carousel .code-card .buttons {
+  flex: 1 1 auto;
+  align-self: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-bottom: 15px;
+}
+.code-carousel .code-card .buttons button {
+  display: inline-block;
+  margin: 0 5px;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: rgb(220,220,220);
+  border-width: 0;
+  cursor: pointer;
+}
+.code-carousel .code-card .buttons button:first-child {
+  margin-left: 15px;
+  margin-right: auto;
+}
+.code-carousel .code-card .buttons button:last-child {
+  margin-right: 15px;
+}
+.code-carousel .code-card .buttons button:hover {
+  background-color: white;
+}
+
+/* Highlight.js */
+.hljs-title {
+  color: rgb(0, 91, 152);
+  font-weight: 600;
+}
+.hljs-string {
+  color: rgb(0, 0, 0);
+}
+.hljs-attr {
+  color: rgb(0, 91, 152);
+}
+
+/* CSS */
+.button-2 {
+  background-color: rgba(51, 51, 51, 0.05);
+  border-radius: 8px;
+  border-width: 0;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Scroll Bar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #ececec;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Mock Application */
+pre.output-duplicate {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+@media (max-width: 1024px) {
+  main {
+    width: calc(100vw - 30px);
+  }
+
+  .code-carousel {
+    margin-left: -15px;
+    width: 100vw;
+  }
+
+  .code-carousel figure:first-child {
+    /* viewport width - (card size / 2) */
+    padding-left: 15px;
+  }
+
+  .code-carousel figure:last-child {
+    padding-right: 15px;
+  }
+/* 
+  .flickity-prev-next-button.previous {
+    left: -15px;
+  }
+  
+  .flickity-prev-next-button.next {
+    right: -15px;
+  } */
+  
+}

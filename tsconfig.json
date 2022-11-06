@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "es2015"],
+    "module": "es6",
+    "target": "es6"
+  }
+}

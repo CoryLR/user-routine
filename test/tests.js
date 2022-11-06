@@ -1,5 +1,10 @@
 
 await spaCheck([
+  'comment input[type="text"] Look at this thing!',
+  'comment input[type="number"] Look at this other thing!',
+]);
+
+await spaCheck([
   'log Tests starting',
   'value input[type="text"] Hello, world!',
   'value input[type="number"] 20',
@@ -14,7 +19,7 @@ await spaCheck([
   'click button long process',
   'await !.output processing...',
   'await .output process complete',
-], { message: 'Testing features', globalDelay: 100 });
+], { message: 'Testing features', globalDelay: 100, displaySpeed: 2 });
 
 await spaCheck([
   'log Expect success: false',

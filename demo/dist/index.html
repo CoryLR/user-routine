@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=0"><title>SPA Check Demo</title><script defer="defer" src="main.js"></script></head><body><main><header><h1>SPA Check Demo</h1><p data-fill-description>Description description description...</p><nav>Quick Links: <a href="https://github.com/CoryLR/spa-check#readme">Documentation on GitHub</a>, <a href="https://www.npmjs.com/package/spa-check">NPM Listing</a>, <a href="https://github.com/CoryLR/spa-check/blob/main/spa-check.template.js">Portable Template</a></nav></header><br/><section class="code-carousel" data-flickity='{ "contain": true, "hash": true }'><figure id="demo-fill-form"><div class="code-card"><div class="code-card-header">Fill a form</div><pre class="bruh"><code>spaCheck([
+  'value input.text Hello, world!',
+  'value input.count 20',
+  'click button',
+  'exists pre hello, world',
+], { message: 'Testing form' });</code>
+          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure><figure id="demo-write-nav"><div class="code-card"><div class="code-card-header">Write and navigate</div><pre class="bruh"><code>spaCheck([
+  'write #far-down Back up we go!',
+  'nav #',
+], {
+  message: 'Testing nav',
+});</code>
+          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure><figure id="demo-await"><div class="code-card"><div class="code-card-header">Await a process</div><pre class="bruh"><code>spaCheck([
+  'click button long process',
+  'await !.output processing...',
+  'await .output process complete',
+], { message: 'Testing await' });</code>
+          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure></section><section><br/><br/><h3>Mock Application</h3><p>Click the button to duplicate some text.</p><label>Text:</label> <input class="text"> <label>Count:</label> <input type="number" class="count" min="0" max="9999"> <button class="duplicate">Duplicate</button><pre class="output-duplicate"></pre><br><br><button class="process"><span>&#128337;</span> Simulate long process</button><div class="output-process"></div></section><br><br></main></body></html>

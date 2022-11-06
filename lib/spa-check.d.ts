@@ -1,5 +1,5 @@
-export type SpaCheckAction = SpaCheckActionString | (() => void) | Promise<void>;
-type ActionSimple = 'await' | 'click' | 'exists' | 'log' | 'nav' | 'wait';
+export type SpaCheckAction = SpaCheckActionString | (() => void) | Promise<void> | string;
+type ActionSimple = 'await' | 'click' | 'comment' | 'exists' | 'log' | 'nav' | 'wait';
 type ActionComplex = 'await' |'append' | 'exists' | 'value' | 'write';
 type StringSimple = `${ActionSimple} ${string}`;
 type StringComplex = `${ActionComplex} ${string} ${string}`;
@@ -17,6 +17,7 @@ export type SpaCheckOptions = {
   message?: string,
   overrideCss?: string,
   separator?: string,
+  tutorialMode?: boolean,
 }
 export type SpaCheckReturn = { success: boolean, log: string[], message: string };
 export type DomElements = {
@@ -25,7 +26,13 @@ export type DomElements = {
   focusBox?: HTMLElement,
   message?: HTMLElement,
   style?: HTMLElement,
-  tooltip?: HTMLElement
-  tooltipShadow?: HTMLElement
+  tooltip?: HTMLElement,
+  tooltipShadow?: HTMLElement,
+  nextButton?: HTMLElement,
+  playButton?: HTMLElement,
+  pauseButton?: HTMLElement,
+  stopButton?: HTMLElement,
+  attribution?: HTMLElement,
+  status?: HTMLElement,
 }
 

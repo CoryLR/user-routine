@@ -14,23 +14,34 @@ import { spaCheck } from 'spa-check';
 const { spaCheck } = require('spa-check');
 ```
 
-**2.** Or copy the portable template from here: [spa-check.template.js](./spa-check.template.js)
+**2.** Or copy the portable template from here: [spa-check.template.js](./dist/spa-check.template.js)
 * This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
 SPA Check is served as a function named `spaCheck`.
 
-Example:
+## Simple examples:
+
+Run a test:
 
 ```javascript
 spaCheck([
-  'click button',
-  'await .result Result Text'
+  'click button.btn', // Target using CSS selectors
+  'await .result Result Text', // Await some result
 ]);
 ```
 
-You can also add options:
+Display a tutorial:
+
+```javascript
+spaCheck([
+  'comment .some-form First, fill this out',
+  'comment .submit-button Then, hit Submit!',
+], { message:'Tutorial', tutorialMode: true });
+```
+
+Customize some options:
 
 ```javascript
 spaCheck(
@@ -41,20 +52,21 @@ spaCheck(
 
 Input parameter details:
 
-* 1: Actions List (Array of strings or custom functions)
+* 1: Actions List (*String* (separate actions by new lines) or *Array of strings/functions*, required)
   * Action strings & examples:
-    * `append` - `'append p Appended text'`
-    * `await` - `'await .modal.success-message'`, `'await h1 With This Text'`, or `'await !h1 To disappear'`
+    * `append` - `'append section>p Appended text'`
+    * `await` & `!await` - `'await .modal.success-message'`, `'await h1 With This Text'`, or `'!await h1 To disappear'`
     * `click` - `'click button.submit'` or `'click button With This Text'`
-    * `exists` - `'exists .class-name'`, `'exists h1 With This Text'`, or `'exists !h1 Incorrect text'`
+    * `comment` - `'comment input.name Type your name here'`
+    * `exists` & `!exists` - `'exists .class-name'`, `'exists h1 With This Text'`, or `'!exists h1 Incorrect text'`
+    * `fill` - `'fill form>input.name Cory Rahman'`
     * `log` - `'log Some message'`
     * `nav` - `'nav #id'` or `'nav #/some/hash/routing/path'`
-    * `value` - `'value form>input.name Cory Rahman'`
     * `wait` - `'wait 3000'` (3 seconds)
     * `write` - `'write p Overwritten text'`
   * Selector: CSS selector like `button.class-name` (should not contain spaces)
-  * Data: Argument for `value`, `write`, `log`, and optionally `exists` and `await`
-* 2: Options (Object, optional)
+  * Data: Argument for `fill`, `write`, `log`, and optionally `exists` and `await`
+* 2: Options (*Object*, optional)
   * `awaitTimeout`: (*default: 15000*) How long in milliseconds to wait for an element using the await command
   * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
   * `displayMessage`: (*default: true*) Show message at the top of the page
@@ -65,8 +77,10 @@ Input parameter details:
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
   * `message`: (*default: 'SPA Check'*) Label to show in the console and in the DOM
+  * `messageAttribution`: (*default: 'SPA Check'*) Subtitle text shown when custom message is provided
   * `overrideCss`: (*default: ''*) Override default SPA Check CSS, target classes such as .spa-check-message, .spa-check-focus-box, or .spa-check-tooltip
   * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `selector` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'` without worrying about spaces breaking the CSS selector. Alternatively you can use `>>` instead of spaces without customizing the separator, like `await .container>>div Result Text`.
+  * `tutorialMode`: (*default: false*) Only animate tooltips for "log" and "comment" actions
 
 Output details:
 
@@ -76,7 +90,7 @@ Output details:
 
 ```
 [SPA Check] Message
-  * Set the value of form>input.name to 'Cory'
+  * Filled the value of form>input.name to 'Cory'
   * Clicked on button[type="submit"]
   * Awaiting 'div.success-message'...
   * ...Found 'div.success-message'
@@ -88,16 +102,16 @@ Output details:
 
 ## Template
 
-See the [spa-check.template.js](./spa-check.template.js) for examples of running multiple sequential tests using async/await.
+See the [spa-check.template.js](./dist/spa-check.template.js) for examples of running multiple sequential tests using async/await.
 
 ## Use-cases
 
-### Fill inputs with `value` and interact with `click` using Selectors:
+### Fill inputs with `fill` and interact with `click` using Selectors:
 
 ```javascript
 spaCheck([
-  'value input[type="text"] Hello, world!', // Fills in the input
-  'value input[type="number"] 20',
+  'fill input[type="text"] Hello, world!', // Fills in the input
+  'fill input[type="number"] 20',
   'click button.some-class', // Clicks a button with class 'some-class'
   'click div With certain text', // Clicks on the given text within a div
   'click * With certain text', // Clicks on the given text regardless of containing element
@@ -113,8 +127,8 @@ spaCheck([
 spaCheck([
   'exists p.some-class', // Checks for the existence of this element
   'exists p.some-class With certain text', // Also checks if it includes certain text
-  'exists !p.some-class', // Ensures the element does not exist
-  'exists !p.some-class With certain text', // Ensures the element does not exist with certain text
+  '!exists p.some-class', // Ensures the element does not exist
+  '!exists p.some-class With certain text', // Ensures the element does not exist with certain text
 ]);
 ```
 
@@ -124,8 +138,8 @@ spaCheck([
 spaCheck([
   'await div.some-popup', // Awaits the existence of this element
   'await div.some-popup With certain text', // Also waits for it to include certain text
-  'await !div.some-spinner', // Awaits the non-existence of this element
-  'await !div.some-popup With certain text', // Also waits for it to not include certain text
+  '!await div.some-spinner', // Awaits the non-existence of this element
+  '!await div.some-popup With certain text', // Also waits for it to not include certain text
   'wait 3000', // waits 3 seconds
 ]);
 ```
@@ -156,7 +170,7 @@ spaCheck([
 
 ```javascript
 spaCheck([
-  'value input.name Cory',
+  'fill input.name Cory',
   'click button[type="submit"]',
 ], { globalDelay: 1000 });
 // ^ Options object with 1 second between actions
@@ -166,9 +180,15 @@ spaCheck([
 
 # Development
 
-* To run the tests, use `npm install` to and then run `npm run build` and open up the `test/test.html` file
+## Release Notes
+
+Version 5.0
+
+* 
 
 ## Maintainers
+
+To run the tests, run `npm install` to and then run `npm run build` and open up the `demo/dist/index.html` file.
 
 To publish:
 
@@ -177,3 +197,27 @@ To publish:
 3. `npm run build`
 4. Test one last time
 5. `npm publish --access public`
+
+TODO:
+
+* [ ] Add CDN example https://cdn.jsdelivr.net/gh/CoryLR/spa-check/lib/spa-check.min.js
+* [x] Test and make sure the new notOperator syntax works as expected
+* [x] Add "comment" action
+* [x] Add "tutorialMode" option
+* [x] Change to "tutorialMode"
+* [ ] Improve "tutorialMode" to include clickable "next" buttons on each log and comment
+  * [ ] add "tutorialModeAutoPlay" option? (default false)
+  * [x] Make highlight boxes click-through-able
+  * [ ] Maybe add a feature so that if a check fail SPA Check goes back to the previous log or comment?
+* [x] Add "attributionText" option.
+* [ ] Finish the Demo page
+* [x] Add auto-test URL params to demo page so I can use it for testing
+* [x] Add multiline string action list option
+* [x] Add a check so spaCheck ends if there is already an existing SPA Check happening
+  * [x] Handle condition where multiple SPA Checks run at once, check for the message element
+* [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which SPA Check can look at both on the globaldelay but also before tooltip hide
+* [ ] Add a tutorial walkthrough to the demo page *using* SPA Check
+* [ ] Add count action
+* [ ] Change name to spa-routine / SPA Routine / spaRoutine
+
+ 

@@ -2,7 +2,7 @@
 /* Run from root */
 
 import fs from 'fs';
-const spaCheckJsBlob = fs.readFileSync('spa-check.blob.js', 'utf8');
+const spaCheckJsBlob = fs.readFileSync('dist/spa-check.blob.js', 'utf8');
 const exampleTests = fs.readFileSync('test/tests.js', 'utf8');
 
 /* Extract usage documentation */
@@ -11,6 +11,10 @@ const usage = readme.match(/# (Usage[\s\S]*?)# /gm);
 const packageJson = JSON.parse(fs.readFileSync('package.json'));
 const version = packageJson.version;
 const description = packageJson.description;
+
+function addIndent(text, prepend = '  ') {
+  return prepend + text.replaceAll(/\n/g, '\n' + prepend);
+}
 
 const template =`
 /* 
@@ -27,7 +31,7 @@ const template =`
  * SPA Check examples, replace with your tests
 */
 async function runSpaChecks() {
-  ${exampleTests.replaceAll(/\n/g, '\n  ')}
+${addIndent(exampleTests)}
 }
 
 /*
@@ -36,7 +40,8 @@ ${usage}
 
 /* Minified SPA Check code, provides function 'spaCheck' */ /* @ts-ignore */
 ${spaCheckJsBlob}
+
 runSpaChecks();
 `;
 
-fs.writeFileSync('spa-check.template.js', template, { encoding: 'utf8', flag: 'w' });
+fs.writeFileSync('dist/spa-check.template.js', template, { encoding: 'utf8', flag: 'w' });
