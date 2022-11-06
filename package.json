@@ -1,9 +1,9 @@
 {
-  "name": "spa-check",
+  "name": "spa-routine",
   "version": "4.3.1",
   "description": "Automated routines for single-page applications (SPAs), useful for end-to-end-testing and guided tutorials. Small, portable, and easy to use. Click buttons, fill values, await results, guide users, etc.",
-  "main": "./lib/spa-check.min.js",
-  "types": "./lib/spa-check.d.ts",
+  "main": "./lib/spa-routine.min.js",
+  "types": "./lib/spa-routine.d.ts",
   "directories": {
     "test": "test"
   },
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CoryLR/spa-check.git"
+    "url": "git+https://github.com/CoryLR/spa-routine.git"
   },
   "author": "Cory Leigh Rahman",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CoryLR/spa-check/issues"
+    "url": "https://github.com/CoryLR/spa-routine/issues"
   },
-  "homepage": "https://github.com/CoryLR/spa-check#readme",
+  "homepage": "https://github.com/CoryLR/spa-routine#readme",
   "keywords": [
     "JavaScript",
     "SPA",
@@ -35,7 +35,7 @@
     "click",
     "e2e",
     "end to end",
-    "spa-check",
+    "spa-routine",
     "test"
   ],
   "devDependencies": {

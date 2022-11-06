@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: './lib/spa-check.ts',
+  entry: './lib/spa-routine.ts',
   module: {
     rules: [
       {
@@ -21,7 +21,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'spa-check.blob.js',
+    filename: 'spa-routine.blob.js',
     library: {
       type: 'global',
     },

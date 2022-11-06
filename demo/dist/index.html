@@ -1,16 +1,16 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=0"><title>SPA Check Demo</title><script defer="defer" src="main.js"></script></head><body><main><header><h1>SPA Check Demo</h1><p data-fill-description>Description description description...</p><nav>Quick Links: <a href="https://github.com/CoryLR/spa-check#readme">Documentation on GitHub</a>, <a href="https://www.npmjs.com/package/spa-check">NPM Listing</a>, <a href="https://github.com/CoryLR/spa-check/blob/main/spa-check.template.js">Portable Template</a></nav></header><br/><section class="code-carousel" data-flickity='{ "contain": true, "hash": true }'><figure id="demo-fill-form"><div class="code-card"><div class="code-card-header">Fill a form</div><pre class="bruh"><code>spaCheck([
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=0"><title>SPA Routine Demo</title><script defer="defer" src="main.js"></script></head><body><main><header><h1>SPA Routine Demo</h1><p data-fill-description>Description description description...</p><nav>Quick Links: <a href="https://github.com/CoryLR/spa-routine#readme">Documentation on GitHub</a>, <a href="https://www.npmjs.com/package/spa-routine">NPM Listing</a>, <a href="https://github.com/CoryLR/spa-routine/blob/main/spa-routine.template.js">Portable Template</a></nav></header><br/><section class="code-carousel" data-flickity='{ "contain": true, "hash": true }'><figure id="demo-fill-form"><div class="code-card"><div class="code-card-header">Fill a form</div><pre class="bruh"><code>spaRoutine([
   'value input.text Hello, world!',
   'value input.count 20',
   'click button',
   'exists pre hello, world',
 ], { message: 'Testing form' });</code>
-          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure><figure id="demo-write-nav"><div class="code-card"><div class="code-card-header">Write and navigate</div><pre class="bruh"><code>spaCheck([
+          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure><figure id="demo-write-nav"><div class="code-card"><div class="code-card-header">Write and navigate</div><pre class="bruh"><code>spaRoutine([
   'write #far-down Back up we go!',
   'nav #',
 ], {
   message: 'Testing nav',
 });</code>
-          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure><figure id="demo-await"><div class="code-card"><div class="code-card-header">Await a process</div><pre class="bruh"><code>spaCheck([
+          </pre><div class="buttons"><button class="run"><i class="fa-solid fa-play"></i> Run</button> <button class="copy"><i class="fa-regular fa-copy"></i></button> <button class="link"><i class="fa-solid fa-link"></i></button></div></div></figure><figure id="demo-await"><div class="code-card"><div class="code-card-header">Await a process</div><pre class="bruh"><code>spaRoutine([
   'click button long process',
   'await !.output processing...',
   'await .output process complete',

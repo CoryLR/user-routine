@@ -1,4 +1,4 @@
-import { spaCheck } from '../../dist/spa-check.min';
+import { spaRoutine } from '../../dist/spa-routine.min';
 
 export async function runRegressionTests(
   globalDelay = 10,
@@ -6,12 +6,12 @@ export async function runRegressionTests(
   logProgress = false,
 ) {
 
-  await spaCheck([
+  await spaRoutine([
     'log Hey there, ready to get started?',
     'comment button.duplicate First, click this button...',
   ], { message: 'Tutorial Test', tutorialMode: true });
 
-  await spaCheck([
+  await spaRoutine([
     'log Tests starting',
     'fill input.text Hello, world!',
     'fill input.count 2',
@@ -35,7 +35,7 @@ export async function runRegressionTests(
     awaitTimeout: displayProgress ? 9000 : 1500,
   });
 
-  await spaCheck([
+  await spaRoutine([
     'log Expect success: false',
     'click does-not-exist',
     'invalidkeyword test',
@@ -48,7 +48,7 @@ export async function runRegressionTests(
     continueOnFailure: true, awaitTimeout: 150, logProgress
   });
 
-  await spaCheck([
+  await spaRoutine([
     'log Expect success: false, should halt after next error',
     'click does-not-exist',
     'log If you see this, it did not work',

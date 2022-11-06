@@ -1,10 +1,10 @@
 
-await spaCheck([
+await spaRoutine([
   'comment input[type="text"] Look at this thing!',
   'comment input[type="number"] Look at this other thing!',
 ]);
 
-await spaCheck([
+await spaRoutine([
   'log Tests starting',
   'value input[type="text"] Hello, world!',
   'value input[type="number"] 20',
@@ -21,7 +21,7 @@ await spaCheck([
   'await .output process complete',
 ], { message: 'Testing features', globalDelay: 100, displaySpeed: 2 });
 
-await spaCheck([
+await spaRoutine([
   'log Expect success: false',
   'click does-not-exist',
   'invalidkeyword test',
@@ -35,13 +35,13 @@ await spaCheck([
   globalDelay: 50, displaySpeed: 2,
 });
 
-await spaCheck([
+await spaRoutine([
   'log Expect success: false, should halt after next error',
   'click does-not-exist',
   'log If you see this, it did not work',
 ], { message: 'Testing graceful fail', globalDelay: 50, displaySpeed: 2 });
 
-await spaCheck([
+await spaRoutine([
   'append #progress  Done! Check the browser console for results.',
   'log All done!',
 ], { globalDelay: 0, logProgress: false, logResult: false });

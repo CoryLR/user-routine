@@ -1,10 +1,10 @@
 
-const { spaCheck } = require('../lib/spa-check.min');
+const { spaRoutine } = require('../lib/spa-routine.min');
 
 // const { test } = require('../lib/test.min.js');
 
 async function test2() {
-  const out = await spaCheck([]);
+  const out = await spaRoutine([]);
   console.log(out)
 }
 

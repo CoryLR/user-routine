@@ -1,4 +1,4 @@
-# SPA Check
+# SPA Routine
 
 Automated testing for single-page applications (SPAs). Small, easy to use, and zero setup. Click on things, fill in values, await for things exist, etc.
 
@@ -6,27 +6,27 @@ Automated testing for single-page applications (SPAs). Small, easy to use, and z
 
 Options:
 
-**1.** Install using `npm install --save-dev spa-check` and import:
+**1.** Install using `npm install --save-dev spa-routine` and import:
 
 ```javascript
-import { spaCheck } from 'spa-check';
+import { spaRoutine } from 'spa-routine';
 // or
-const { spaCheck } = require('spa-check');
+const { spaRoutine } = require('spa-routine');
 ```
 
-**2.** Or copy the portable template from here: [spa-check.template.js](./dist/spa-check.template.js)
+**2.** Or copy the portable template from here: [spa-routine.template.js](./dist/spa-routine.template.js)
 * This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
-SPA Check is served as a function named `spaCheck`.
+SPA Routine is served as a function named `spaRoutine`.
 
 ## Simple examples:
 
 Run a test:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'click button.btn', // Target using CSS selectors
   'await .result Result Text', // Await some result
 ]);
@@ -35,7 +35,7 @@ spaCheck([
 Display a tutorial:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'comment .some-form First, fill this out',
   'comment .submit-button Then, hit Submit!',
 ], { message:'Tutorial', tutorialMode: true });
@@ -44,7 +44,7 @@ spaCheck([
 Customize some options:
 
 ```javascript
-spaCheck(
+spaRoutine(
   ['click button', 'await .result Result Text'], // Actions
   { message:'Example Test', globalDelay: 1000 }, // Options
 );
@@ -76,20 +76,20 @@ Input parameter details:
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
-  * `message`: (*default: 'SPA Check'*) Label to show in the console and in the DOM
-  * `messageAttribution`: (*default: 'SPA Check'*) Subtitle text shown when custom message is provided
-  * `overrideCss`: (*default: ''*) Override default SPA Check CSS, target classes such as .spa-check-message, .spa-check-focus-box, or .spa-check-tooltip
+  * `message`: (*default: 'SPA Routine'*) Label to show in the console and in the DOM
+  * `messageAttribution`: (*default: 'SPA Routine'*) Subtitle text shown when custom message is provided
+  * `overrideCss`: (*default: ''*) Override default SPA Routine CSS, target classes such as .spa-routine-message, .spa-routine-focus-box, or .spa-routine-tooltip
   * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `selector` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'` without worrying about spaces breaking the CSS selector. Alternatively you can use `>>` instead of spaces without customizing the separator, like `await .container>>div Result Text`.
   * `tutorialMode`: (*default: false*) Only animate tooltips for "log" and "comment" actions
 
 Output details:
 
-* The `spaCheck` function returns type `SpaCheckReturn`:
-  * `export type SpaCheckReturn = { success: boolean, log: string[], message: string };`
+* The `spaRoutine` function returns type `SpaRoutineReturn`:
+  * `export type SpaRoutineReturn = { success: boolean, log: string[], message: string };`
 * Updates are also logged to the browser console like so:
 
 ```
-[SPA Check] Message
+[SPA Routine] Message
   * Filled the value of form>input.name to 'Cory'
   * Clicked on button[type="submit"]
   * Awaiting 'div.success-message'...
@@ -102,14 +102,14 @@ Output details:
 
 ## Template
 
-See the [spa-check.template.js](./dist/spa-check.template.js) for examples of running multiple sequential tests using async/await.
+See the [spa-routine.template.js](./dist/spa-routine.template.js) for examples of running multiple sequential tests using async/await.
 
 ## Use-cases
 
 ### Fill inputs with `fill` and interact with `click` using Selectors:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'fill input[type="text"] Hello, world!', // Fills in the input
   'fill input[type="number"] 20',
   'click button.some-class', // Clicks a button with class 'some-class'
@@ -124,7 +124,7 @@ spaCheck([
 ### Validate the DOM with `exists`:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'exists p.some-class', // Checks for the existence of this element
   'exists p.some-class With certain text', // Also checks if it includes certain text
   '!exists p.some-class', // Ensures the element does not exist
@@ -135,7 +135,7 @@ spaCheck([
 ### Deal with timing using `await` and `wait`:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'await div.some-popup', // Awaits the existence of this element
   'await div.some-popup With certain text', // Also waits for it to include certain text
   '!await div.some-spinner', // Awaits the non-existence of this element
@@ -149,7 +149,7 @@ spaCheck([
 ### Navigate within a single-page application using `nav`:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'nav #some-id',
   'nav #/some/hash/routing/path',
   'nav #', // Back to the top
@@ -159,7 +159,7 @@ spaCheck([
 ### Add notes with `append`, `log`, and `write`:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'write h1 Testing successful!', // overwrites the h1's textContent
   'append h1  - Testing successful!', // appends to the h1's textContent
   'log The testing is complete.',
@@ -169,7 +169,7 @@ spaCheck([
 ### Pass options as a second argument:
 
 ```javascript
-spaCheck([
+spaRoutine([
   'fill input.name Cory',
   'click button[type="submit"]',
 ], { globalDelay: 1000 });
@@ -200,7 +200,7 @@ To publish:
 
 TODO:
 
-* [ ] Add CDN example https://cdn.jsdelivr.net/gh/CoryLR/spa-check/lib/spa-check.min.js
+* [ ] Add CDN example https://cdn.jsdelivr.net/gh/CoryLR/spa-routine/lib/spa-routine.min.js
 * [x] Test and make sure the new notOperator syntax works as expected
 * [x] Add "comment" action
 * [x] Add "tutorialMode" option
@@ -208,15 +208,15 @@ TODO:
 * [ ] Improve "tutorialMode" to include clickable "next" buttons on each log and comment
   * [ ] add "tutorialModeAutoPlay" option? (default false)
   * [x] Make highlight boxes click-through-able
-  * [ ] Maybe add a feature so that if a check fail SPA Check goes back to the previous log or comment?
+  * [ ] Maybe add a feature so that if a check fail SPA Routine goes back to the previous log or comment?
 * [x] Add "attributionText" option.
 * [ ] Finish the Demo page
 * [x] Add auto-test URL params to demo page so I can use it for testing
 * [x] Add multiline string action list option
-* [x] Add a check so spaCheck ends if there is already an existing SPA Check happening
-  * [x] Handle condition where multiple SPA Checks run at once, check for the message element
-* [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which SPA Check can look at both on the globaldelay but also before tooltip hide
-* [ ] Add a tutorial walkthrough to the demo page *using* SPA Check
+* [x] Add a check so spaRoutine ends if there is already an existing SPA Routine happening
+  * [x] Handle condition where multiple SPA Routines run at once, check for the message element
+* [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which SPA Routine can look at both on the globaldelay but also before tooltip hide
+* [ ] Add a tutorial walkthrough to the demo page *using* SPA Routine
 * [ ] Add count action
 * [ ] Change name to spa-routine / SPA Routine / spaRoutine
 

@@ -2,15 +2,15 @@
 const fs = require('fs')
 const { parse } = require('node-html-parser');
 
-const spaCheckJsBlob = fs.readFileSync('./dist/spa-check.blob.js', 'utf8');
+const spaRoutineJsBlob = fs.readFileSync('./dist/spa-routine.blob.js', 'utf8');
 const tests = fs.readFileSync('./test/tests.js', 'utf8');
 const combinedBlobAndTests = `
-${spaCheckJsBlob}
-async function runSpaChecks() {
+${spaRoutineJsBlob}
+async function runSpaRoutines() {
   ${tests}
   console.log('Done! See above for results.');
 }
-runSpaChecks();
+runSpaRoutines();
 `;
 
 const htmlDocument = parse(fs.readFileSync('test/test.html', 'utf8'));

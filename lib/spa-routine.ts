@@ -1,6 +1,6 @@
-import { DomElements, SpaCheckAction, SpaCheckActionString, SpaCheckOptions, SpaCheckReturn } from './spa-check.d';
+import { DomElements, SpaRoutineAction, SpaRoutineActionString, SpaRoutineOptions, SpaRoutineReturn } from './spa-routine.d';
 
-export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaCheckOptions = {}): Promise<SpaCheckReturn> {
+export async function spaRoutine(actions: SpaRoutineAction[] | string, options: SpaRoutineOptions = {}): Promise<SpaRoutineReturn> {
 
   const defaultConfig = {
     awaitTimeout: 15000,
@@ -12,8 +12,8 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     logCollapse: false,
     logProgress: true,
     logResult: true,
-    message: 'SPA Check',
-    messageAttribution: 'SPA Check',
+    message: 'SPA Routine',
+    messageAttribution: 'SPA Routine',
     overrideCss: '',
     separator: ' ',
     tutorialMode: false,
@@ -22,7 +22,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
   if (options.tutorialMode) options.globalDelay = 200;
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
-  const spaCheckLogTitle = config.message ? `[SPA Check] ${config.message}` : '[SPA Check]';
+  const spaRoutineLogTitle = config.message ? `[SPA Routine] ${config.message}` : '[SPA Routine]';
 
   const state = {
     paused: false,
@@ -79,7 +79,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
 
   /* Bundled functions */
 
-  function makeActionList(actions: SpaCheckAction[] | string): SpaCheckAction[] {
+  function makeActionList(actions: SpaRoutineAction[] | string): SpaRoutineAction[] {
     /* Make actionList */
     if (typeof actions === 'string') {
       return actions.split('\n').map(a => a.trimStart());
@@ -88,9 +88,9 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     }
   }
 
-  async function doAction(action: SpaCheckAction) {
+  async function doAction(action: SpaRoutineAction) {
     if (typeof action === 'string') {
-      await doActionString(action as SpaCheckActionString)
+      await doActionString(action as SpaRoutineActionString)
     } else if (typeof action === 'function') {
       try {
         await performAction(
@@ -109,7 +109,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     }
   }
 
-  async function doActionString(action: SpaCheckActionString) {
+  async function doActionString(action: SpaRoutineActionString) {
     const actionCode = action.replace('!', '').substring(0, 3);
     if (actionCode === 'nav') {
       const location = action.split(config.separator)[1];
@@ -412,16 +412,16 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
 
   function checkIfShouldStart() {
     if (typeof document === 'undefined') {
-      let errorMessage = 'FAIL: document is undefined. SPA Check can only be used in the browser. Halting execution.';
+      let errorMessage = 'FAIL: document is undefined. SPA Routine can only be used in the browser. Halting execution.';
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
     }
 
-    const otherSpaCheck = document.querySelector('body > .spa-check');
-    if (otherSpaCheck) {
-      const otherMessage = otherSpaCheck.getAttribute('data-spa-check')
-      let errorMessage = `FAIL: SPA Check '${otherMessage}' is already running. Halting execution.`;
+    const otherSpaRoutine = document.querySelector('body > .spa-routine');
+    if (otherSpaRoutine) {
+      const otherMessage = otherSpaRoutine.getAttribute('data-spa-routine')
+      let errorMessage = `FAIL: SPA Routine '${otherMessage}' is already running. Halting execution.`;
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
@@ -434,24 +434,24 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     if (config.displayMessage || config.displayProgress) addCss();
     if (config.logProgress) {
       if (config.logCollapse) {
-        console.groupCollapsed(spaCheckLogTitle);
+        console.groupCollapsed(spaRoutineLogTitle);
       } else {
-        console.group(spaCheckLogTitle);
+        console.group(spaRoutineLogTitle);
       }
     }
     displayMessageInDOM(config.message);
   }
 
   async function messageEnd(returnPayload, groupEndOverride = true) {
-    const resultPrepend = config.logProgress ? '' : spaCheckLogTitle;
+    const resultPrepend = config.logProgress ? '' : spaRoutineLogTitle;
     if (config.logResult) console.log(`${resultPrepend} Result:`, returnPayload);
     if (config.logProgress && groupEndOverride) console.groupEnd();
   }
 
-  async function finish(): Promise<SpaCheckReturn> {
+  async function finish(): Promise<SpaRoutineReturn> {
     cleanUpDOM();
     const result = !state.errorOccurred;
-    const returnPayload: SpaCheckReturn = { success: result, log: updateList, message: config.message };
+    const returnPayload: SpaRoutineReturn = { success: result, log: updateList, message: config.message };
     log(`Done, success: ${result}`);
     messageEnd(returnPayload);
     return returnPayload;
@@ -469,7 +469,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
   async function addCss() {
     domElements.style = document.createElement('style');
     domElements.style.textContent = `
-      body > .spa-check {
+      body > .spa-routine {
         font: 20px Arial;
         padding: 18px 12px 6px 12px;
         z-index: 9999;
@@ -487,7 +487,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         border: 2px solid rgb(180,180,180);
         border-top: 0;
       }
-      body > .spa-check > .spa-check-footer {
+      body > .spa-routine > .spa-routine-footer {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -496,64 +496,64 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         font-size: 12px;
         margin-top: 5px;
       }
-      body .spa-check-footer .spa-check-play {
+      body .spa-routine-footer .spa-routine-play {
         display: none;
       }
-      body .spa-check-footer .spa-check-play,
-      body .spa-check-footer .spa-check-pause,
-      body .spa-check-footer .spa-check-stop {
+      body .spa-routine-footer .spa-routine-play,
+      body .spa-routine-footer .spa-routine-pause,
+      body .spa-routine-footer .spa-routine-stop {
         padding: 4px;
       }
-      body .spa-check-footer .spa-check-play:hover,
-      body .spa-check-footer .spa-check-pause:hover,
-      body .spa-check-footer .spa-check-stop:hover {
+      body .spa-routine-footer .spa-routine-play:hover,
+      body .spa-routine-footer .spa-routine-pause:hover,
+      body .spa-routine-footer .spa-routine-stop:hover {
         cursor: pointer;
       }
-      body > .spa-check > .spa-check-footer .spa-check-play-icon {
+      body > .spa-routine > .spa-routine-footer .spa-routine-play-icon {
         width: 0;
         height: 0;
         border-top: 5px solid transparent;
         border-bottom: 5px solid transparent;
         border-left: 8px solid rgb(191, 191, 191);
       }
-      body > .spa-check > .spa-check-footer .spa-check-pause-icon {
+      body > .spa-routine > .spa-routine-footer .spa-routine-pause-icon {
         width: 2px;
         height: 8px;
         border-left: 3px solid rgb(191, 191, 191);
         border-right: 3px solid rgb(191, 191, 191);
         margin: 1px 0;
       }
-      body > .spa-check > .spa-check-footer .spa-check-stop-icon {
+      body > .spa-routine > .spa-routine-footer .spa-routine-stop-icon {
         height: 8px;
         width: 8px;
         background-color: rgb(191, 191, 191);
       }
-      body .spa-check-footer .spa-check-play:hover .spa-check-play-icon {
+      body .spa-routine-footer .spa-routine-play:hover .spa-routine-play-icon {
         border-left: 8px solid rgb(80, 80, 80);
       }
-      body .spa-check-footer .spa-check-pause:hover .spa-check-pause-icon {
+      body .spa-routine-footer .spa-routine-pause:hover .spa-routine-pause-icon {
         border-left: 3px solid rgb(80, 80, 80);
         border-right: 3px solid rgb(80, 80, 80);
       }
-      body .spa-check-footer .spa-check-stop:hover .spa-check-stop-icon {
+      body .spa-routine-footer .spa-routine-stop:hover .spa-routine-stop-icon {
         background-color: rgb(80, 80, 80);
       }
-      body > .spa-check > .spa-check-footer > .spa-check-status,
-      body > .spa-check > .spa-check-footer > .spa-check-attribution {
+      body > .spa-routine > .spa-routine-footer > .spa-routine-status,
+      body > .spa-routine > .spa-routine-footer > .spa-routine-attribution {
         text-align: left;
         color: dimgray;
       }
-      body > .spa-check > .spa-check-footer > .spa-check-status {
+      body > .spa-routine > .spa-routine-footer > .spa-routine-status {
         min-width: 60px;
         min-height: 15px;
         margin-left: 5px;
         font-style: italic;
       }
-      body > .spa-check > .spa-check-footer > .spa-check-attribution {
+      body > .spa-routine > .spa-routine-footer > .spa-routine-attribution {
         margin-left: auto;
         padding-left: 5px;
       }
-      body > .spa-check-focus-box {
+      body > .spa-routine-focus-box {
         z-index: 9997;
         visibility: hidden;
         position: absolute;
@@ -562,7 +562,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         box-shadow: 0 0 0 2px rgb(0,0,0);
         pointer-events: none;
       }
-      body > .spa-check-tooltip {
+      body > .spa-routine-tooltip {
         z-index: 9999;
         visibility: hidden;
         font: 14px Arial;
@@ -574,10 +574,10 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         border-radius: 10px;
         max-width: ${ANIMATION_TOOLTIP_MAX_WIDTH}px;
       }
-      body > .spa-check-tooltip-error {
+      body > .spa-routine-tooltip-error {
         color: darkred;
       }
-      body > .spa-check-arrow {
+      body > .spa-routine-arrow {
         z-index: 9999;
         visibility: hidden;
         width: 0;
@@ -587,14 +587,14 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         border-right: 10px solid transparent;
         border-bottom: 10px solid rgb(245,245,245); 
       }
-      body > .spa-check-arrow-shadow {
+      body > .spa-routine-arrow-shadow {
         z-index: 9998;
         border-left: 14px solid transparent;
         border-right: 14px solid transparent;
         border-bottom: 14px solid rgb(180,180,180);
         margin: -3px 0 0 -4px;
       }
-      body > .spa-check-tooltip-shadow {
+      body > .spa-routine-tooltip-shadow {
         z-index: 9998;
         color: transparent;
         border: 2px solid rgb(180,180,180);
@@ -602,7 +602,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         margin: -2px 0 0 -2px;
         border-radius: 12px;
       }
-      body > .spa-check-tooltip .spa-check-next-button {
+      body > .spa-routine-tooltip .spa-routine-next-button {
         display: block;
         margin: 5px auto 0 auto;
         border-radius: 5px;
@@ -611,19 +611,19 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
         border-width: 0;
         cursor: pointer;
       }
-      body > .spa-check-fade-in {
+      body > .spa-routine-fade-in {
         visibility: visible;
-        animation: spaCheckfadeIn ${ANIMATION_FADE_TIME}ms; 
+        animation: spaRoutinefadeIn ${ANIMATION_FADE_TIME}ms; 
       }
-      body > .spa-check-fade-out {
+      body > .spa-routine-fade-out {
         opacity: 0;
-        animation: spaCheckfadeOut ${ANIMATION_FADE_TIME}ms; 
+        animation: spaRoutinefadeOut ${ANIMATION_FADE_TIME}ms; 
       }
-      @keyframes spaCheckfadeIn {
+      @keyframes spaRoutinefadeIn {
         0% { opacity: 0; }
         100% { opacity: 1; }
       }
-      @keyframes spaCheckfadeOut {
+      @keyframes spaRoutinefadeOut {
         0% { opacity: 1; }
         100% { opacity: 0; }
       }
@@ -637,24 +637,24 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
 
     domElements.message.innerHTML = `
       ${message}
-      <div class="spa-check-footer">
-        <div class="spa-check-play"><div class="spa-check-play-icon"></div></div>
-        <div class="spa-check-pause"><div class="spa-check-pause-icon"></div></div>
-        <div class="spa-check-stop"><div class="spa-check-stop-icon"></div></div>
-        <div class="spa-check-status"></div>
-        <div class="spa-check-attribution">${config.messageAttribution}</div>
+      <div class="spa-routine-footer">
+        <div class="spa-routine-play"><div class="spa-routine-play-icon"></div></div>
+        <div class="spa-routine-pause"><div class="spa-routine-pause-icon"></div></div>
+        <div class="spa-routine-stop"><div class="spa-routine-stop-icon"></div></div>
+        <div class="spa-routine-status"></div>
+        <div class="spa-routine-attribution">${config.messageAttribution}</div>
       </div>
     `;
 
-    domElements.message.setAttribute('data-spa-check', message);
-    domElements.message.classList.add('spa-check');
+    domElements.message.setAttribute('data-spa-routine', message);
+    domElements.message.classList.add('spa-routine');
     if (!config.displayMessage) domElements.message.style.visibility = 'hidden';
     document.querySelector('body').appendChild(domElements.message);
 
-    domElements.playButton = document.querySelector('.spa-check .spa-check-play');
-    domElements.pauseButton = document.querySelector('.spa-check .spa-check-pause');
-    domElements.stopButton = document.querySelector('.spa-check .spa-check-stop');
-    domElements.status = document.querySelector('.spa-check .spa-check-status');
+    domElements.playButton = document.querySelector('.spa-routine .spa-routine-play');
+    domElements.pauseButton = document.querySelector('.spa-routine .spa-routine-pause');
+    domElements.stopButton = document.querySelector('.spa-routine .spa-routine-stop');
+    domElements.status = document.querySelector('.spa-routine .spa-routine-status');
 
     /* Add event listeners to play, pause, and stop buttons */
     domElements.playButton.addEventListener('click', async () => {
@@ -710,19 +710,19 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     const scrollLeftActual = window.pageXOffset || element.scrollLeft || document.body.scrollLeft;
 
     domElements.focusBox = document.createElement('div');
-    domElements.focusBox.classList.add('spa-check-focus-box');
+    domElements.focusBox.classList.add('spa-routine-focus-box');
 
     domElements.arrow = document.createElement('div');
-    domElements.arrow.classList.add('spa-check-arrow');
+    domElements.arrow.classList.add('spa-routine-arrow');
 
     domElements.tooltip = document.createElement('div');
-    domElements.tooltip.classList.add('spa-check-tooltip');
-    if (type === 'error') domElements.tooltip.classList.add('spa-check-tooltip-error');
+    domElements.tooltip.classList.add('spa-routine-tooltip');
+    if (type === 'error') domElements.tooltip.classList.add('spa-routine-tooltip-error');
     domElements.tooltip.textContent = actionMessage.replace(/>>/g, ' ');
 
     domElements.nextButton = document.createElement('button');
     domElements.nextButton.textContent = "Next";
-    domElements.nextButton.classList.add('spa-check-next-button');
+    domElements.nextButton.classList.add('spa-routine-next-button');
     domElements.nextButton.addEventListener('click', () => {
       state.nextButtonPressed = true;
     });
@@ -768,18 +768,18 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     /* Make the shadow/outline */
     domElements.arrowShadow = domElements.arrow.cloneNode(true) as HTMLElement;
     domElements.tooltipShadow = domElements.tooltip.cloneNode(true) as HTMLElement;
-    domElements.arrowShadow.classList.add('spa-check-arrow-shadow');
-    domElements.tooltipShadow.classList.add('spa-check-tooltip-shadow');
+    domElements.arrowShadow.classList.add('spa-routine-arrow-shadow');
+    domElements.tooltipShadow.classList.add('spa-routine-tooltip-shadow');
     document.body.appendChild(domElements.arrowShadow);
     document.body.appendChild(domElements.tooltipShadow);
 
     await scrollIntoViewIfNeeded(element);
 
-    domElements.focusBox.classList.add('spa-check-fade-in');
-    domElements.arrowShadow.classList.add('spa-check-fade-in');
-    domElements.tooltipShadow.classList.add('spa-check-fade-in');
-    domElements.arrow.classList.add('spa-check-fade-in');
-    domElements.tooltip.classList.add('spa-check-fade-in');
+    domElements.focusBox.classList.add('spa-routine-fade-in');
+    domElements.arrowShadow.classList.add('spa-routine-fade-in');
+    domElements.tooltipShadow.classList.add('spa-routine-fade-in');
+    domElements.arrow.classList.add('spa-routine-fade-in');
+    domElements.tooltip.classList.add('spa-routine-fade-in');
     const findTime = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300ms)
     let readTime = actionMessage.length * 30 < 2000 ? actionMessage.length * 30 : 2000; // Reading covers one letter per 30ms in sentences
     readTime = readTime;
@@ -792,11 +792,11 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     /* TODO: Significantly reduce delay after clicking "next", maybe change strategy
             to do more with the actual click event */
     if (addComprehensionTime) await (advanceDelay(COMPREHEND_ACTION_RESULT_TIME));
-    domElements.focusBox.classList.add('spa-check-fade-out');
-    domElements.arrow.classList.add('spa-check-fade-out');
-    domElements.tooltip.classList.add('spa-check-fade-out');
-    domElements.arrowShadow.classList.add('spa-check-fade-out');
-    domElements.tooltipShadow.classList.add('spa-check-fade-out');
+    domElements.focusBox.classList.add('spa-routine-fade-out');
+    domElements.arrow.classList.add('spa-routine-fade-out');
+    domElements.tooltip.classList.add('spa-routine-fade-out');
+    domElements.arrowShadow.classList.add('spa-routine-fade-out');
+    domElements.tooltipShadow.classList.add('spa-routine-fade-out');
     await advanceDelay(ANIMATION_FADE_TIME);
     domElements.focusBox.remove();
     domElements.tooltip.remove();
@@ -818,7 +818,7 @@ export async function spaCheck(actions: SpaCheckAction[] | string, options: SpaC
     return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
   }
 
-  async function validateInputs(actionList: SpaCheckAction[] | string, options?: SpaCheckOptions): Promise<boolean> {
+  async function validateInputs(actionList: SpaRoutineAction[] | string, options?: SpaRoutineOptions): Promise<boolean> {
     let inputsValid = true;
     if (actionList === undefined) {
       inputsValid = false;
