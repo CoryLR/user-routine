@@ -4,12 +4,19 @@ export async function runRegressionTests(
   globalDelay = 10,
   displayProgress = false,
   logProgress = false,
+  visualTests = false,
 ) {
 
-  await spaRoutine([
-    'log Hey there, ready to get started?',
-    'comment button.duplicate First, click this button...',
-  ], { message: 'Tutorial Test', tutorialMode: true });
+  if (visualTests) {
+    await spaRoutine([
+      'log Hey there, ready to get started?',
+      'comment input.text First, enter some text here',
+      'comment input.count Now put a number here',
+      'click button.duplicate',
+      'comment .output-duplicate The output will appear here',
+      'log All done! Click Next to finish.',
+    ], { message: 'Tutorial Test', tutorialMode: true });
+  }
 
   await spaRoutine([
     'log Tests starting',

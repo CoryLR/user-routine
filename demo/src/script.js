@@ -27,7 +27,7 @@ if (urlParams.get('test') === 'quick-regression') {
   runRegressionTests();
   processTime = 20;
 } else if (urlParams.get('test') === 'full-regression') {
-  runRegressionTests(500, true, true);
+  runRegressionTests(500, true, true, true);
   processTime = 2000;
 }
 

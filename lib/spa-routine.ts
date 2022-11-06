@@ -239,10 +239,12 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
       } else {
         [_, value] = action.split(/ (.*)/s);
       }
+      if (config.tutorialMode) state.nextButtonPressed = false;
       await performAction(
         () => { log(value); },
         `${value}`,
       );
+      if (config.tutorialMode) await pauseBetweenNextButtons();
 
     } else if (actionCode === 'com') {
       const [_, selector, value] = await argSplitComplex(action);
@@ -250,11 +252,12 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         await raiseError(`Value was not provided for comment action '${action}'`);
         return;
       }
-      /* TODO */
       const element = await select(selector);
       if (!element) return;
+      if (config.tutorialMode) state.nextButtonPressed = false;
       await animateTooltipOpen(element as HTMLElement, value, 'info');
-      await animateTooltipClose();
+      if (!config.tutorialMode) await animateTooltipClose();
+      if (config.tutorialMode) await pauseBetweenNextButtons();
 
     } else if (actionCode === 'wai') {
       const [_, value] = action.split(config.separator);
@@ -337,7 +340,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     }
     if (showTooltip) await animateTooltipOpen(element, message, 'info', fixedPositionOverride);
     await actionFunction();
-    if (showTooltip) await animateTooltipClose();
+    if (showTooltip && !config.tutorialMode) await animateTooltipClose();
   }
 
   async function select(selector: string): Promise<HTMLElement & HTMLInputElement> {
@@ -635,16 +638,29 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
   function displayMessageInDOM(message: string) {
     domElements.message = document.createElement('div');
 
-    domElements.message.innerHTML = `
+    let htmlString = `
       ${message}
       <div class="spa-routine-footer">
-        <div class="spa-routine-play"><div class="spa-routine-play-icon"></div></div>
-        <div class="spa-routine-pause"><div class="spa-routine-pause-icon"></div></div>
-        <div class="spa-routine-stop"><div class="spa-routine-stop-icon"></div></div>
+    `;
+    if (!config.tutorialMode) {
+      htmlString += `
+        <div class="spa-routine-play" title="Play">
+          <div class="spa-routine-play-icon"></div>
+        </div>
+        <div class="spa-routine-pause" title="Pause">
+          <div class="spa-routine-pause-icon"></div>
+        </div>
+      `;
+    }
+    htmlString += `
+        <div class="spa-routine-stop" title="Stop">
+          <div class="spa-routine-stop-icon"></div>
+        </div>
         <div class="spa-routine-status"></div>
         <div class="spa-routine-attribution">${config.messageAttribution}</div>
       </div>
     `;
+    domElements.message.innerHTML = htmlString;
 
     domElements.message.setAttribute('data-spa-routine', message);
     domElements.message.classList.add('spa-routine');
@@ -657,12 +673,14 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     domElements.status = document.querySelector('.spa-routine .spa-routine-status');
 
     /* Add event listeners to play, pause, and stop buttons */
-    domElements.playButton.addEventListener('click', async () => {
-      play();
-    });
-    domElements.pauseButton.addEventListener('click', async () => {
-      pause();
-    });
+    if (!config.tutorialMode) {
+      domElements.playButton.addEventListener('click', async () => {
+        play();
+      });
+      domElements.pauseButton.addEventListener('click', async () => {
+        pause();
+      });
+    }
     domElements.stopButton.addEventListener('click', async () => {
       await stop('pause button');
     });
@@ -696,9 +714,16 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     domElements.status.textContent = 'Paused';
   }
   async function stop(source) {
-    domElements.status.textContent = 'Stopping';
     const stopConfirmation = confirm(`[${config.messageAttribution}]: Are you sure you would like to stop '${config.message}'?`);
-    if (stopConfirmation) await interruptExecution(`Stopped by user (${source})`);
+    if (stopConfirmation) {
+      domElements.status.textContent = 'Stopping';
+      await interruptExecution(`Stopped by user (${source})`)
+    };
+  }
+  /* TODO2 */
+  async function next() {
+    state.nextButtonPressed = true;
+    await animateTooltipClose(false);
   }
 
   async function animateTooltipOpen(element: HTMLElement, actionMessage: string, type: 'info' | 'error' = 'info', pinnedOverride?: boolean) {
@@ -720,13 +745,15 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     if (type === 'error') domElements.tooltip.classList.add('spa-routine-tooltip-error');
     domElements.tooltip.textContent = actionMessage.replace(/>>/g, ' ');
 
-    domElements.nextButton = document.createElement('button');
-    domElements.nextButton.textContent = "Next";
-    domElements.nextButton.classList.add('spa-routine-next-button');
-    domElements.nextButton.addEventListener('click', () => {
-      state.nextButtonPressed = true;
-    });
-    domElements.tooltip.appendChild(domElements.nextButton);
+    if (config.tutorialMode) {
+      domElements.nextButton = document.createElement('button');
+      domElements.nextButton.textContent = "Next";
+      domElements.nextButton.classList.add('spa-routine-next-button');
+      domElements.nextButton.addEventListener('click',async () => {
+        await next();
+      });
+      domElements.tooltip.appendChild(domElements.nextButton);
+    }
 
     document.body.appendChild(domElements.focusBox);
     document.body.appendChild(domElements.arrow);
@@ -787,7 +814,6 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
   }
 
   async function animateTooltipClose(addComprehensionTime = true) {
-    if (config.tutorialMode) await pauseBetweenNextButtons();
     if (!config.displayProgress || !domElements.focusBox || !domElements.arrow || !domElements.tooltip || !domElements.arrowShadow || !domElements.tooltipShadow) return;
     /* TODO: Significantly reduce delay after clicking "next", maybe change strategy
             to do more with the actual click event */
@@ -876,10 +902,11 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     }
   }
   async function pauseBetweenNextButtons() {
-    state.nextButtonPressed = false;
+    /* TODO2 */
     while (!state.nextButtonPressed) {
       await sleep(config.globalDelay / 2);
     }
+    state.nextButtonPressed = false;
   }
 
   async function nonBlockingSleep(milliseconds: number) {

@@ -1,3 +1,4 @@
+
 # SPA Routine
 
 Automated testing for single-page applications (SPAs). Small, easy to use, and zero setup. Click on things, fill in values, await for things exist, etc.
@@ -184,11 +185,22 @@ spaRoutine([
 
 Version 5.0
 
-* 
+* ...
 
 ## Maintainers
 
-To run the tests, run `npm install` to and then run `npm run build` and open up the `demo/dist/index.html` file.
+### Getting Started
+
+* Install dependencies for the Demo using `npm install`
+* Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
+
+### Continuous Development
+
+* Make changes to [lib/spa-routine.ts](./lib/spa-routine.ts)
+* Run `npm run build:local`
+* To test changes, edit either [demo/src/regression-tests.js](./demo/src/regression-tests.js) or [demo/src/script.js](./demo/src/script.js)
+* Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
+* Before each commit, run the full `npm run build`
 
 To publish:
 
@@ -205,10 +217,10 @@ TODO:
 * [x] Add "comment" action
 * [x] Add "tutorialMode" option
 * [x] Change to "tutorialMode"
-* [ ] Improve "tutorialMode" to include clickable "next" buttons on each log and comment
+* [x] Improve "tutorialMode" to include clickable "next" buttons on each log and comment
   * [ ] add "tutorialModeAutoPlay" option? (default false)
   * [x] Make highlight boxes click-through-able
-  * [ ] Maybe add a feature so that if a check fail SPA Routine goes back to the previous log or comment?
+  * [ ] Maybe add a feature so that if a check fail SPA Routine goes back to the previous log or comment? - OR - Add 'gate' command or something similar to prevent the user from continuing if they don't follow the tutorial instructions
 * [x] Add "attributionText" option.
 * [ ] Finish the Demo page
 * [x] Add auto-test URL params to demo page so I can use it for testing
@@ -218,6 +230,8 @@ TODO:
 * [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which SPA Routine can look at both on the globaldelay but also before tooltip hide
 * [ ] Add a tutorial walkthrough to the demo page *using* SPA Routine
 * [ ] Add count action
-* [ ] Change name to spa-routine / SPA Routine / spaRoutine
+* [ ] Add a value action which will check for a value or a specific value
+* [x] Change name to spa-routine / SPA Routine / spaRoutine
+* [ ] Change Repo name and publish to spa-routine on NPM
 
  
