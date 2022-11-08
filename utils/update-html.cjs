@@ -6,11 +6,11 @@ const dryRunJsBlob = fs.readFileSync('./dist/dry-run.blob.js', 'utf8');
 const tests = fs.readFileSync('./test/tests.js', 'utf8');
 const combinedBlobAndTests = `
 ${dryRunJsBlob}
-async function runDryRuns() {
+async function startDryRun() {
   ${tests}
   console.log('Done! See above for results.');
 }
-runDryRuns();
+startDryRun();
 `;
 
 const htmlDocument = parse(fs.readFileSync('test/test.html', 'utf8'));

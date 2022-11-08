@@ -15,14 +15,24 @@ import { dryRun } from 'dry-run';
 const { dryRun } = require('dry-run');
 ```
 
-**2.** Or copy the portable template from here: [dry-run.template.js](./dist/dry-run.template.js)
+**2.** Add a reference to `dry-run.min.js` to your HTML:
+
+```html
+<!-- From CDN -->
+<script src="https://cdn.jsdelivr.net/gh/CoryLR/dry-run/dist/dry-run.min.js"></script>
+
+<!-- Or from local file -->
+<script src="/dry-run.min.js"></script>
+```
+
+**3.** Or copy the portable template from here: [dry-run.template.js](./dist/dry-run.template.js)
 * This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
 Dry-Run is served as a function named `dryRun`.
 
-## Simple examples:
+**Some simple examples:**
 
 Run a test:
 
@@ -47,7 +57,8 @@ Customize some options:
 ```javascript
 dryRun(
   ['click button', 'await .result Result Text'], // Actions
-  { message:'Example Test', globalDelay: 1000 }, // Options
+  { message:'Example Test', globalDelay: 1000,   // Options
+  displayProgress: false, continueOnFailure: true},
 );
 ```
 
@@ -63,6 +74,7 @@ Input parameter details:
     * `fill` - `'fill form>input.name Cory Rahman'`
     * `log` - `'log Some message'`
     * `nav` - `'nav #id'` or `'nav #/some/hash/routing/path'`
+    * `value` - `'value input.required'` or `'value input.name Test User 1'`
     * `wait` - `'wait 3000'` (3 seconds)
     * `write` - `'write p Overwritten text'`
   * Selector: CSS selector like `button.class-name` (should not contain spaces)
@@ -80,8 +92,8 @@ Input parameter details:
   * `message`: (*default: 'Dry-Run'*) Label to show in the console and in the DOM
   * `messageAttribution`: (*default: 'Dry-Run'*) Subtitle text shown when custom message is provided
   * `overrideCss`: (*default: ''*) Override default Dry-Run CSS, target classes such as .dry-run-message, .dry-run-focus-box, or .dry-run-tooltip
-  * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `selector` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'` without worrying about spaces breaking the CSS selector. Alternatively you can use `>>` instead of spaces without customizing the separator, like `await .container>>div Result Text`.
-  * `tutorialMode`: (*default: false*) Only animate tooltips for "log" and "comment" actions
+  * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `separator` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'`. (Alternatively you can use `>>` instead of spaces without customizing the CSS selector, like `await .container>>div Result Text`).
+  * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
 Output details:
 
@@ -122,14 +134,16 @@ dryRun([
 
 * Note: To use spaces in CSS selectors, either replace the spaces with `>>` (like `body>>.class` instead of `body .class`) or define a custom separator using the `separator` option (like `separator: '; '`).
 
-### Validate the DOM with `exists`:
+### Validate the DOM with `exists` and `value`:
 
 ```javascript
 dryRun([
   'exists p.some-class', // Checks for the existence of this element
   'exists p.some-class With certain text', // Also checks if it includes certain text
-  '!exists p.some-class', // Ensures the element does not exist
-  '!exists p.some-class With certain text', // Ensures the element does not exist with certain text
+  '!exists p.some-class', // Validates that the element does not exist
+  '!exists p.some-class With certain text', // Validates that the element does not exist with certain text
+  'value input.required', // Validates that the element has any value
+  'value input.name Jane Doe', // Validates that the element has a value of "Jane Doe"
 ]);
 ```
 
@@ -181,12 +195,6 @@ dryRun([
 
 # Development
 
-## Release Notes
-
-Version 5.0
-
-* ...
-
 ## Maintainers
 
 ### Getting Started
@@ -210,36 +218,10 @@ To publish:
 4. Test one last time
 5. `npm publish --access public`
 
-TODO:
+TO DO:
 
-* [ ] Add CDN example https://cdn.jsdelivr.net/gh/CoryLR/dry-run/lib/dry-run.min.js
-* [x] Test and make sure the new notOperator syntax works as expected
-* [x] Add "comment" action
-* [x] Add "tutorialMode" option
-* [x] Change to "tutorialMode"
-* [x] Improve "tutorialMode" to include clickable "next" buttons on each log and comment
-  * [ ] add "tutorialModeAutoPlay" option? (default false)
-  * [x] Make highlight boxes click-through-able
-  * [ ] Maybe add a feature so that if a check fail Dry-Run goes back to the previous log or comment? - OR - Add 'gate' command or something similar to prevent the user from continuing if they don't follow the tutorial instructions
-* [x] Add "attributionText" option.
+* [ ] Pick new name, some options: task-routine, auto-routine, spa-routine, spa-list
 * [ ] Finish the Demo page
-* [x] Add auto-test URL params to demo page so I can use it for testing
-* [x] Add multiline string action list option
-* [x] Add a check so dryRun ends if there is already an existing Dry-Run happening
-  * [x] Handle condition where multiple SPA Routines run at once, check for the message element
-* [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which Dry-Run can look at both on the globaldelay but also before tooltip hide
-* [ ] Add a tutorial walkthrough to the demo page *using* Dry-Run
-* [ ] Add count action
-* [ ] Add a value action which will check for a value or a specific value
-* [x] Change name to dry-run / Dry-Run / dryRun
-* [ ] Change Repo name and publish new name to NPM, options:
-  * dry-run
-  * task-routine
-  * auto-routine
-  * action-list
-  * dry-run
-  * spa-bot
-  * spa-check
-  * spa-list
-
- 
+* [ ] Add count action to count instances of a particular CSS selector
+* [ ] Add a tutorial walkthrough to the demo page, using Dry-Run to showcase Dry-Run
+* [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button

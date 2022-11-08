@@ -1,47 +1,24 @@
 
 await dryRun([
-  'comment input[type="text"] Look at this thing!',
-  'comment input[type="number"] Look at this other thing!',
-]);
-
-await dryRun([
   'log Tests starting',
-  'value input[type="text"] Hello, world!',
-  'value input[type="number"] 20',
-  'click button',
-  'exists pre hello',
-  'write #far-down Back up we go!',
+  'fill input.text Hello, world!',
+  'value input.text',
+  'value input.text Hello, world!',
+  'fill input.count 2',
+  'click button.duplicate',
+  'exists pre.output-duplicate Hello, world! Hello, world! ',
+  'append pre.output-duplicate Hello, world!',
+  'exists pre.output-duplicate Hello, world! Hello, world! Hello, world!',
+  'write .output-duplicate Hello Pluto!',
+  '!exists .output-duplicate Hello World!',
+  'click button.duplicate',
   'nav #',
-  'log Next are custom functions',
-  () => { console.log('This is logging from a custom function, next is a custom async function!') },
+  () => { if (logProgress) console.log('This is logging from a provided function!') },
   async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 300)) },
-  'exists !.output processing...',
+  '!exists .output-process Processing...',
   'click button long process',
-  'await !.output processing...',
-  'await .output process complete',
-], { message: 'Testing features', globalDelay: 100, displaySpeed: 2 });
-
-await dryRun([
-  'log Expect success: false',
-  'click does-not-exist',
-  'invalidkeyword test',
-  () => { throw new Error('This function should error') },
-  'exists !body',
-  'await does-not-exist',
-  'await body>main this text should not exist anywhere'
+  '!await .output-process processing...',
+  'await .output-process Process complete!',
 ], {
-  message: 'Testing error handling',
-  continueOnFailure: true, awaitTimeout: 600,
-  globalDelay: 50, displaySpeed: 2,
+  message: 'Testing Features', globalDelay: 500,
 });
-
-await dryRun([
-  'log Expect success: false, should halt after next error',
-  'click does-not-exist',
-  'log If you see this, it did not work',
-], { message: 'Testing graceful fail', globalDelay: 50, displaySpeed: 2 });
-
-await dryRun([
-  'append #progress  Done! Check the browser console for results.',
-  'log All done!',
-], { globalDelay: 0, logProgress: false, logResult: false });

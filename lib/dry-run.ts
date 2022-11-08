@@ -209,6 +209,38 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
       )
       log(`Filled the value of ${selector} to '${value}'`);
 
+    } else if (actionCode === 'val') {
+      const [_, selector, value] = await argSplitComplex(action);
+      const element = await select(selector);
+      if (!element) return;
+      /* TODO: working */
+      if (element.value === undefined || element.value === null) {
+        if (!config.tutorialMode) await animateTooltipOpen(element, `Element cannot have a value`, 'error');
+        if (!config.tutorialMode) await animateTooltipClose();
+        await raiseError(`Element ${selector} (${element.tagName.toLowerCase()}) did not have a value attribute`)
+      };
+      if (value === undefined || value === null) {
+        if (element.value !== '') {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Confirmed has a value`, 'info');
+          if (!config.tutorialMode) await animateTooltipClose();
+          log(`Element '${selector}' had a value ('${element.value}')`);
+        } else {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Expected value to exist`, 'error');
+          if (!config.tutorialMode) await animateTooltipClose();
+          await raiseError(`Element '${selector}' did not have a value`);
+        }
+      } else {
+        if (element.value === value) {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Value is correct`, 'info');
+          if (!config.tutorialMode) await animateTooltipClose();
+          log(`Element '${selector}' has the correct value: '${element.value}'`);
+        } else {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Expected a value of '${value}'`, 'error');
+          if (!config.tutorialMode) await animateTooltipClose();
+          await raiseError(`Element '${selector}' has an incorrect value, expected '${value}' but saw '${element.value}'`);
+        }
+      }
+
     } else if (actionCode === 'wri' || actionCode === 'app') {
       const [_, selector, splitText] = await argSplit(action);
       const element = await select(selector);
@@ -446,13 +478,13 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
   }
 
   async function messageEnd(returnPayload, groupEndOverride = true) {
+    cleanUpDOM();
     const resultPrepend = config.logProgress ? '' : dryRunLogTitle;
     if (config.logResult) console.log(`${resultPrepend} Result:`, returnPayload);
     if (config.logProgress && groupEndOverride) console.groupEnd();
   }
 
   async function finish(): Promise<DryRunReturn> {
-    cleanUpDOM();
     const result = !state.errorOccurred;
     const returnPayload: DryRunReturn = { success: result, log: updateList, message: config.message };
     log(`Done, success: ${result}`);
@@ -466,7 +498,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         domElements[key].remove();
       }
     }
-    if (state.documentKeyDownSet) document.onkeydown === null;
+    if (state.documentKeyDownSet) {document.onkeydown = null};
   }
 
   async function addCss() {
@@ -685,7 +717,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
       await stop('pause button');
     });
 
-    if (document.onkeydown === null && config.logProgress && !config.tutorialMode) {
+    if (document.onkeydown === null && config.displayProgress && !config.tutorialMode) {
       document.onkeydown = async (event) => {
         if (event.key === 'Escape') {
           await stop('escape key');
@@ -749,7 +781,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
       domElements.nextButton = document.createElement('button');
       domElements.nextButton.textContent = "Next";
       domElements.nextButton.classList.add('dry-run-next-button');
-      domElements.nextButton.addEventListener('click',async () => {
+      domElements.nextButton.addEventListener('click', async () => {
         await next();
       });
       domElements.tooltip.appendChild(domElements.nextButton);
@@ -860,7 +892,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     return inputsValid;
   }
 
-  async function log(message: string) {
+  function log(message: string) {
     updateList.push(message);
     const updateMessage = `* ${message}`;
     if (config.logProgress) console.log(updateMessage);
@@ -903,7 +935,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
   }
   async function pauseBetweenNextButtons() {
     /* TODO2 */
-    while (!state.nextButtonPressed) {
+    while (!state.nextButtonPressed && state.continueActions) {
       await sleep(config.globalDelay / 2);
     }
     state.nextButtonPressed = false;

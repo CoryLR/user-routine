@@ -30,7 +30,7 @@ const template =`
 /**
  * Dry-Run examples, replace with your tests
 */
-async function runDryRuns() {
+async function startDryRun() {
 ${addIndent(exampleTests)}
 }
 
@@ -41,7 +41,7 @@ ${usage}
 /* Minified Dry-Run code, provides function 'dryRun' */ /* @ts-ignore */
 ${dryRunJsBlob}
 
-runDryRuns();
+startDryRun();
 `;
 
 fs.writeFileSync('dist/dry-run.template.js', template, { encoding: 'utf8', flag: 'w' });

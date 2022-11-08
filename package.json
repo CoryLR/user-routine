@@ -1,6 +1,6 @@
 {
   "name": "dry-run",
-  "version": "4.3.1",
+  "version": "5.0.0",
   "description": "Automated routines for single-page applications (SPAs), useful for end-to-end-testing and guided tutorials. Small, portable, and easy to use. Click buttons, fill values, await results, guide users, etc.",
   "main": "./lib/dry-run.min.js",
   "types": "./lib/dry-run.d.ts",
