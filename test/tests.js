@@ -1,5 +1,5 @@
 
-await dryRun([
+await userRoutine([
   'log Tests starting',
   'fill input.text Hello, world!',
   'value input.text',

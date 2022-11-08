@@ -1,10 +1,10 @@
-export type DryRunAction = DryRunActionString | (() => void) | Promise<void> | string;
+export type UserRoutineAction = UserRoutineActionString | (() => void) | Promise<void> | string;
 type ActionSimple = 'await' | 'click' | 'comment' | 'exists' | 'log' | 'nav' | 'wait';
 type ActionComplex = 'await' |'append' | 'exists' | 'value' | 'write';
 type StringSimple = `${ActionSimple} ${string}`;
 type StringComplex = `${ActionComplex} ${string} ${string}`;
-export type DryRunActionString = '' | StringSimple | StringComplex;
-export type DryRunOptions = {
+export type UserRoutineActionString = '' | StringSimple | StringComplex;
+export type UserRoutineOptions = {
   awaitTimeout?: number,
   continueOnFailure?: boolean,
   displayMessage?: boolean,
@@ -15,11 +15,12 @@ export type DryRunOptions = {
   logProgress?: boolean,
   logResult?: boolean,
   message?: string,
+  messageAttribution?: string,
   overrideCss?: string,
   separator?: string,
   tutorialMode?: boolean,
 }
-export type DryRunReturn = { success: boolean, log: string[], message: string };
+export type UserRoutineReturn = { success: boolean, log: string[], message: string, configuration: UserRoutineOptions };
 export type DomElements = {
   arrow?: HTMLElement,
   arrowShadow?: HTMLElement,

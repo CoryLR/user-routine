@@ -2,15 +2,15 @@
 const fs = require('fs')
 const { parse } = require('node-html-parser');
 
-const dryRunJsBlob = fs.readFileSync('./dist/dry-run.blob.js', 'utf8');
+const userRoutineJsBlob = fs.readFileSync('./dist/user-routine.blob.js', 'utf8');
 const tests = fs.readFileSync('./test/tests.js', 'utf8');
 const combinedBlobAndTests = `
-${dryRunJsBlob}
-async function startDryRun() {
+${userRoutineJsBlob}
+async function startUserRoutine() {
   ${tests}
   console.log('Done! See above for results.');
 }
-startDryRun();
+startUserRoutine();
 `;
 
 const htmlDocument = parse(fs.readFileSync('test/test.html', 'utf8'));

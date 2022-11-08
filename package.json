@@ -1,9 +1,9 @@
 {
-  "name": "dry-run",
+  "name": "user-routine",
   "version": "5.0.0",
-  "description": "Automated routines for single-page applications (SPAs), useful for end-to-end-testing and guided tutorials. Small, portable, and easy to use. Click buttons, fill values, await results, guide users, etc.",
-  "main": "./lib/dry-run.min.js",
-  "types": "./lib/dry-run.d.ts",
+  "description": "Automated user routines for end-to-end testing or guided user tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, etc.",
+  "main": "./lib/user-routine.min.js",
+  "types": "./lib/user-routine.d.ts",
   "directories": {
     "test": "test"
   },
@@ -17,14 +17,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CoryLR/dry-run.git"
+    "url": "git+https://github.com/CoryLR/user-routine.git"
   },
   "author": "Cory Leigh Rahman",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CoryLR/dry-run/issues"
+    "url": "https://github.com/CoryLR/user-routine/issues"
   },
-  "homepage": "https://github.com/CoryLR/dry-run#readme",
+  "homepage": "https://github.com/CoryLR/user-routine#readme",
   "keywords": [
     "JavaScript",
     "SPA",
@@ -35,7 +35,7 @@
     "click",
     "e2e",
     "end to end",
-    "dry-run",
+    "user-routine",
     "test"
   ],
   "devDependencies": {

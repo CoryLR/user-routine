@@ -1,6 +1,6 @@
-import { DomElements, DryRunAction, DryRunActionString, DryRunOptions, DryRunReturn } from './dry-run.d';
+import { DomElements, UserRoutineAction, UserRoutineActionString, UserRoutineOptions, UserRoutineReturn } from './user-routine.d';
 
-export async function dryRun(actions: DryRunAction[] | string, options: DryRunOptions = {}): Promise<DryRunReturn> {
+export async function userRoutine(actions: UserRoutineAction[] | string, options: UserRoutineOptions = {}): Promise<UserRoutineReturn> {
 
   const defaultConfig = {
     awaitTimeout: 15000,
@@ -12,8 +12,8 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     logCollapse: false,
     logProgress: true,
     logResult: true,
-    message: 'Dry-Run',
-    messageAttribution: 'Dry-Run',
+    message: 'User Routine',
+    messageAttribution: 'User Routine',
     overrideCss: '',
     separator: ' ',
     tutorialMode: false,
@@ -22,7 +22,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
   if (options.tutorialMode) options.globalDelay = 200;
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
-  const dryRunLogTitle = config.message ? `[Dry-Run] ${config.message}` : '[Dry-Run]';
+  const userRoutineLogTitle = config.message ? `[User Routine] ${config.message}` : '[User Routine]';
 
   const state = {
     paused: false,
@@ -54,7 +54,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
 
   const shouldStart = checkIfShouldStart();
   if (!shouldStart) {
-    const returnPayload = { success: false, log: updateList, message: config.message };
+    const returnPayload = { success: false, log: updateList, message: config.message, configuration: config };
     messageEnd(returnPayload, false);
     return returnPayload;
   }
@@ -79,7 +79,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
 
   /* Bundled functions */
 
-  function makeActionList(actions: DryRunAction[] | string): DryRunAction[] {
+  function makeActionList(actions: UserRoutineAction[] | string): UserRoutineAction[] {
     /* Make actionList */
     if (typeof actions === 'string') {
       return actions.split('\n').map(a => a.trimStart());
@@ -88,9 +88,9 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     }
   }
 
-  async function doAction(action: DryRunAction) {
+  async function doAction(action: UserRoutineAction) {
     if (typeof action === 'string') {
-      await doActionString(action as DryRunActionString)
+      await doActionString(action as UserRoutineActionString)
     } else if (typeof action === 'function') {
       try {
         await performAction(
@@ -109,7 +109,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     }
   }
 
-  async function doActionString(action: DryRunActionString) {
+  async function doActionString(action: UserRoutineActionString) {
     const actionCode = action.replace('!', '').substring(0, 3);
     if (actionCode === 'nav') {
       const location = action.split(config.separator)[1];
@@ -447,16 +447,16 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
 
   function checkIfShouldStart() {
     if (typeof document === 'undefined') {
-      let errorMessage = 'FAIL: document is undefined. Dry-Run can only be used in the browser. Halting execution.';
+      let errorMessage = 'FAIL: document is undefined. User Routine can only be used in the browser. Halting execution.';
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
     }
 
-    const otherDryRun = document.querySelector('body > .dry-run');
-    if (otherDryRun) {
-      const otherMessage = otherDryRun.getAttribute('data-dry-run')
-      let errorMessage = `FAIL: Dry-Run '${otherMessage}' is already running. Halting execution.`;
+    const otherUserRoutine = document.querySelector('body > .user-routine');
+    if (otherUserRoutine) {
+      const otherMessage = otherUserRoutine.getAttribute('data-user-routine')
+      let errorMessage = `FAIL: User Routine '${otherMessage}' is already running. Halting execution.`;
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
@@ -469,9 +469,9 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     if (config.displayMessage || config.displayProgress) addCss();
     if (config.logProgress) {
       if (config.logCollapse) {
-        console.groupCollapsed(dryRunLogTitle);
+        console.groupCollapsed(userRoutineLogTitle);
       } else {
-        console.group(dryRunLogTitle);
+        console.group(userRoutineLogTitle);
       }
     }
     displayMessageInDOM(config.message);
@@ -479,14 +479,14 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
 
   async function messageEnd(returnPayload, groupEndOverride = true) {
     cleanUpDOM();
-    const resultPrepend = config.logProgress ? '' : dryRunLogTitle;
+    const resultPrepend = config.logProgress ? '' : userRoutineLogTitle;
     if (config.logResult) console.log(`${resultPrepend} Result:`, returnPayload);
     if (config.logProgress && groupEndOverride) console.groupEnd();
   }
 
-  async function finish(): Promise<DryRunReturn> {
+  async function finish(): Promise<UserRoutineReturn> {
     const result = !state.errorOccurred;
-    const returnPayload: DryRunReturn = { success: result, log: updateList, message: config.message };
+    const returnPayload: UserRoutineReturn = { success: result, log: updateList, message: config.message, configuration: config };
     log(`Done, success: ${result}`);
     messageEnd(returnPayload);
     return returnPayload;
@@ -504,7 +504,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
   async function addCss() {
     domElements.style = document.createElement('style');
     domElements.style.textContent = `
-      body > .dry-run {
+      body > .user-routine {
         font: 20px Arial;
         padding: 18px 12px 6px 12px;
         z-index: 9999;
@@ -522,7 +522,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         border: 2px solid rgb(180,180,180);
         border-top: 0;
       }
-      body > .dry-run > .dry-run-footer {
+      body > .user-routine > .user-routine-footer {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -531,64 +531,64 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         font-size: 12px;
         margin-top: 5px;
       }
-      body .dry-run-footer .dry-run-play {
+      body .user-routine-footer .user-routine-play {
         display: none;
       }
-      body .dry-run-footer .dry-run-play,
-      body .dry-run-footer .dry-run-pause,
-      body .dry-run-footer .dry-run-stop {
+      body .user-routine-footer .user-routine-play,
+      body .user-routine-footer .user-routine-pause,
+      body .user-routine-footer .user-routine-stop {
         padding: 4px;
       }
-      body .dry-run-footer .dry-run-play:hover,
-      body .dry-run-footer .dry-run-pause:hover,
-      body .dry-run-footer .dry-run-stop:hover {
+      body .user-routine-footer .user-routine-play:hover,
+      body .user-routine-footer .user-routine-pause:hover,
+      body .user-routine-footer .user-routine-stop:hover {
         cursor: pointer;
       }
-      body > .dry-run > .dry-run-footer .dry-run-play-icon {
+      body > .user-routine > .user-routine-footer .user-routine-play-icon {
         width: 0;
         height: 0;
         border-top: 5px solid transparent;
         border-bottom: 5px solid transparent;
         border-left: 8px solid rgb(191, 191, 191);
       }
-      body > .dry-run > .dry-run-footer .dry-run-pause-icon {
+      body > .user-routine > .user-routine-footer .user-routine-pause-icon {
         width: 2px;
         height: 8px;
         border-left: 3px solid rgb(191, 191, 191);
         border-right: 3px solid rgb(191, 191, 191);
         margin: 1px 0;
       }
-      body > .dry-run > .dry-run-footer .dry-run-stop-icon {
+      body > .user-routine > .user-routine-footer .user-routine-stop-icon {
         height: 8px;
         width: 8px;
         background-color: rgb(191, 191, 191);
       }
-      body .dry-run-footer .dry-run-play:hover .dry-run-play-icon {
+      body .user-routine-footer .user-routine-play:hover .user-routine-play-icon {
         border-left: 8px solid rgb(80, 80, 80);
       }
-      body .dry-run-footer .dry-run-pause:hover .dry-run-pause-icon {
+      body .user-routine-footer .user-routine-pause:hover .user-routine-pause-icon {
         border-left: 3px solid rgb(80, 80, 80);
         border-right: 3px solid rgb(80, 80, 80);
       }
-      body .dry-run-footer .dry-run-stop:hover .dry-run-stop-icon {
+      body .user-routine-footer .user-routine-stop:hover .user-routine-stop-icon {
         background-color: rgb(80, 80, 80);
       }
-      body > .dry-run > .dry-run-footer > .dry-run-status,
-      body > .dry-run > .dry-run-footer > .dry-run-attribution {
+      body > .user-routine > .user-routine-footer > .user-routine-status,
+      body > .user-routine > .user-routine-footer > .user-routine-attribution {
         text-align: left;
         color: dimgray;
       }
-      body > .dry-run > .dry-run-footer > .dry-run-status {
+      body > .user-routine > .user-routine-footer > .user-routine-status {
         min-width: 60px;
         min-height: 15px;
         margin-left: 5px;
         font-style: italic;
       }
-      body > .dry-run > .dry-run-footer > .dry-run-attribution {
+      body > .user-routine > .user-routine-footer > .user-routine-attribution {
         margin-left: auto;
         padding-left: 5px;
       }
-      body > .dry-run-focus-box {
+      body > .user-routine-focus-box {
         z-index: 9997;
         visibility: hidden;
         position: absolute;
@@ -597,7 +597,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         box-shadow: 0 0 0 2px rgb(0,0,0);
         pointer-events: none;
       }
-      body > .dry-run-tooltip {
+      body > .user-routine-tooltip {
         z-index: 9999;
         visibility: hidden;
         font: 14px Arial;
@@ -609,10 +609,10 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         border-radius: 10px;
         max-width: ${ANIMATION_TOOLTIP_MAX_WIDTH}px;
       }
-      body > .dry-run-tooltip-error {
+      body > .user-routine-tooltip-error {
         color: darkred;
       }
-      body > .dry-run-arrow {
+      body > .user-routine-arrow {
         z-index: 9999;
         visibility: hidden;
         width: 0;
@@ -622,14 +622,14 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         border-right: 10px solid transparent;
         border-bottom: 10px solid rgb(245,245,245); 
       }
-      body > .dry-run-arrow-shadow {
+      body > .user-routine-arrow-shadow {
         z-index: 9998;
         border-left: 14px solid transparent;
         border-right: 14px solid transparent;
         border-bottom: 14px solid rgb(180,180,180);
         margin: -3px 0 0 -4px;
       }
-      body > .dry-run-tooltip-shadow {
+      body > .user-routine-tooltip-shadow {
         z-index: 9998;
         color: transparent;
         border: 2px solid rgb(180,180,180);
@@ -637,7 +637,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         margin: -2px 0 0 -2px;
         border-radius: 12px;
       }
-      body > .dry-run-tooltip .dry-run-next-button {
+      body > .user-routine-tooltip .user-routine-next-button {
         display: block;
         margin: 5px auto 0 auto;
         border-radius: 5px;
@@ -646,19 +646,19 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
         border-width: 0;
         cursor: pointer;
       }
-      body > .dry-run-fade-in {
+      body > .user-routine-fade-in {
         visibility: visible;
-        animation: dryRunfadeIn ${ANIMATION_FADE_TIME}ms; 
+        animation: userRoutinefadeIn ${ANIMATION_FADE_TIME}ms; 
       }
-      body > .dry-run-fade-out {
+      body > .user-routine-fade-out {
         opacity: 0;
-        animation: dryRunfadeOut ${ANIMATION_FADE_TIME}ms; 
+        animation: userRoutinefadeOut ${ANIMATION_FADE_TIME}ms; 
       }
-      @keyframes dryRunfadeIn {
+      @keyframes userRoutinefadeIn {
         0% { opacity: 0; }
         100% { opacity: 1; }
       }
-      @keyframes dryRunfadeOut {
+      @keyframes userRoutinefadeOut {
         0% { opacity: 1; }
         100% { opacity: 0; }
       }
@@ -672,37 +672,37 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
 
     let htmlString = `
       ${message}
-      <div class="dry-run-footer">
+      <div class="user-routine-footer">
     `;
     if (!config.tutorialMode) {
       htmlString += `
-        <div class="dry-run-play" title="Play">
-          <div class="dry-run-play-icon"></div>
+        <div class="user-routine-play" title="Play">
+          <div class="user-routine-play-icon"></div>
         </div>
-        <div class="dry-run-pause" title="Pause">
-          <div class="dry-run-pause-icon"></div>
+        <div class="user-routine-pause" title="Pause">
+          <div class="user-routine-pause-icon"></div>
         </div>
       `;
     }
     htmlString += `
-        <div class="dry-run-stop" title="Stop">
-          <div class="dry-run-stop-icon"></div>
+        <div class="user-routine-stop" title="Stop">
+          <div class="user-routine-stop-icon"></div>
         </div>
-        <div class="dry-run-status"></div>
-        <div class="dry-run-attribution">${config.messageAttribution}</div>
+        <div class="user-routine-status"></div>
+        <div class="user-routine-attribution">${config.messageAttribution}</div>
       </div>
     `;
     domElements.message.innerHTML = htmlString;
 
-    domElements.message.setAttribute('data-dry-run', message);
-    domElements.message.classList.add('dry-run');
+    domElements.message.setAttribute('data-user-routine', message);
+    domElements.message.classList.add('user-routine');
     if (!config.displayMessage) domElements.message.style.visibility = 'hidden';
     document.querySelector('body').appendChild(domElements.message);
 
-    domElements.playButton = document.querySelector('.dry-run .dry-run-play');
-    domElements.pauseButton = document.querySelector('.dry-run .dry-run-pause');
-    domElements.stopButton = document.querySelector('.dry-run .dry-run-stop');
-    domElements.status = document.querySelector('.dry-run .dry-run-status');
+    domElements.playButton = document.querySelector('.user-routine .user-routine-play');
+    domElements.pauseButton = document.querySelector('.user-routine .user-routine-pause');
+    domElements.stopButton = document.querySelector('.user-routine .user-routine-stop');
+    domElements.status = document.querySelector('.user-routine .user-routine-status');
 
     /* Add event listeners to play, pause, and stop buttons */
     if (!config.tutorialMode) {
@@ -767,20 +767,20 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     const scrollLeftActual = window.pageXOffset || element.scrollLeft || document.body.scrollLeft;
 
     domElements.focusBox = document.createElement('div');
-    domElements.focusBox.classList.add('dry-run-focus-box');
+    domElements.focusBox.classList.add('user-routine-focus-box');
 
     domElements.arrow = document.createElement('div');
-    domElements.arrow.classList.add('dry-run-arrow');
+    domElements.arrow.classList.add('user-routine-arrow');
 
     domElements.tooltip = document.createElement('div');
-    domElements.tooltip.classList.add('dry-run-tooltip');
-    if (type === 'error') domElements.tooltip.classList.add('dry-run-tooltip-error');
+    domElements.tooltip.classList.add('user-routine-tooltip');
+    if (type === 'error') domElements.tooltip.classList.add('user-routine-tooltip-error');
     domElements.tooltip.textContent = actionMessage.replace(/>>/g, ' ');
 
     if (config.tutorialMode) {
       domElements.nextButton = document.createElement('button');
       domElements.nextButton.textContent = "Next";
-      domElements.nextButton.classList.add('dry-run-next-button');
+      domElements.nextButton.classList.add('user-routine-next-button');
       domElements.nextButton.addEventListener('click', async () => {
         await next();
       });
@@ -827,18 +827,18 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     /* Make the shadow/outline */
     domElements.arrowShadow = domElements.arrow.cloneNode(true) as HTMLElement;
     domElements.tooltipShadow = domElements.tooltip.cloneNode(true) as HTMLElement;
-    domElements.arrowShadow.classList.add('dry-run-arrow-shadow');
-    domElements.tooltipShadow.classList.add('dry-run-tooltip-shadow');
+    domElements.arrowShadow.classList.add('user-routine-arrow-shadow');
+    domElements.tooltipShadow.classList.add('user-routine-tooltip-shadow');
     document.body.appendChild(domElements.arrowShadow);
     document.body.appendChild(domElements.tooltipShadow);
 
     await scrollIntoViewIfNeeded(element);
 
-    domElements.focusBox.classList.add('dry-run-fade-in');
-    domElements.arrowShadow.classList.add('dry-run-fade-in');
-    domElements.tooltipShadow.classList.add('dry-run-fade-in');
-    domElements.arrow.classList.add('dry-run-fade-in');
-    domElements.tooltip.classList.add('dry-run-fade-in');
+    domElements.focusBox.classList.add('user-routine-fade-in');
+    domElements.arrowShadow.classList.add('user-routine-fade-in');
+    domElements.tooltipShadow.classList.add('user-routine-fade-in');
+    domElements.arrow.classList.add('user-routine-fade-in');
+    domElements.tooltip.classList.add('user-routine-fade-in');
     const findTime = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300ms)
     let readTime = actionMessage.length * 30 < 2000 ? actionMessage.length * 30 : 2000; // Reading covers one letter per 30ms in sentences
     readTime = readTime;
@@ -850,11 +850,11 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     /* TODO: Significantly reduce delay after clicking "next", maybe change strategy
             to do more with the actual click event */
     if (addComprehensionTime) await (advanceDelay(COMPREHEND_ACTION_RESULT_TIME));
-    domElements.focusBox.classList.add('dry-run-fade-out');
-    domElements.arrow.classList.add('dry-run-fade-out');
-    domElements.tooltip.classList.add('dry-run-fade-out');
-    domElements.arrowShadow.classList.add('dry-run-fade-out');
-    domElements.tooltipShadow.classList.add('dry-run-fade-out');
+    domElements.focusBox.classList.add('user-routine-fade-out');
+    domElements.arrow.classList.add('user-routine-fade-out');
+    domElements.tooltip.classList.add('user-routine-fade-out');
+    domElements.arrowShadow.classList.add('user-routine-fade-out');
+    domElements.tooltipShadow.classList.add('user-routine-fade-out');
     await advanceDelay(ANIMATION_FADE_TIME);
     domElements.focusBox.remove();
     domElements.tooltip.remove();
@@ -876,7 +876,7 @@ export async function dryRun(actions: DryRunAction[] | string, options: DryRunOp
     return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
   }
 
-  async function validateInputs(actionList: DryRunAction[] | string, options?: DryRunOptions): Promise<boolean> {
+  async function validateInputs(actionList: UserRoutineAction[] | string, options?: UserRoutineOptions): Promise<boolean> {
     let inputsValid = true;
     if (actionList === undefined) {
       inputsValid = false;

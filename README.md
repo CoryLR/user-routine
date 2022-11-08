@@ -1,43 +1,43 @@
 
-# Dry-Run
+# User Routine
 
-Automated testing for single-page applications (SPAs). Small, easy to use, and zero setup. Click on things, fill in values, await for things exist, etc.
+Automated user routines for end-to-end testing or guided user tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, etc.
 
 # Access
 
 Options:
 
-**1.** Install using `npm install --save-dev dry-run` and import:
+**1.** Install using `npm install --save-dev user-routine` and import:
 
 ```javascript
-import { dryRun } from 'dry-run';
+import { userRoutine } from 'user-routine';
 // or
-const { dryRun } = require('dry-run');
+const { userRoutine } = require('user-routine');
 ```
 
-**2.** Add a reference to `dry-run.min.js` to your HTML:
+**2.** Add a reference to `user-routine.min.js` to your HTML:
 
 ```html
 <!-- From CDN -->
-<script src="https://cdn.jsdelivr.net/gh/CoryLR/dry-run/dist/dry-run.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/CoryLR/user-routine/dist/user-routine.min.js"></script>
 
 <!-- Or from local file -->
-<script src="/dry-run.min.js"></script>
+<script src="/user-routine.min.js"></script>
 ```
 
-**3.** Or copy the portable template from here: [dry-run.template.js](./dist/dry-run.template.js)
+**3.** Or copy the portable template from here: [user-routine.template.js](./dist/user-routine.template.js)
 * This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
-Dry-Run is served as a function named `dryRun`.
+User Routine is served as a function named `userRoutine`.
 
 **Some simple examples:**
 
 Run a test:
 
 ```javascript
-dryRun([
+userRoutine([
   'click button.btn', // Target using CSS selectors
   'await .result Result Text', // Await some result
 ]);
@@ -46,7 +46,7 @@ dryRun([
 Display a tutorial:
 
 ```javascript
-dryRun([
+userRoutine([
   'comment .some-form First, fill this out',
   'comment .submit-button Then, hit Submit!',
 ], { message:'Tutorial', tutorialMode: true });
@@ -55,7 +55,7 @@ dryRun([
 Customize some options:
 
 ```javascript
-dryRun(
+userRoutine(
   ['click button', 'await .result Result Text'], // Actions
   { message:'Example Test', globalDelay: 1000,   // Options
   displayProgress: false, continueOnFailure: true},
@@ -89,20 +89,20 @@ Input parameter details:
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
-  * `message`: (*default: 'Dry-Run'*) Label to show in the console and in the DOM
-  * `messageAttribution`: (*default: 'Dry-Run'*) Subtitle text shown when custom message is provided
-  * `overrideCss`: (*default: ''*) Override default Dry-Run CSS, target classes such as .dry-run-message, .dry-run-focus-box, or .dry-run-tooltip
+  * `message`: (*default: 'User Routine'*) Label to show in the console and in the DOM
+  * `messageAttribution`: (*default: 'User Routine'*) Subtitle text shown when custom message is provided
+  * `overrideCss`: (*default: ''*) Override default User Routine CSS, target classes such as .user-routine-message, .user-routine-focus-box, or .user-routine-tooltip
   * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `separator` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'`. (Alternatively you can use `>>` instead of spaces without customizing the CSS selector, like `await .container>>div Result Text`).
   * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
 Output details:
 
-* The `dryRun` function returns type `DryRunReturn`:
-  * `export type DryRunReturn = { success: boolean, log: string[], message: string };`
+* The `userRoutine` function returns type `UserRoutineReturn`:
+  * `export type UserRoutineReturn = { success: boolean, log: string[], message: string, configuration: UserRoutineOptions };`
 * Updates are also logged to the browser console like so:
 
 ```
-[Dry-Run] Message
+[User Routine] Message
   * Filled the value of form>input.name to 'Cory'
   * Clicked on button[type="submit"]
   * Awaiting 'div.success-message'...
@@ -115,14 +115,14 @@ Output details:
 
 ## Template
 
-See the [dry-run.template.js](./dist/dry-run.template.js) for examples of running multiple sequential tests using async/await.
+See the [user-routine.template.js](./dist/user-routine.template.js) for examples of running multiple sequential tests using async/await.
 
 ## Use-cases
 
 ### Fill inputs with `fill` and interact with `click` using Selectors:
 
 ```javascript
-dryRun([
+userRoutine([
   'fill input[type="text"] Hello, world!', // Fills in the input
   'fill input[type="number"] 20',
   'click button.some-class', // Clicks a button with class 'some-class'
@@ -137,7 +137,7 @@ dryRun([
 ### Validate the DOM with `exists` and `value`:
 
 ```javascript
-dryRun([
+userRoutine([
   'exists p.some-class', // Checks for the existence of this element
   'exists p.some-class With certain text', // Also checks if it includes certain text
   '!exists p.some-class', // Validates that the element does not exist
@@ -150,7 +150,7 @@ dryRun([
 ### Deal with timing using `await` and `wait`:
 
 ```javascript
-dryRun([
+userRoutine([
   'await div.some-popup', // Awaits the existence of this element
   'await div.some-popup With certain text', // Also waits for it to include certain text
   '!await div.some-spinner', // Awaits the non-existence of this element
@@ -164,7 +164,7 @@ dryRun([
 ### Navigate within a single-page application using `nav`:
 
 ```javascript
-dryRun([
+userRoutine([
   'nav #some-id',
   'nav #/some/hash/routing/path',
   'nav #', // Back to the top
@@ -174,7 +174,7 @@ dryRun([
 ### Add notes with `append`, `log`, and `write`:
 
 ```javascript
-dryRun([
+userRoutine([
   'write h1 Testing successful!', // overwrites the h1's textContent
   'append h1  - Testing successful!', // appends to the h1's textContent
   'log The testing is complete.',
@@ -184,7 +184,7 @@ dryRun([
 ### Pass options as a second argument:
 
 ```javascript
-dryRun([
+userRoutine([
   'fill input.name Cory',
   'click button[type="submit"]',
 ], { globalDelay: 1000 });
@@ -204,7 +204,7 @@ dryRun([
 
 ### Continuous Development
 
-* Make changes to [lib/dry-run.ts](./lib/dry-run.ts)
+* Make changes to [lib/user-routine.ts](./lib/user-routine.ts)
 * Run `npm run build:local`
 * To test changes, edit either [demo/src/regression-tests.js](./demo/src/regression-tests.js) or [demo/src/script.js](./demo/src/script.js)
 * Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
@@ -220,8 +220,9 @@ To publish:
 
 TO DO:
 
-* [ ] Pick new name, some options: task-routine, auto-routine, spa-routine, spa-list
+* [ ] Pick new name, some options: user-routine, action-routine, task-routine, auto-routine, spa-routine, spa-list
 * [ ] Finish the Demo page
 * [ ] Add count action to count instances of a particular CSS selector
-* [ ] Add a tutorial walkthrough to the demo page, using Dry-Run to showcase Dry-Run
+* [ ] Add a tutorial walkthrough to the demo page, using User Routine to showcase User Routine
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
+* [ ] Add config warnings that might conflict, like tutorialMode and displayProgress/globalDelay

@@ -1,4 +1,4 @@
-import { dryRun } from '../../dist/dry-run.min';
+import { userRoutine } from '../../dist/user-routine.min';
 
 export async function runRegressionTests(
   globalDelay = 10,
@@ -7,7 +7,7 @@ export async function runRegressionTests(
   interactiveTests = false,
 ) {
 
-  await dryRun([
+  await userRoutine([
     'log Tests starting',
     'fill input.text Hello, world!',
     'value input.text',
@@ -33,7 +33,7 @@ export async function runRegressionTests(
     awaitTimeout: displayProgress ? 9000 : 1500,
   });
 
-  await dryRun([
+  await userRoutine([
     'log Expect success: false',
     'click does-not-exist',
     'invalidkeyword test',
@@ -47,7 +47,7 @@ export async function runRegressionTests(
     continueOnFailure: true, awaitTimeout: 150, logProgress
   });
 
-  await dryRun([
+  await userRoutine([
     'log Expect success: false, should halt after next error',
     'click does-not-exist',
     'log If you see this, it did not work',
@@ -57,7 +57,7 @@ export async function runRegressionTests(
   });
 
   if (interactiveTests) {
-    await dryRun([
+    await userRoutine([
       'log Hey there, ready to get started?',
       'comment input.text First, enter some text here',
       'comment input.count Now put a number here',

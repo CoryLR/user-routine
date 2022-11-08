@@ -6,19 +6,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport"
     content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0">
-  <title>Dry-Run Demo</title>
+  <title>User Routine Demo</title>
 </head>
 
 <body>
 
   <main>
     <header>
-      <h1>Dry-Run Demo</h1>
+      <h1>User Routine Demo</h1>
       <p data-fill-description>Description description description...</p>
       <nav>Quick Links:
-        <a href="https://github.com/CoryLR/dry-run#readme">Documentation on GitHub</a>,
-        <a href="https://www.npmjs.com/package/dry-run">NPM Listing</a>,
-        <a href="https://github.com/CoryLR/dry-run/blob/main/dry-run.template.js">Portable Template</a>
+        <a href="https://github.com/CoryLR/user-routine#readme">Documentation on GitHub</a>,
+        <a href="https://www.npmjs.com/package/user-routine">NPM Listing</a>,
+        <a href="https://github.com/CoryLR/user-routine/blob/main/user-routine.template.js">Portable Template</a>
       </nav>
     </header>
 
@@ -28,9 +28,9 @@
       <figure id="demo-fill-form">
         <div class="code-card">
           <div class="code-card-header">Fill a form</div>
-          <pre class="bruh"><code>dryRun([
-  'value input.text Hello, world!',
-  'value input.count 20',
+          <pre class="bruh"><code>userRoutine([
+  'fill input.text Hello, world!',
+  'fill input.count 20',
   'click button',
   'exists pre hello, world',
 ], { message: 'Testing form' });</code>
@@ -46,7 +46,7 @@
       <figure id="demo-write-nav">
         <div class="code-card">
           <div class="code-card-header">Write and navigate</div>
-          <pre class="bruh"><code>dryRun([
+          <pre class="bruh"><code>userRoutine([
   'write #far-down Back up we go!',
   'nav #',
 ], {
@@ -64,7 +64,7 @@
       <figure id="demo-await">
         <div class="code-card">
           <div class="code-card-header">Await a process</div>
-          <pre class="bruh"><code>dryRun([
+          <pre class="bruh"><code>userRoutine([
   'click button long process',
   'await !.output processing...',
   'await .output process complete',
