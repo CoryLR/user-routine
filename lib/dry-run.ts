@@ -1,6 +1,6 @@
-import { DomElements, SpaRoutineAction, SpaRoutineActionString, SpaRoutineOptions, SpaRoutineReturn } from './spa-routine.d';
+import { DomElements, DryRunAction, DryRunActionString, DryRunOptions, DryRunReturn } from './dry-run.d';
 
-export async function spaRoutine(actions: SpaRoutineAction[] | string, options: SpaRoutineOptions = {}): Promise<SpaRoutineReturn> {
+export async function dryRun(actions: DryRunAction[] | string, options: DryRunOptions = {}): Promise<DryRunReturn> {
 
   const defaultConfig = {
     awaitTimeout: 15000,
@@ -12,8 +12,8 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     logCollapse: false,
     logProgress: true,
     logResult: true,
-    message: 'SPA Routine',
-    messageAttribution: 'SPA Routine',
+    message: 'Dry-Run',
+    messageAttribution: 'Dry-Run',
     overrideCss: '',
     separator: ' ',
     tutorialMode: false,
@@ -22,7 +22,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
   if (options.tutorialMode) options.globalDelay = 200;
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
-  const spaRoutineLogTitle = config.message ? `[SPA Routine] ${config.message}` : '[SPA Routine]';
+  const dryRunLogTitle = config.message ? `[Dry-Run] ${config.message}` : '[Dry-Run]';
 
   const state = {
     paused: false,
@@ -79,7 +79,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
 
   /* Bundled functions */
 
-  function makeActionList(actions: SpaRoutineAction[] | string): SpaRoutineAction[] {
+  function makeActionList(actions: DryRunAction[] | string): DryRunAction[] {
     /* Make actionList */
     if (typeof actions === 'string') {
       return actions.split('\n').map(a => a.trimStart());
@@ -88,9 +88,9 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     }
   }
 
-  async function doAction(action: SpaRoutineAction) {
+  async function doAction(action: DryRunAction) {
     if (typeof action === 'string') {
-      await doActionString(action as SpaRoutineActionString)
+      await doActionString(action as DryRunActionString)
     } else if (typeof action === 'function') {
       try {
         await performAction(
@@ -109,7 +109,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     }
   }
 
-  async function doActionString(action: SpaRoutineActionString) {
+  async function doActionString(action: DryRunActionString) {
     const actionCode = action.replace('!', '').substring(0, 3);
     if (actionCode === 'nav') {
       const location = action.split(config.separator)[1];
@@ -415,16 +415,16 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
 
   function checkIfShouldStart() {
     if (typeof document === 'undefined') {
-      let errorMessage = 'FAIL: document is undefined. SPA Routine can only be used in the browser. Halting execution.';
+      let errorMessage = 'FAIL: document is undefined. Dry-Run can only be used in the browser. Halting execution.';
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
     }
 
-    const otherSpaRoutine = document.querySelector('body > .spa-routine');
-    if (otherSpaRoutine) {
-      const otherMessage = otherSpaRoutine.getAttribute('data-spa-routine')
-      let errorMessage = `FAIL: SPA Routine '${otherMessage}' is already running. Halting execution.`;
+    const otherDryRun = document.querySelector('body > .dry-run');
+    if (otherDryRun) {
+      const otherMessage = otherDryRun.getAttribute('data-dry-run')
+      let errorMessage = `FAIL: Dry-Run '${otherMessage}' is already running. Halting execution.`;
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
@@ -437,24 +437,24 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     if (config.displayMessage || config.displayProgress) addCss();
     if (config.logProgress) {
       if (config.logCollapse) {
-        console.groupCollapsed(spaRoutineLogTitle);
+        console.groupCollapsed(dryRunLogTitle);
       } else {
-        console.group(spaRoutineLogTitle);
+        console.group(dryRunLogTitle);
       }
     }
     displayMessageInDOM(config.message);
   }
 
   async function messageEnd(returnPayload, groupEndOverride = true) {
-    const resultPrepend = config.logProgress ? '' : spaRoutineLogTitle;
+    const resultPrepend = config.logProgress ? '' : dryRunLogTitle;
     if (config.logResult) console.log(`${resultPrepend} Result:`, returnPayload);
     if (config.logProgress && groupEndOverride) console.groupEnd();
   }
 
-  async function finish(): Promise<SpaRoutineReturn> {
+  async function finish(): Promise<DryRunReturn> {
     cleanUpDOM();
     const result = !state.errorOccurred;
-    const returnPayload: SpaRoutineReturn = { success: result, log: updateList, message: config.message };
+    const returnPayload: DryRunReturn = { success: result, log: updateList, message: config.message };
     log(`Done, success: ${result}`);
     messageEnd(returnPayload);
     return returnPayload;
@@ -472,7 +472,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
   async function addCss() {
     domElements.style = document.createElement('style');
     domElements.style.textContent = `
-      body > .spa-routine {
+      body > .dry-run {
         font: 20px Arial;
         padding: 18px 12px 6px 12px;
         z-index: 9999;
@@ -490,7 +490,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         border: 2px solid rgb(180,180,180);
         border-top: 0;
       }
-      body > .spa-routine > .spa-routine-footer {
+      body > .dry-run > .dry-run-footer {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -499,64 +499,64 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         font-size: 12px;
         margin-top: 5px;
       }
-      body .spa-routine-footer .spa-routine-play {
+      body .dry-run-footer .dry-run-play {
         display: none;
       }
-      body .spa-routine-footer .spa-routine-play,
-      body .spa-routine-footer .spa-routine-pause,
-      body .spa-routine-footer .spa-routine-stop {
+      body .dry-run-footer .dry-run-play,
+      body .dry-run-footer .dry-run-pause,
+      body .dry-run-footer .dry-run-stop {
         padding: 4px;
       }
-      body .spa-routine-footer .spa-routine-play:hover,
-      body .spa-routine-footer .spa-routine-pause:hover,
-      body .spa-routine-footer .spa-routine-stop:hover {
+      body .dry-run-footer .dry-run-play:hover,
+      body .dry-run-footer .dry-run-pause:hover,
+      body .dry-run-footer .dry-run-stop:hover {
         cursor: pointer;
       }
-      body > .spa-routine > .spa-routine-footer .spa-routine-play-icon {
+      body > .dry-run > .dry-run-footer .dry-run-play-icon {
         width: 0;
         height: 0;
         border-top: 5px solid transparent;
         border-bottom: 5px solid transparent;
         border-left: 8px solid rgb(191, 191, 191);
       }
-      body > .spa-routine > .spa-routine-footer .spa-routine-pause-icon {
+      body > .dry-run > .dry-run-footer .dry-run-pause-icon {
         width: 2px;
         height: 8px;
         border-left: 3px solid rgb(191, 191, 191);
         border-right: 3px solid rgb(191, 191, 191);
         margin: 1px 0;
       }
-      body > .spa-routine > .spa-routine-footer .spa-routine-stop-icon {
+      body > .dry-run > .dry-run-footer .dry-run-stop-icon {
         height: 8px;
         width: 8px;
         background-color: rgb(191, 191, 191);
       }
-      body .spa-routine-footer .spa-routine-play:hover .spa-routine-play-icon {
+      body .dry-run-footer .dry-run-play:hover .dry-run-play-icon {
         border-left: 8px solid rgb(80, 80, 80);
       }
-      body .spa-routine-footer .spa-routine-pause:hover .spa-routine-pause-icon {
+      body .dry-run-footer .dry-run-pause:hover .dry-run-pause-icon {
         border-left: 3px solid rgb(80, 80, 80);
         border-right: 3px solid rgb(80, 80, 80);
       }
-      body .spa-routine-footer .spa-routine-stop:hover .spa-routine-stop-icon {
+      body .dry-run-footer .dry-run-stop:hover .dry-run-stop-icon {
         background-color: rgb(80, 80, 80);
       }
-      body > .spa-routine > .spa-routine-footer > .spa-routine-status,
-      body > .spa-routine > .spa-routine-footer > .spa-routine-attribution {
+      body > .dry-run > .dry-run-footer > .dry-run-status,
+      body > .dry-run > .dry-run-footer > .dry-run-attribution {
         text-align: left;
         color: dimgray;
       }
-      body > .spa-routine > .spa-routine-footer > .spa-routine-status {
+      body > .dry-run > .dry-run-footer > .dry-run-status {
         min-width: 60px;
         min-height: 15px;
         margin-left: 5px;
         font-style: italic;
       }
-      body > .spa-routine > .spa-routine-footer > .spa-routine-attribution {
+      body > .dry-run > .dry-run-footer > .dry-run-attribution {
         margin-left: auto;
         padding-left: 5px;
       }
-      body > .spa-routine-focus-box {
+      body > .dry-run-focus-box {
         z-index: 9997;
         visibility: hidden;
         position: absolute;
@@ -565,7 +565,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         box-shadow: 0 0 0 2px rgb(0,0,0);
         pointer-events: none;
       }
-      body > .spa-routine-tooltip {
+      body > .dry-run-tooltip {
         z-index: 9999;
         visibility: hidden;
         font: 14px Arial;
@@ -577,10 +577,10 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         border-radius: 10px;
         max-width: ${ANIMATION_TOOLTIP_MAX_WIDTH}px;
       }
-      body > .spa-routine-tooltip-error {
+      body > .dry-run-tooltip-error {
         color: darkred;
       }
-      body > .spa-routine-arrow {
+      body > .dry-run-arrow {
         z-index: 9999;
         visibility: hidden;
         width: 0;
@@ -590,14 +590,14 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         border-right: 10px solid transparent;
         border-bottom: 10px solid rgb(245,245,245); 
       }
-      body > .spa-routine-arrow-shadow {
+      body > .dry-run-arrow-shadow {
         z-index: 9998;
         border-left: 14px solid transparent;
         border-right: 14px solid transparent;
         border-bottom: 14px solid rgb(180,180,180);
         margin: -3px 0 0 -4px;
       }
-      body > .spa-routine-tooltip-shadow {
+      body > .dry-run-tooltip-shadow {
         z-index: 9998;
         color: transparent;
         border: 2px solid rgb(180,180,180);
@@ -605,7 +605,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         margin: -2px 0 0 -2px;
         border-radius: 12px;
       }
-      body > .spa-routine-tooltip .spa-routine-next-button {
+      body > .dry-run-tooltip .dry-run-next-button {
         display: block;
         margin: 5px auto 0 auto;
         border-radius: 5px;
@@ -614,19 +614,19 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
         border-width: 0;
         cursor: pointer;
       }
-      body > .spa-routine-fade-in {
+      body > .dry-run-fade-in {
         visibility: visible;
-        animation: spaRoutinefadeIn ${ANIMATION_FADE_TIME}ms; 
+        animation: dryRunfadeIn ${ANIMATION_FADE_TIME}ms; 
       }
-      body > .spa-routine-fade-out {
+      body > .dry-run-fade-out {
         opacity: 0;
-        animation: spaRoutinefadeOut ${ANIMATION_FADE_TIME}ms; 
+        animation: dryRunfadeOut ${ANIMATION_FADE_TIME}ms; 
       }
-      @keyframes spaRoutinefadeIn {
+      @keyframes dryRunfadeIn {
         0% { opacity: 0; }
         100% { opacity: 1; }
       }
-      @keyframes spaRoutinefadeOut {
+      @keyframes dryRunfadeOut {
         0% { opacity: 1; }
         100% { opacity: 0; }
       }
@@ -640,37 +640,37 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
 
     let htmlString = `
       ${message}
-      <div class="spa-routine-footer">
+      <div class="dry-run-footer">
     `;
     if (!config.tutorialMode) {
       htmlString += `
-        <div class="spa-routine-play" title="Play">
-          <div class="spa-routine-play-icon"></div>
+        <div class="dry-run-play" title="Play">
+          <div class="dry-run-play-icon"></div>
         </div>
-        <div class="spa-routine-pause" title="Pause">
-          <div class="spa-routine-pause-icon"></div>
+        <div class="dry-run-pause" title="Pause">
+          <div class="dry-run-pause-icon"></div>
         </div>
       `;
     }
     htmlString += `
-        <div class="spa-routine-stop" title="Stop">
-          <div class="spa-routine-stop-icon"></div>
+        <div class="dry-run-stop" title="Stop">
+          <div class="dry-run-stop-icon"></div>
         </div>
-        <div class="spa-routine-status"></div>
-        <div class="spa-routine-attribution">${config.messageAttribution}</div>
+        <div class="dry-run-status"></div>
+        <div class="dry-run-attribution">${config.messageAttribution}</div>
       </div>
     `;
     domElements.message.innerHTML = htmlString;
 
-    domElements.message.setAttribute('data-spa-routine', message);
-    domElements.message.classList.add('spa-routine');
+    domElements.message.setAttribute('data-dry-run', message);
+    domElements.message.classList.add('dry-run');
     if (!config.displayMessage) domElements.message.style.visibility = 'hidden';
     document.querySelector('body').appendChild(domElements.message);
 
-    domElements.playButton = document.querySelector('.spa-routine .spa-routine-play');
-    domElements.pauseButton = document.querySelector('.spa-routine .spa-routine-pause');
-    domElements.stopButton = document.querySelector('.spa-routine .spa-routine-stop');
-    domElements.status = document.querySelector('.spa-routine .spa-routine-status');
+    domElements.playButton = document.querySelector('.dry-run .dry-run-play');
+    domElements.pauseButton = document.querySelector('.dry-run .dry-run-pause');
+    domElements.stopButton = document.querySelector('.dry-run .dry-run-stop');
+    domElements.status = document.querySelector('.dry-run .dry-run-status');
 
     /* Add event listeners to play, pause, and stop buttons */
     if (!config.tutorialMode) {
@@ -735,20 +735,20 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     const scrollLeftActual = window.pageXOffset || element.scrollLeft || document.body.scrollLeft;
 
     domElements.focusBox = document.createElement('div');
-    domElements.focusBox.classList.add('spa-routine-focus-box');
+    domElements.focusBox.classList.add('dry-run-focus-box');
 
     domElements.arrow = document.createElement('div');
-    domElements.arrow.classList.add('spa-routine-arrow');
+    domElements.arrow.classList.add('dry-run-arrow');
 
     domElements.tooltip = document.createElement('div');
-    domElements.tooltip.classList.add('spa-routine-tooltip');
-    if (type === 'error') domElements.tooltip.classList.add('spa-routine-tooltip-error');
+    domElements.tooltip.classList.add('dry-run-tooltip');
+    if (type === 'error') domElements.tooltip.classList.add('dry-run-tooltip-error');
     domElements.tooltip.textContent = actionMessage.replace(/>>/g, ' ');
 
     if (config.tutorialMode) {
       domElements.nextButton = document.createElement('button');
       domElements.nextButton.textContent = "Next";
-      domElements.nextButton.classList.add('spa-routine-next-button');
+      domElements.nextButton.classList.add('dry-run-next-button');
       domElements.nextButton.addEventListener('click',async () => {
         await next();
       });
@@ -795,18 +795,18 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     /* Make the shadow/outline */
     domElements.arrowShadow = domElements.arrow.cloneNode(true) as HTMLElement;
     domElements.tooltipShadow = domElements.tooltip.cloneNode(true) as HTMLElement;
-    domElements.arrowShadow.classList.add('spa-routine-arrow-shadow');
-    domElements.tooltipShadow.classList.add('spa-routine-tooltip-shadow');
+    domElements.arrowShadow.classList.add('dry-run-arrow-shadow');
+    domElements.tooltipShadow.classList.add('dry-run-tooltip-shadow');
     document.body.appendChild(domElements.arrowShadow);
     document.body.appendChild(domElements.tooltipShadow);
 
     await scrollIntoViewIfNeeded(element);
 
-    domElements.focusBox.classList.add('spa-routine-fade-in');
-    domElements.arrowShadow.classList.add('spa-routine-fade-in');
-    domElements.tooltipShadow.classList.add('spa-routine-fade-in');
-    domElements.arrow.classList.add('spa-routine-fade-in');
-    domElements.tooltip.classList.add('spa-routine-fade-in');
+    domElements.focusBox.classList.add('dry-run-fade-in');
+    domElements.arrowShadow.classList.add('dry-run-fade-in');
+    domElements.tooltipShadow.classList.add('dry-run-fade-in');
+    domElements.arrow.classList.add('dry-run-fade-in');
+    domElements.tooltip.classList.add('dry-run-fade-in');
     const findTime = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300ms)
     let readTime = actionMessage.length * 30 < 2000 ? actionMessage.length * 30 : 2000; // Reading covers one letter per 30ms in sentences
     readTime = readTime;
@@ -818,11 +818,11 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     /* TODO: Significantly reduce delay after clicking "next", maybe change strategy
             to do more with the actual click event */
     if (addComprehensionTime) await (advanceDelay(COMPREHEND_ACTION_RESULT_TIME));
-    domElements.focusBox.classList.add('spa-routine-fade-out');
-    domElements.arrow.classList.add('spa-routine-fade-out');
-    domElements.tooltip.classList.add('spa-routine-fade-out');
-    domElements.arrowShadow.classList.add('spa-routine-fade-out');
-    domElements.tooltipShadow.classList.add('spa-routine-fade-out');
+    domElements.focusBox.classList.add('dry-run-fade-out');
+    domElements.arrow.classList.add('dry-run-fade-out');
+    domElements.tooltip.classList.add('dry-run-fade-out');
+    domElements.arrowShadow.classList.add('dry-run-fade-out');
+    domElements.tooltipShadow.classList.add('dry-run-fade-out');
     await advanceDelay(ANIMATION_FADE_TIME);
     domElements.focusBox.remove();
     domElements.tooltip.remove();
@@ -844,7 +844,7 @@ export async function spaRoutine(actions: SpaRoutineAction[] | string, options: 
     return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
   }
 
-  async function validateInputs(actionList: SpaRoutineAction[] | string, options?: SpaRoutineOptions): Promise<boolean> {
+  async function validateInputs(actionList: DryRunAction[] | string, options?: DryRunOptions): Promise<boolean> {
     let inputsValid = true;
     if (actionList === undefined) {
       inputsValid = false;

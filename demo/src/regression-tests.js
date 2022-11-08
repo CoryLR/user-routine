@@ -1,4 +1,4 @@
-import { spaRoutine } from '../../dist/spa-routine.min';
+import { dryRun } from '../../dist/dry-run.min';
 
 export async function runRegressionTests(
   globalDelay = 10,
@@ -8,7 +8,7 @@ export async function runRegressionTests(
 ) {
 
   if (visualTests) {
-    await spaRoutine([
+    await dryRun([
       'log Hey there, ready to get started?',
       'comment input.text First, enter some text here',
       'comment input.count Now put a number here',
@@ -18,7 +18,7 @@ export async function runRegressionTests(
     ], { message: 'Tutorial Test', tutorialMode: true });
   }
 
-  await spaRoutine([
+  await dryRun([
     'log Tests starting',
     'fill input.text Hello, world!',
     'fill input.count 2',
@@ -42,7 +42,7 @@ export async function runRegressionTests(
     awaitTimeout: displayProgress ? 9000 : 1500,
   });
 
-  await spaRoutine([
+  await dryRun([
     'log Expect success: false',
     'click does-not-exist',
     'invalidkeyword test',
@@ -55,7 +55,7 @@ export async function runRegressionTests(
     continueOnFailure: true, awaitTimeout: 150, logProgress
   });
 
-  await spaRoutine([
+  await dryRun([
     'log Expect success: false, should halt after next error',
     'click does-not-exist',
     'log If you see this, it did not work',

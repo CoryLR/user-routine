@@ -6,19 +6,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport"
     content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0">
-  <title>SPA Routine Demo</title>
+  <title>Dry-Run Demo</title>
 </head>
 
 <body>
 
   <main>
     <header>
-      <h1>SPA Routine Demo</h1>
+      <h1>Dry-Run Demo</h1>
       <p data-fill-description>Description description description...</p>
       <nav>Quick Links:
-        <a href="https://github.com/CoryLR/spa-routine#readme">Documentation on GitHub</a>,
-        <a href="https://www.npmjs.com/package/spa-routine">NPM Listing</a>,
-        <a href="https://github.com/CoryLR/spa-routine/blob/main/spa-routine.template.js">Portable Template</a>
+        <a href="https://github.com/CoryLR/dry-run#readme">Documentation on GitHub</a>,
+        <a href="https://www.npmjs.com/package/dry-run">NPM Listing</a>,
+        <a href="https://github.com/CoryLR/dry-run/blob/main/dry-run.template.js">Portable Template</a>
       </nav>
     </header>
 
@@ -28,7 +28,7 @@
       <figure id="demo-fill-form">
         <div class="code-card">
           <div class="code-card-header">Fill a form</div>
-          <pre class="bruh"><code>spaRoutine([
+          <pre class="bruh"><code>dryRun([
   'value input.text Hello, world!',
   'value input.count 20',
   'click button',
@@ -46,7 +46,7 @@
       <figure id="demo-write-nav">
         <div class="code-card">
           <div class="code-card-header">Write and navigate</div>
-          <pre class="bruh"><code>spaRoutine([
+          <pre class="bruh"><code>dryRun([
   'write #far-down Back up we go!',
   'nav #',
 ], {
@@ -64,7 +64,7 @@
       <figure id="demo-await">
         <div class="code-card">
           <div class="code-card-header">Await a process</div>
-          <pre class="bruh"><code>spaRoutine([
+          <pre class="bruh"><code>dryRun([
   'click button long process',
   'await !.output processing...',
   'await .output process complete',

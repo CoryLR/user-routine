@@ -1,10 +1,10 @@
-export type SpaRoutineAction = SpaRoutineActionString | (() => void) | Promise<void> | string;
+export type DryRunAction = DryRunActionString | (() => void) | Promise<void> | string;
 type ActionSimple = 'await' | 'click' | 'comment' | 'exists' | 'log' | 'nav' | 'wait';
 type ActionComplex = 'await' |'append' | 'exists' | 'value' | 'write';
 type StringSimple = `${ActionSimple} ${string}`;
 type StringComplex = `${ActionComplex} ${string} ${string}`;
-export type SpaRoutineActionString = '' | StringSimple | StringComplex;
-export type SpaRoutineOptions = {
+export type DryRunActionString = '' | StringSimple | StringComplex;
+export type DryRunOptions = {
   awaitTimeout?: number,
   continueOnFailure?: boolean,
   displayMessage?: boolean,
@@ -19,7 +19,7 @@ export type SpaRoutineOptions = {
   separator?: string,
   tutorialMode?: boolean,
 }
-export type SpaRoutineReturn = { success: boolean, log: string[], message: string };
+export type DryRunReturn = { success: boolean, log: string[], message: string };
 export type DomElements = {
   arrow?: HTMLElement,
   arrowShadow?: HTMLElement,

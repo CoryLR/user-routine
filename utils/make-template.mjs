@@ -1,8 +1,8 @@
-/* Create a SPA Routine template that's easy to copy-paste */
+/* Create a Dry-Run template that's easy to copy-paste */
 /* Run from root */
 
 import fs from 'fs';
-const spaRoutineJsBlob = fs.readFileSync('dist/spa-routine.blob.js', 'utf8');
+const dryRunJsBlob = fs.readFileSync('dist/dry-run.blob.js', 'utf8');
 const exampleTests = fs.readFileSync('test/tests.js', 'utf8');
 
 /* Extract usage documentation */
@@ -18,7 +18,7 @@ function addIndent(text, prepend = '  ') {
 
 const template =`
 /* 
- * SPA Routine Template
+ * Dry-Run Template
  *
  * Run tests with zero setup by copy-pasting this file's contents
  * into a browser console or into client-side JavaScript
@@ -28,9 +28,9 @@ const template =`
 */
 
 /**
- * SPA Routine examples, replace with your tests
+ * Dry-Run examples, replace with your tests
 */
-async function runSpaRoutines() {
+async function runDryRuns() {
 ${addIndent(exampleTests)}
 }
 
@@ -38,10 +38,10 @@ ${addIndent(exampleTests)}
 ${usage}
 */
 
-/* Minified SPA Routine code, provides function 'spaRoutine' */ /* @ts-ignore */
-${spaRoutineJsBlob}
+/* Minified Dry-Run code, provides function 'dryRun' */ /* @ts-ignore */
+${dryRunJsBlob}
 
-runSpaRoutines();
+runDryRuns();
 `;
 
-fs.writeFileSync('dist/spa-routine.template.js', template, { encoding: 'utf8', flag: 'w' });
+fs.writeFileSync('dist/dry-run.template.js', template, { encoding: 'utf8', flag: 'w' });

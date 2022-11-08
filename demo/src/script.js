@@ -7,11 +7,11 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
 import hljs from 'highlight.js/lib/common';
 
 import './style.css';
-import { spaRoutine } from '../../dist/spa-routine.min';
+import { dryRun } from '../../dist/dry-run.min';
 import { runRegressionTests } from './regression-tests';
 
-/* Enable spaRoutine access from console */
-window.spaRoutine = spaRoutine;
+/* Enable dryRun access from console */
+window.dryRun = dryRun;
 
 /* Add syntax highlighting */
 hljs.highlightAll();

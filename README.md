@@ -1,5 +1,5 @@
 
-# SPA Routine
+# Dry-Run
 
 Automated testing for single-page applications (SPAs). Small, easy to use, and zero setup. Click on things, fill in values, await for things exist, etc.
 
@@ -7,27 +7,27 @@ Automated testing for single-page applications (SPAs). Small, easy to use, and z
 
 Options:
 
-**1.** Install using `npm install --save-dev spa-routine` and import:
+**1.** Install using `npm install --save-dev dry-run` and import:
 
 ```javascript
-import { spaRoutine } from 'spa-routine';
+import { dryRun } from 'dry-run';
 // or
-const { spaRoutine } = require('spa-routine');
+const { dryRun } = require('dry-run');
 ```
 
-**2.** Or copy the portable template from here: [spa-routine.template.js](./dist/spa-routine.template.js)
+**2.** Or copy the portable template from here: [dry-run.template.js](./dist/dry-run.template.js)
 * This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
-SPA Routine is served as a function named `spaRoutine`.
+Dry-Run is served as a function named `dryRun`.
 
 ## Simple examples:
 
 Run a test:
 
 ```javascript
-spaRoutine([
+dryRun([
   'click button.btn', // Target using CSS selectors
   'await .result Result Text', // Await some result
 ]);
@@ -36,7 +36,7 @@ spaRoutine([
 Display a tutorial:
 
 ```javascript
-spaRoutine([
+dryRun([
   'comment .some-form First, fill this out',
   'comment .submit-button Then, hit Submit!',
 ], { message:'Tutorial', tutorialMode: true });
@@ -45,7 +45,7 @@ spaRoutine([
 Customize some options:
 
 ```javascript
-spaRoutine(
+dryRun(
   ['click button', 'await .result Result Text'], // Actions
   { message:'Example Test', globalDelay: 1000 }, // Options
 );
@@ -77,20 +77,20 @@ Input parameter details:
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
-  * `message`: (*default: 'SPA Routine'*) Label to show in the console and in the DOM
-  * `messageAttribution`: (*default: 'SPA Routine'*) Subtitle text shown when custom message is provided
-  * `overrideCss`: (*default: ''*) Override default SPA Routine CSS, target classes such as .spa-routine-message, .spa-routine-focus-box, or .spa-routine-tooltip
+  * `message`: (*default: 'Dry-Run'*) Label to show in the console and in the DOM
+  * `messageAttribution`: (*default: 'Dry-Run'*) Subtitle text shown when custom message is provided
+  * `overrideCss`: (*default: ''*) Override default Dry-Run CSS, target classes such as .dry-run-message, .dry-run-focus-box, or .dry-run-tooltip
   * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `selector` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'` without worrying about spaces breaking the CSS selector. Alternatively you can use `>>` instead of spaces without customizing the separator, like `await .container>>div Result Text`.
   * `tutorialMode`: (*default: false*) Only animate tooltips for "log" and "comment" actions
 
 Output details:
 
-* The `spaRoutine` function returns type `SpaRoutineReturn`:
-  * `export type SpaRoutineReturn = { success: boolean, log: string[], message: string };`
+* The `dryRun` function returns type `DryRunReturn`:
+  * `export type DryRunReturn = { success: boolean, log: string[], message: string };`
 * Updates are also logged to the browser console like so:
 
 ```
-[SPA Routine] Message
+[Dry-Run] Message
   * Filled the value of form>input.name to 'Cory'
   * Clicked on button[type="submit"]
   * Awaiting 'div.success-message'...
@@ -103,14 +103,14 @@ Output details:
 
 ## Template
 
-See the [spa-routine.template.js](./dist/spa-routine.template.js) for examples of running multiple sequential tests using async/await.
+See the [dry-run.template.js](./dist/dry-run.template.js) for examples of running multiple sequential tests using async/await.
 
 ## Use-cases
 
 ### Fill inputs with `fill` and interact with `click` using Selectors:
 
 ```javascript
-spaRoutine([
+dryRun([
   'fill input[type="text"] Hello, world!', // Fills in the input
   'fill input[type="number"] 20',
   'click button.some-class', // Clicks a button with class 'some-class'
@@ -125,7 +125,7 @@ spaRoutine([
 ### Validate the DOM with `exists`:
 
 ```javascript
-spaRoutine([
+dryRun([
   'exists p.some-class', // Checks for the existence of this element
   'exists p.some-class With certain text', // Also checks if it includes certain text
   '!exists p.some-class', // Ensures the element does not exist
@@ -136,7 +136,7 @@ spaRoutine([
 ### Deal with timing using `await` and `wait`:
 
 ```javascript
-spaRoutine([
+dryRun([
   'await div.some-popup', // Awaits the existence of this element
   'await div.some-popup With certain text', // Also waits for it to include certain text
   '!await div.some-spinner', // Awaits the non-existence of this element
@@ -150,7 +150,7 @@ spaRoutine([
 ### Navigate within a single-page application using `nav`:
 
 ```javascript
-spaRoutine([
+dryRun([
   'nav #some-id',
   'nav #/some/hash/routing/path',
   'nav #', // Back to the top
@@ -160,7 +160,7 @@ spaRoutine([
 ### Add notes with `append`, `log`, and `write`:
 
 ```javascript
-spaRoutine([
+dryRun([
   'write h1 Testing successful!', // overwrites the h1's textContent
   'append h1  - Testing successful!', // appends to the h1's textContent
   'log The testing is complete.',
@@ -170,7 +170,7 @@ spaRoutine([
 ### Pass options as a second argument:
 
 ```javascript
-spaRoutine([
+dryRun([
   'fill input.name Cory',
   'click button[type="submit"]',
 ], { globalDelay: 1000 });
@@ -196,7 +196,7 @@ Version 5.0
 
 ### Continuous Development
 
-* Make changes to [lib/spa-routine.ts](./lib/spa-routine.ts)
+* Make changes to [lib/dry-run.ts](./lib/dry-run.ts)
 * Run `npm run build:local`
 * To test changes, edit either [demo/src/regression-tests.js](./demo/src/regression-tests.js) or [demo/src/script.js](./demo/src/script.js)
 * Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
@@ -212,7 +212,7 @@ To publish:
 
 TODO:
 
-* [ ] Add CDN example https://cdn.jsdelivr.net/gh/CoryLR/spa-routine/lib/spa-routine.min.js
+* [ ] Add CDN example https://cdn.jsdelivr.net/gh/CoryLR/dry-run/lib/dry-run.min.js
 * [x] Test and make sure the new notOperator syntax works as expected
 * [x] Add "comment" action
 * [x] Add "tutorialMode" option
@@ -220,18 +220,26 @@ TODO:
 * [x] Improve "tutorialMode" to include clickable "next" buttons on each log and comment
   * [ ] add "tutorialModeAutoPlay" option? (default false)
   * [x] Make highlight boxes click-through-able
-  * [ ] Maybe add a feature so that if a check fail SPA Routine goes back to the previous log or comment? - OR - Add 'gate' command or something similar to prevent the user from continuing if they don't follow the tutorial instructions
+  * [ ] Maybe add a feature so that if a check fail Dry-Run goes back to the previous log or comment? - OR - Add 'gate' command or something similar to prevent the user from continuing if they don't follow the tutorial instructions
 * [x] Add "attributionText" option.
 * [ ] Finish the Demo page
 * [x] Add auto-test URL params to demo page so I can use it for testing
 * [x] Add multiline string action list option
-* [x] Add a check so spaRoutine ends if there is already an existing SPA Routine happening
+* [x] Add a check so dryRun ends if there is already an existing Dry-Run happening
   * [x] Handle condition where multiple SPA Routines run at once, check for the message element
-* [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which SPA Routine can look at both on the globaldelay but also before tooltip hide
-* [ ] Add a tutorial walkthrough to the demo page *using* SPA Routine
+* [x] Add play/pause/stop support - coordinate via data-attributes so it can be controlled from the outside too. When one of the buttons is clicked, it can set a data-attribute flag which Dry-Run can look at both on the globaldelay but also before tooltip hide
+* [ ] Add a tutorial walkthrough to the demo page *using* Dry-Run
 * [ ] Add count action
 * [ ] Add a value action which will check for a value or a specific value
-* [x] Change name to spa-routine / SPA Routine / spaRoutine
-* [ ] Change Repo name and publish to spa-routine on NPM
+* [x] Change name to dry-run / Dry-Run / dryRun
+* [ ] Change Repo name and publish new name to NPM, options:
+  * dry-run
+  * task-routine
+  * auto-routine
+  * action-list
+  * dry-run
+  * spa-bot
+  * spa-check
+  * spa-list
 
  
