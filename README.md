@@ -1,13 +1,23 @@
 
 # User Routine
 
-Automated user routines for end-to-end testing or guided user tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, etc.
+Automate actions web pages for testing and user tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
+
+Example:
+
+```javascript
+userRoutine([
+  'fill form>input.name Cory',
+  'click button.submit',
+  'await div.result',
+]);
+```
 
 # Access
 
 Options:
 
-**1.** Install using `npm install --save-dev user-routine` and import:
+**1.** Install from NPM (`npm install user-routine`) and import
 
 ```javascript
 import { userRoutine } from 'user-routine';
@@ -15,18 +25,20 @@ import { userRoutine } from 'user-routine';
 const { userRoutine } = require('user-routine');
 ```
 
-**2.** Add a reference to `user-routine.min.js` to your HTML:
+**2.** Or include the User Routine script file (`user-routine.blob.js`) in your HTML:
 
 ```html
-<!-- From CDN -->
-<script src="https://cdn.jsdelivr.net/gh/CoryLR/user-routine/dist/user-routine.min.js"></script>
+<!-- Provides `userRoutine` function from CDN -->
+<script src="https://cdn.jsdelivr.net/gh/CoryLR/user-routine/dist/user-routine.blob.js"></script>
 
-<!-- Or from local file -->
-<script src="/user-routine.min.js"></script>
+<!-- Provides `userRoutine` function from local file -->
+<script src="/user-routine.blob.js"></script>
+
 ```
 
 **3.** Or copy the portable template from here: [user-routine.template.js](./dist/user-routine.template.js)
-* This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
+
+* ^ This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 # Usage
 
@@ -39,7 +51,7 @@ Run a test:
 ```javascript
 userRoutine([
   'click button.btn', // Target using CSS selectors
-  'await div.result Result Text', // Await some result
+  'await div.result Result Text', // Await result text
 ]);
 ```
 
@@ -57,17 +69,17 @@ Example with more actions and options:
 ```javascript
 userRoutine(
   [
-    'fill input.class Some Text',
-    'wait 500', // (milliseconds)
-    'click button.class',
-    '!await .spinner',
-    'await div.output With this text',
+    'fill input.class Some Text', // fill input value
+    'wait 500', // wait half a second
+    'click button.some-class', // click a button
+    '!await .spinner', // await disappearance of a loading spinner
+    'await div.output With this text', // await output message text
   ], {
-    message:'Example Test',
-    awaitTimeout: 2000,
-    continueOnFailure: true,
-    displayProgress: false,
-    globalDelay: 100,
+    message: 'Example Test', // name of routine
+    awaitTimeout: 2000, // maximum time to await
+    continueOnFailure: true, // don't stop on errors
+    displayProgress: false, // don't show progress tooltips
+    globalDelay: 100, // shorten time between actions to 0.1 seconds
   },
 );
 ```
