@@ -5,7 +5,7 @@
  * Run tests with zero setup by copy-pasting this file's contents
  * into a browser console or into client-side JavaScript
  *
- * Version: 5.0.5
+ * Version: 5.0.6
  * Description: Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
 */
 
@@ -149,6 +149,7 @@ Input parameter details:
   * `messageAttribution`: (*default: 'User Routine'*) Subtitle text shown when custom message is provided
   * `overrideCss`: (*default: ''*) Override default User Routine CSS, target classes such as .user-routine-message, .user-routine-focus-box, or .user-routine-tooltip
   * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `separator` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'`.
+  * `simultaneousAllowed`: (*default: false*) Allow the User Routine to run even if one is already running
   * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
 Output details:
