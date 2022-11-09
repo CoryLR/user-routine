@@ -1,3 +1,11 @@
+
+# SPA Check Has Moved To **User Routine**
+
+* New Documentation: https://github.com/CoryLR/user-routine#user-routine
+* `npm install user-routine` https://www.npmjs.com/package/user-routine
+
+***Original SPA Check Documentation:***
+
 # SPA Check
 
 Automated testing for single-page applications (SPAs). Small, easy to use, and zero setup. Click on things, fill in values, await for things exist, etc.
