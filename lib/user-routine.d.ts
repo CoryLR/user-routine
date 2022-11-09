@@ -11,6 +11,7 @@ export type UserRoutineOptions = {
   displayProgress?: boolean,
   displaySpeed?: number,
   globalDelay?: number,
+  keyboardControls?: boolean,
   logCollapse?: boolean,
   logProgress?: boolean,
   logResult?: boolean,
@@ -18,6 +19,7 @@ export type UserRoutineOptions = {
   messageAttribution?: string,
   overrideCss?: string,
   separator?: string,
+  simultaneousAllowed?: boolean,
   tutorialMode?: boolean,
 }
 export type UserRoutineReturn = { success: boolean, log: string[], message: string, configuration: UserRoutineOptions };

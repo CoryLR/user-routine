@@ -9,6 +9,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     displayProgress: true,
     displaySpeed: 1,
     globalDelay: 500,
+    keyboardControls: true,
     logCollapse: false,
     logProgress: true,
     logResult: true,
@@ -16,11 +17,16 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     messageAttribution: 'User Routine',
     overrideCss: '',
     separator: ' ',
+    simultaneousAllowed: false,
     tutorialMode: false,
   };
   if (options.tutorialMode && !options.displayProgress) {
     options.displayProgress = true;
-    console.warn(`[User Routine] WARN: 'displayProgress' changed to 'true' because 'tutorialMode' is 'true'`);
+    console.warn(`[User Routine] WARN: 'displayProgress' changed to 'true' because 'tutorialMode' is enabled`);
+  };
+  if (options.tutorialMode && options.keyboardControls) {
+    options.keyboardControls = false;
+    console.warn(`[User Routine] WARN: 'keyboardControls' changed to 'false' because 'tutorialMode' is enabled`);
   };
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
@@ -455,13 +461,15 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       return false
     }
 
-    const otherUserRoutine = document.querySelector('body > .user-routine');
-    if (otherUserRoutine) {
-      const otherMessage = otherUserRoutine.querySelector('.user-routine-message').textContent;
-      let errorMessage = `FAIL: User Routine '${otherMessage}' is already running. Halting execution.`;
-      if (config.logProgress) console.error(errorMessage);
-      updateList.push(errorMessage);
-      return false
+    if (!config.simultaneousAllowed) {
+      const otherUserRoutine = document.querySelector('body > .user-routine');
+      if (otherUserRoutine) {
+        const otherMessage = otherUserRoutine.querySelector('.user-routine-message').textContent;
+        let errorMessage = `FAIL: User Routine '${otherMessage}' is already running. Halting execution.`;
+        if (config.logProgress) console.error(errorMessage);
+        updateList.push(errorMessage);
+        return false
+      }
     }
 
     return true
@@ -718,7 +726,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       await stop('pause button');
     });
 
-    if (document.onkeydown === null && config.displayProgress && !config.tutorialMode) {
+    if (document.onkeydown === null && !config.tutorialMode && config.keyboardControls) {
       document.onkeydown = async (event) => {
         if (event.key === 'Escape') {
           await stop('escape key');
@@ -731,6 +739,8 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
         }
       }
       state.documentKeyDownSet = true;
+    } else if (document.onkeydown !== null) {
+      console.warn('[User Routine] document.onkeydown already set, keyboard controls disabled');
     }
   }
 
@@ -846,13 +856,13 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
 
   async function animateTooltipClose(addComprehensionTime = true) {
     if (!config.displayProgress || !domElements.focusBox || !domElements.arrow || !domElements.tooltip || !domElements.arrowShadow || !domElements.tooltipShadow) return;
-    if (addComprehensionTime) await (advanceDelay(COMPREHEND_ACTION_RESULT_TIME));
+    if (addComprehensionTime) await (advanceDelay(COMPREHEND_ACTION_RESULT_TIME / config.displaySpeed));
     domElements.focusBox.classList.add('user-routine-fade-out');
     domElements.arrow.classList.add('user-routine-fade-out');
     domElements.tooltip.classList.add('user-routine-fade-out');
     domElements.arrowShadow.classList.add('user-routine-fade-out');
     domElements.tooltipShadow.classList.add('user-routine-fade-out');
-    await advanceDelay(ANIMATION_FADE_TIME);
+    await advanceDelay(ANIMATION_FADE_TIME / config.displaySpeed);
     domElements.focusBox.remove();
     domElements.tooltip.remove();
     domElements.arrow.remove();

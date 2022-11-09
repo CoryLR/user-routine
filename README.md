@@ -140,6 +140,7 @@ Input parameter details:
   * `displayProgress`: (*default: true*) Show animations of actions visually on the page using tooltips
   * `displaySpeed`: (*default: 1*) Animation speed for displayProgress tooltips (0.5 = half speed, 2 = double speed, etc)
   * `globalDelay`: (*default: 500*) Time between actions in milliseconds
+  * `keyboardControls`: (*default: true*) Enables play/pause/stop with space and escape keys
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
@@ -278,3 +279,4 @@ TO DO:
 * [ ] Add a tutorial walk-through to the demo page, using User Routine to showcase User Routine
 * [ ] (Maybe) Add count action to count instances of a particular CSS selector
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
+* [ ] Separate actions into externally-callable functions

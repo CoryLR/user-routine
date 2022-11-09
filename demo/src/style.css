@@ -10,6 +10,10 @@ main {
   width: 80%;
   margin: auto;
 }
+svg {
+  /* Should always be in a button, makes targeting easier */
+  pointer-events: none;
+}
 
 /* Code Carousel with Flickity */
 .code-carousel {
@@ -161,20 +165,11 @@ pre.output-duplicate {
   }
 
   .code-carousel figure:first-child {
-    /* viewport width - (card size / 2) */
     padding-left: 15px;
   }
 
   .code-carousel figure:last-child {
     padding-right: 15px;
   }
-/* 
-  .flickity-prev-next-button.previous {
-    left: -15px;
-  }
-  
-  .flickity-prev-next-button.next {
-    right: -15px;
-  } */
   
 }

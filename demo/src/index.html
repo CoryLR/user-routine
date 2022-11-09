@@ -26,9 +26,9 @@
 
     <section class="code-carousel" data-flickity='{ "contain": true, "hash": true }'>
       <figure id="demo-fill-form">
-        <div class="code-card">
+        <div class="code-card" data-card-id="0">
           <div class="code-card-header">Fill a form</div>
-          <pre class="bruh"><code>userRoutine([
+          <pre><code>userRoutine([
   'fill input.text Hello, world!',
   'fill input.count 20',
   'click button',
@@ -37,16 +37,16 @@
           </pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
-            <button class="copy"><i class="fa-regular fa-copy"></i></button>
-            <button class="link"><i class="fa-solid fa-link"></i></button>
+            <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+            <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
           </div>
         </div>
       </figure>
 
       <figure id="demo-write-nav">
-        <div class="code-card">
+        <div class="code-card" data-card-id="1">
           <div class="code-card-header">Write and navigate</div>
-          <pre class="bruh"><code>userRoutine([
+          <pre><code>userRoutine([
   'write #far-down Back up we go!',
   'nav #',
 ], {
@@ -55,16 +55,16 @@
           </pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
-            <button class="copy"><i class="fa-regular fa-copy"></i></button>
-            <button class="link"><i class="fa-solid fa-link"></i></button>
+            <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+            <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
           </div>
         </div>
       </figure>
 
       <figure id="demo-await">
-        <div class="code-card">
+        <div class="code-card" data-card-id="2">
           <div class="code-card-header">Await a process</div>
-          <pre class="bruh"><code>userRoutine([
+          <pre><code>userRoutine([
   'click button long process',
   'await !.output processing...',
   'await .output process complete',
@@ -72,8 +72,8 @@
           </pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
-            <button class="copy"><i class="fa-regular fa-copy"></i></button>
-            <button class="link"><i class="fa-solid fa-link"></i></button>
+            <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+            <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
           </div>
         </div>
       </figure>
