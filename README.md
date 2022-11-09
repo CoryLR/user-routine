@@ -1,7 +1,7 @@
 
 # User Routine
 
-Automate actions web pages for testing and user tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
+Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
 
 Example:
 
@@ -244,9 +244,7 @@ To publish:
 
 TO DO:
 
-* [ ] Pick new name, some options: user-routine, action-routine, task-routine, auto-routine, spa-routine, spa-list
 * [ ] Finish the Demo page
-* [ ] Add count action to count instances of a particular CSS selector
-* [ ] Add a tutorial walkthrough to the demo page, using User Routine to showcase User Routine
+* [ ] Add a tutorial walk-through to the demo page, using User Routine to showcase User Routine
+* [ ] (Maybe) Add count action to count instances of a particular CSS selector
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
-* [ ] Add config warnings that might conflict, like tutorialMode and displayProgress/globalDelay

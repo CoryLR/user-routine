@@ -13,7 +13,7 @@ await userRoutine([
   '!exists .output-duplicate Hello World!',
   'click button.duplicate',
   'nav #',
-  () => { if (logProgress) console.log('This is logging from a provided function!') },
+  () => { console.log('This is logging from a provided function!') },
   async () => { await new Promise(resolve => setTimeout(() => { resolve() }, 300)) },
   '!exists .output-process Processing...',
   'click button long process',

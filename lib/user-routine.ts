@@ -18,8 +18,10 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     separator: ' ',
     tutorialMode: false,
   };
-  /* TODO: is this necessary? */
-  if (options.tutorialMode) options.globalDelay = 200;
+  if (options.tutorialMode && !options.displayProgress) {
+    options.displayProgress = true;
+    console.warn(`[User Routine] WARN: 'displayProgress' changed to 'true' because 'tutorialMode' is 'true'`);
+  };
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
   const userRoutineLogTitle = config.message ? `[User Routine] ${config.message}` : '[User Routine]';
@@ -49,7 +51,8 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
   }
 
   const ANIMATION_FADE_TIME = 150;
-  const COMPREHEND_ACTION_RESULT_TIME = 500;
+  const COMPREHEND_ACTION_RESULT_TIME = 500; // Time given to comprehend a visual change on the page
+  const FIND_TOOLTIP_TIME = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300-500ms)
   const ANIMATION_TOOLTIP_MAX_WIDTH = 200;
 
   const shouldStart = checkIfShouldStart();
@@ -213,7 +216,6 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       const [_, selector, value] = await argSplitComplex(action);
       const element = await select(selector);
       if (!element) return;
-      /* TODO: working */
       if (element.value === undefined || element.value === null) {
         if (!config.tutorialMode) await animateTooltipOpen(element, `Element cannot have a value`, 'error');
         if (!config.tutorialMode) await animateTooltipClose();
@@ -455,7 +457,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
 
     const otherUserRoutine = document.querySelector('body > .user-routine');
     if (otherUserRoutine) {
-      const otherMessage = otherUserRoutine.getAttribute('data-user-routine')
+      const otherMessage = otherUserRoutine.querySelector('.user-routine-message').textContent;
       let errorMessage = `FAIL: User Routine '${otherMessage}' is already running. Halting execution.`;
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
@@ -579,7 +581,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
         color: dimgray;
       }
       body > .user-routine > .user-routine-footer > .user-routine-status {
-        min-width: 60px;
+        min-width: 50px;
         min-height: 15px;
         margin-left: 5px;
         font-style: italic;
@@ -671,7 +673,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     domElements.message = document.createElement('div');
 
     let htmlString = `
-      ${message}
+      <div class="user-routine-message">${message}</div>
       <div class="user-routine-footer">
     `;
     if (!config.tutorialMode) {
@@ -694,7 +696,6 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     `;
     domElements.message.innerHTML = htmlString;
 
-    domElements.message.setAttribute('data-user-routine', message);
     domElements.message.classList.add('user-routine');
     if (!config.displayMessage) domElements.message.style.visibility = 'hidden';
     document.querySelector('body').appendChild(domElements.message);
@@ -752,7 +753,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       await interruptExecution(`Stopped by user (${source})`)
     };
   }
-  /* TODO2 */
+
   async function next() {
     state.nextButtonPressed = true;
     await animateTooltipClose(false);
@@ -832,23 +833,19 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     document.body.appendChild(domElements.arrowShadow);
     document.body.appendChild(domElements.tooltipShadow);
 
-    await scrollIntoViewIfNeeded(element);
+    if(config.displayProgress) await scrollIntoViewIfNeeded(domElements.tooltip);
 
     domElements.focusBox.classList.add('user-routine-fade-in');
     domElements.arrowShadow.classList.add('user-routine-fade-in');
     domElements.tooltipShadow.classList.add('user-routine-fade-in');
     domElements.arrow.classList.add('user-routine-fade-in');
     domElements.tooltip.classList.add('user-routine-fade-in');
-    const findTime = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300ms)
-    let readTime = actionMessage.length * 30 < 2000 ? actionMessage.length * 30 : 2000; // Reading covers one letter per 30ms in sentences
-    readTime = readTime;
-    await advanceDelay((ANIMATION_FADE_TIME + findTime + readTime) / config.displaySpeed);
+    let readTime = actionMessage.length * 30 < 2500 ? actionMessage.length * 30 : 2500; // Reading covers one letter per 30ms in sentences
+    await advanceDelay((ANIMATION_FADE_TIME + FIND_TOOLTIP_TIME + readTime) / config.displaySpeed);
   }
 
   async function animateTooltipClose(addComprehensionTime = true) {
     if (!config.displayProgress || !domElements.focusBox || !domElements.arrow || !domElements.tooltip || !domElements.arrowShadow || !domElements.tooltipShadow) return;
-    /* TODO: Significantly reduce delay after clicking "next", maybe change strategy
-            to do more with the actual click event */
     if (addComprehensionTime) await (advanceDelay(COMPREHEND_ACTION_RESULT_TIME));
     domElements.focusBox.classList.add('user-routine-fade-out');
     domElements.arrow.classList.add('user-routine-fade-out');
@@ -892,10 +889,14 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     return inputsValid;
   }
 
-  function log(message: string) {
+  function log(message: string, type: 'log' | 'warn' = 'log') {
     updateList.push(message);
     const updateMessage = `* ${message}`;
-    if (config.logProgress) console.log(updateMessage);
+    if (config.logProgress && type === 'log') {
+      console.log(updateMessage);
+    } else if (config.logProgress && type === 'warn') {
+      console.warn(updateMessage);
+    }
   }
 
   async function raiseError(message: string, value?: string, continueOnFailure = config.continueOnFailure, animateError = true) {
@@ -933,8 +934,8 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       await sleep(config.globalDelay / 2);
     }
   }
+
   async function pauseBetweenNextButtons() {
-    /* TODO2 */
     while (!state.nextButtonPressed && state.continueActions) {
       await sleep(config.globalDelay / 2);
     }

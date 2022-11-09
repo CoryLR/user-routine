@@ -1,7 +1,7 @@
 {
   "name": "user-routine",
-  "version": "5.0.1",
-  "description": "Automated user routines for end-to-end testing or guided user tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, etc.",
+  "version": "5.0.2",
+  "description": "Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.",
   "main": "./lib/user-routine.min.js",
   "types": "./lib/user-routine.d.ts",
   "directories": {
