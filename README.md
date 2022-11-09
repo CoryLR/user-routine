@@ -52,7 +52,7 @@ Run a test:
 userRoutine([
   'click button.btn', // Target using CSS selectors
   'await div.result Result Text', // Await result text
-]);
+], {message: 'Testing Button'});
 ```
 
 Display a tutorial:
@@ -61,7 +61,7 @@ Display a tutorial:
 userRoutine([
   'comment .some-form First, fill this out',
   'comment .submit-button Then, hit Submit!',
-], { message:'Tutorial', tutorialMode: true });
+], { message: 'Tutorial', tutorialMode: true });
 ```
 
 Example with more actions and options:
@@ -121,7 +121,7 @@ Input parameter details:
 
 Output details:
 
-* The `userRoutine` function returns type `UserRoutineReturn`:
+* The `userRoutine` function returns a Promise resolving to type `UserRoutineReturn`:
   * `export type UserRoutineReturn = { success: boolean, log: string[], message: string, configuration: UserRoutineOptions };`
 * Updates are also logged to the browser console like so:
 
