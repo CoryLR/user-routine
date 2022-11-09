@@ -5,7 +5,7 @@
  * Run tests with zero setup by copy-pasting this file's contents
  * into a browser console or into client-side JavaScript
  *
- * Version: 5.0.3
+ * Version: 5.0.4
  * Description: Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
 */
 
@@ -53,10 +53,10 @@ Run a test:
 userRoutine([
   'click button.btn', // Target using CSS selectors
   'await div.result Result Text', // Await result text
-], {message: 'Testing Button'});
+], { message: 'Testing the Button' });
 ```
 
-Display a tutorial:
+Start a tutorial:
 
 ```javascript
 userRoutine([
@@ -65,7 +65,7 @@ userRoutine([
 ], { message: 'Tutorial', tutorialMode: true });
 ```
 
-Example with more actions and options:
+More actions and options:
 
 ```javascript
 userRoutine(
@@ -89,21 +89,51 @@ Input parameter details:
 
 * 1: Actions List (*String* (separate actions by new lines) or *Array of strings/functions*, required)
   * Action strings & examples:
-    * `append` -- Add text, like `'append section>p Appended text'`
-    * `await` -- Await for something to appear, like `'await .modal.success-message'` or `'await h1 With This Text'`
-    * `!await` -- Await for something to disappear, like `'!await .spinner'` or `'!await h1 This title should disappear'`
-    * `click` -- Click on something, like `'click button.submit'` or `'click button With This Text'`
-    * `comment` -- Show a tooltip to point something out, like `'comment input.name Type your name here'`
-    * `exists` -- Check to see if something exists, like `'exists .class-name'` or `'exists h1 With This Text'`
-    * `!exists` -- Check to see if something doesn't exist, like `'!exists h1 Incorrect text'`
-    * `fill` -- Fill the value attribute of an element, like `'fill form>input.name Cory Rahman'`
-    * `log` -- Record a message, like `'log Some message'`
-    * `nav` -- Use hash navigation, like `'nav #id'` or `'nav #/some/hash/routing/path'`
-    * `value` -- Check the value attribute of an element, like `'value input.required'` or `'value input.name Test User 1'`
-    * `wait` -- Wait for some time, like `'wait 3000'` (3 seconds)
-    * `write` -- Overwrite textContent of an element, like `'write p Overwritten text'`
-  * Selector: CSS selector like `button.class-name` (should not contain spaces)
-  * Data: Argument for `fill`, `write`, `log`, and optionally `exists` and `await`
+    * `append`
+      * Add text to the end of an element's textContent
+      * `'append section>p Appended text'`
+    * `await`
+      * Await for something to appear
+      * `'await .modal.success-message'` or `'await h1 With This Text'`
+    * `!await`
+      * Await for something to disappear
+      * `'!await .spinner'` or `'!await h1 This title should disappear'`
+    * `click`
+      * Click on something
+      * `'click button.submit'` or `'click button With This Text'`
+    * `comment`
+      * Show a tooltip to point something out
+      * `'comment input.name Type your name here'`
+    * `exists`
+      * Check to see if something exists
+      * `'exists .class-name'` or `'exists h1 With This Text'`
+    * `!exists`
+      * Check to see if something doesn't exist
+      * `'!exists h1 Incorrect text'`
+    * `fill`
+      * Fill the value attribute of an element
+      * `'fill form>input.name Cory Rahman'`
+    * `log`
+      * Record a message
+      * `'log Some message'`
+    * `nav`
+      * Use hash navigation
+      * `'nav #id'` or `'nav #/some/hash/routing/path'`
+    * `value`
+      * Check the value attribute of an element
+      * `'value input.required'` or `'value input.name Test User 1'`
+    * `wait`
+      * Wait for some time
+      * `'wait 3000'` (3 seconds)
+    * `write`
+      * Overwrite textContent of an element
+      * `'write p Overwritten text'`
+  * Selector:
+    * CSS selector like `button.class-name`
+    * The CSS selector should not contain spaces by default. Either use `>>` instead of spaces like `await .container>>div Result Text`) or pass a custom action string `separator` in the Options
+  * Data:
+    * Required argument for `append`, `comment`, `fill`, `log`, `value`, `wait`, and `write`
+    * Optional argument for `await`, `click`, `exists`, and `value`
 * 2: Options (*Object*, optional)
   * `awaitTimeout`: (*default: 15000*) How long in milliseconds to wait for an element using the await command
   * `continueOnFailure`: (*default: false*) Continue to run actions even if one fails
@@ -117,7 +147,7 @@ Input parameter details:
   * `message`: (*default: 'User Routine'*) Label to show in the console and in the DOM
   * `messageAttribution`: (*default: 'User Routine'*) Subtitle text shown when custom message is provided
   * `overrideCss`: (*default: ''*) Override default User Routine CSS, target classes such as .user-routine-message, .user-routine-focus-box, or .user-routine-tooltip
-  * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `separator` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'`. (Alternatively you can use `>>` instead of spaces without customizing the CSS selector, like `await .container>>div Result Text`).
+  * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `separator` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'`.
   * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
 Output details:
