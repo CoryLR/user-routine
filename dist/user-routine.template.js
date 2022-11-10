@@ -5,7 +5,7 @@
  * Run tests with zero setup by copy-pasting this file's contents
  * into a browser console or into client-side JavaScript
  *
- * Version: 5.0.7
+ * Version: 5.0.8
  * Description: Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
 */
 
