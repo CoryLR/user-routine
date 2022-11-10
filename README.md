@@ -277,6 +277,7 @@ To publish:
 TO DO:
 
 * [ ] Finish the Demo page
+  * Started Code Cards, need to load them into the JS & HTML appropriately
 * [ ] Add a tutorial walk-through to the demo page, using User Routine to showcase User Routine
 * [ ] (Maybe) Add count action to count instances of a particular CSS selector
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button

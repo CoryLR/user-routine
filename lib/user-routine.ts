@@ -723,7 +723,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       });
     }
     domElements.stopButton.addEventListener('click', async () => {
-      await stop('pause button');
+      await stop('stop button');
     });
 
     if (document.onkeydown === null && !config.tutorialMode && config.keyboardControls) {
