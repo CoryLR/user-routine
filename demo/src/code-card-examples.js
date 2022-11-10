@@ -8,10 +8,11 @@ userRoutine([
 // Craft a tutorial
 userRoutine([
   'log Welcome to the demo!',
-  'comment .code-card These are examples',
+  'comment .code-card An example',
+  'comment .run Click Run to try',
   'log Click Next to finish'
 ], {
-  message: '"User Routine" Tutorial',
+  message: 'User Routine Tutorial',
   tutorialMode: true
 })
 // Await a process
