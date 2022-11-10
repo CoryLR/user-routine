@@ -67,4 +67,6 @@ export async function runRegressionTests(
     ], { message: 'Tutorial Test', tutorialMode: true });
   }
 
+  console.log('Done!');
+
 }

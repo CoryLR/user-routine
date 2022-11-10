@@ -30,7 +30,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
   };
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
-  const userRoutineLogTitle = config.message ? `[User Routine] ${config.message}` : '[User Routine]';
+  const userRoutineLogTitle = config.message !== defaultConfig.message ? `[User Routine] ${config.message}` : '[User Routine]';
 
   const state = {
     paused: false,

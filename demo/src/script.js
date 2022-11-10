@@ -59,7 +59,7 @@ function copyCodeOnClick(event) {
   userRoutine(
     `comment figure:nth-child(${codeCardId+1})>>button.copy-code ✔️ Code copied!`,
     { displayMessage: false, logProgress: false,
-      logResult: true, simultaneousAllowed: true, keyboardControls: false,
+      logResult: false, simultaneousAllowed: true, keyboardControls: false,
       globalDelay: 0, displaySpeed: 1.5 }
   );
 }
@@ -73,7 +73,7 @@ function copyLinkOnClick(event) {
   userRoutine(
     `comment figure:nth-child(${codeCardId+1})>>button.copy-link ✔️ Link copied!`,
     { displayMessage: false, logProgress: false,
-      logResult: true, simultaneousAllowed: true, keyboardControls: false,
+      logResult: false, simultaneousAllowed: true, keyboardControls: false,
       globalDelay: 0, displaySpeed: 1.5 }
   );
 }
