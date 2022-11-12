@@ -22,20 +22,18 @@
       </nav>
     </header>
 
-    <br />
+    <br>
 
-    <section class="code-carousel" data-flickity='{ "contain": true, "hash": true }'>
-      
-      <figure id="demo-fill-form">
+    <section data-fill-tests class="code-carousel" data-flickity='{ "contain": true, "hash": true }'>
+      <figure id="test-a-feature">
         <div class="code-card" data-card-id="0">
-          <div class="code-card-header">Fill a form</div>
-          <pre><code>userRoutine([
-  'fill input.text Hello, world!',
-  'fill input.count 20',
-  'click button',
-  'exists pre hello, world',
-], { message: 'Testing form' });</code>
-          </pre>
+          <div class="code-card-header">Test a Feature</div>
+          <pre><code class="hljs language-javascript">userRoutine([
+  'fill input.text Hi',
+  'fill input.count 3',
+  'click button.duplicate',
+  'exists .output Hi Hi Hi',
+])</code></pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
             <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
@@ -43,17 +41,17 @@
           </div>
         </div>
       </figure>
-
-      <figure id="demo-write-nav">
+      <figure id="display-a-tutorial">
         <div class="code-card" data-card-id="1">
-          <div class="code-card-header">Write and navigate</div>
-          <pre><code>userRoutine([
-  'write #far-down Back up we go!',
-  'nav #',
+          <div class="code-card-header">Display a Tutorial</div>
+          <pre><code class="hljs language-javascript">userRoutine([
+  'log Welcome to the demo',
+  'comment .code-carousel Try one',
+  'comment nav Link to docs here',
 ], {
-  message: 'Testing nav',
-});</code>
-          </pre>
+  message: 'User Routine Tutorial',
+  tutorialMode: true
+})</code></pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
             <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
@@ -61,29 +59,24 @@
           </div>
         </div>
       </figure>
-
-      <figure id="demo-await">
+      <figure id="await-a-process">
         <div class="code-card" data-card-id="2">
-          <div class="code-card-header">Await a process</div>
-          <pre><code>userRoutine([
-  'click button long process',
-  'await !.output processing...',
-  'await .output process complete',
-], { message: 'Testing await' });</code>
-          </pre>
+          <div class="code-card-header">Await a Process</div>
+          <pre><code class="hljs language-javascript">userRoutine([
+  'click button Long process',
+  '!await .result processing...',
+  'await .result process complete',
+], { message: 'Testing await' })</code></pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
             <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
             <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
           </div>
         </div>
-      </figure>
-    </section>
-
-
-    <section>
-      <br />
-      <br />
+      </figure></section>
+    <br>
+    <br>
+    <section class="mock-app">
       <h3>Mock Application</h3>
       <p>Click the button to duplicate some text.</p>
       <label>Text:</label>
@@ -91,13 +84,13 @@
       <label>Count:</label>
       <input type="number" class="count" min="0" max="9999">
       <button class="duplicate">Duplicate</button>
-      <pre class="output-duplicate"></pre>
+      <pre class="output"></pre>
 
       <br><br>
       <button class="process"><span>&#128337;</span> Simulate long process</button>
-      <div class="output-process"></div>
+      <div class="result"></div>
     </section>
-    
+
     <br><br>
   </main>
 </body>

@@ -1,23 +1,22 @@
-// Test a feature
+// Test a Feature
 userRoutine([
   'fill input.text Hi',
   'fill input.count 3',
   'click button.duplicate',
   'exists .output Hi Hi Hi',
 ])
-// Craft a tutorial
+// Display a Tutorial
 userRoutine([
-  'log Welcome to the demo!',
-  'comment .code-card An example',
-  'comment .run Click Run to try',
-  'log Click Next to finish'
+  'log Welcome to the demo',
+  'comment .code-carousel Try one',
+  'comment nav Link to docs here',
 ], {
   message: 'User Routine Tutorial',
   tutorialMode: true
 })
-// Await a process
+// Await a Process
 userRoutine([
   'click button Long process',
-  'await !.output processing...',
-  'await .output process complete',
+  '!await .result processing...',
+  'await .result process complete',
 ], { message: 'Testing await' })

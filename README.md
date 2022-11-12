@@ -9,7 +9,8 @@ Example:
 userRoutine([
   'fill form>input.name Cory',
   'click button.submit',
-  'exists div.expected-result',
+  'await div.result',
+  'exists div With this text',
 ]);
 ```
 
@@ -106,6 +107,8 @@ userRoutine([
 ```
 
 ## Input Parameter Details
+
+function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions?*)
 
 * 1: Actions List (*String* (separate actions by new lines) or *Array of strings/functions*, required)
   * Action strings & examples:
@@ -300,6 +303,8 @@ TO DO:
 * [ ] Finish the Demo page
   * Started Code Cards, need to load them into the JS & HTML appropriately
 * [ ] Add a tutorial walk-through to the demo page, using User Routine to showcase User Routine
-* [ ] (Maybe) Add count action to count instances of a particular CSS selector
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
 * [ ] Separate actions into externally-callable functions
+* [ ] (Maybe) Add count action to count instances of a particular CSS selector
+* [ ] (Maybe) Add ability to keybind user routine(s) to keys
+* [ ] (Maybe) Add copy/paste actions

@@ -9,6 +9,7 @@ import hljs from 'highlight.js/lib/common';
 import './style.css';
 import { userRoutine } from '../../dist/user-routine.min';
 import { runRegressionTests } from './regression-tests';
+import { codeCardFunctionArray } from './code-cards.min';
 
 const state = {
   processTime: 2000,
@@ -35,6 +36,9 @@ function main() {
   }
 
   /* Add demo code card event listeners */
+  document.querySelectorAll('button.run').forEach((runButton) => {
+    runButton.addEventListener('click', runExample)
+  });
   document.querySelectorAll('button.copy-code').forEach((copyButton) => {
     copyButton.addEventListener('click', copyCodeOnClick)
   });
@@ -51,16 +55,24 @@ function main() {
 
 /* Code Card Functions */
 
+function runExample() {
+  const codeCard = event.target.parentNode.parentNode;
+  const codeCardId = Number(codeCard.getAttribute('data-card-id'));
+  codeCardFunctionArray[codeCardId]();
+}
+
 function copyCodeOnClick(event) {
   const codeCard = event.target.parentNode.parentNode;
   const codeCardId = Number(codeCard.getAttribute('data-card-id'));
   const code = codeCard.querySelector('pre > code').textContent;
   navigator.clipboard.writeText(code);
   userRoutine(
-    `comment figure:nth-child(${codeCardId+1})>>button.copy-code ✔️ Code copied!`,
-    { displayMessage: false, logProgress: false,
+    `comment figure:nth-child(${codeCardId + 1})>>button.copy-code ✔️ Code copied!`,
+    {
+      displayMessage: false, logProgress: false,
       logResult: false, simultaneousAllowed: true, keyboardControls: false,
-      globalDelay: 0, displaySpeed: 1.5 }
+      globalDelay: 0, displaySpeed: 1.5
+    }
   );
 }
 
@@ -71,17 +83,19 @@ function copyLinkOnClick(event) {
   const link = location.protocol + '//' + location.host + location.pathname + '#' + figureId;
   navigator.clipboard.writeText(link);
   userRoutine(
-    `comment figure:nth-child(${codeCardId+1})>>button.copy-link ✔️ Link copied!`,
-    { displayMessage: false, logProgress: false,
+    `comment figure:nth-child(${codeCardId + 1})>>button.copy-link ✔️ Link copied!`,
+    {
+      displayMessage: false, logProgress: false,
       logResult: false, simultaneousAllowed: true, keyboardControls: false,
-      globalDelay: 0, displaySpeed: 1.5 }
+      globalDelay: 0, displaySpeed: 1.5
+    }
   );
 }
 
 /* Mock App Functions */
 
 function duplicateText() {
-  const outputArea = document.querySelector('pre.output-duplicate');
+  const outputArea = document.querySelector('pre.output');
   outputArea.textContent = '';
   const text = document.querySelector('input.text').value;
   const count = document.querySelector('input.count').value;
@@ -91,16 +105,16 @@ function duplicateText() {
 }
 
 function startMockLongProcess() {
-  const processOutput = document.querySelector('.output-process');
+  const processOutput = document.querySelector('.result');
   processOutput.textContent = '';
   processOutput.textContent = 'Processing...';
   setTimeout(() => {
     processOutput.textContent = 'Almost there...'
-  }, state.processTime)
+  }, state.processTime);
   setTimeout(() => {
     processOutput.textContent = 'Process complete!';
     state.processTime = 2000;
-  }, state.processTime * 2)
+  }, state.processTime * 2);
 }
 
 main();

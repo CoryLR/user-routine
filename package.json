@@ -1,6 +1,6 @@
 {
   "name": "user-routine",
-  "version": "5.0.9",
+  "version": "5.0.10",
   "description": "Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.",
   "main": "./lib/user-routine.min.js",
   "types": "./lib/user-routine.d.ts",
@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run build:lib && npm run build:blob && npm run build:template && npm run build:demo",
     "build:blob": "webpack --config webpack.config.blob.cjs",
-    "build:demo": "webpack --config webpack.config.demo.cjs && node utils/update-demo.cjs",
+    "build:demo": "node utils/update-demo-pre.cjs && webpack --config webpack.config.demo.cjs && node utils/update-demo-post.cjs",
     "build:lib": "webpack --config webpack.config.min.cjs",
     "build:local": "npm run build:lib && npm run build:demo",
     "build:template": "node utils/make-template.mjs"

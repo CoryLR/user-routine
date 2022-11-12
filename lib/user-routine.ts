@@ -20,11 +20,11 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     simultaneousAllowed: false,
     tutorialMode: false,
   };
-  if (options.tutorialMode && !options.displayProgress) {
+  if (options.tutorialMode === true && options.displayProgress === false) {
     options.displayProgress = true;
     console.warn(`[User Routine] WARN: 'displayProgress' changed to 'true' because 'tutorialMode' is enabled`);
   };
-  if (options.tutorialMode && options.keyboardControls) {
+  if (options.tutorialMode === true && options.keyboardControls === true) {
     options.keyboardControls = false;
     console.warn(`[User Routine] WARN: 'keyboardControls' changed to 'false' because 'tutorialMode' is enabled`);
   };
