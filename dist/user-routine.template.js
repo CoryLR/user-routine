@@ -5,7 +5,7 @@
  * Run tests with zero setup by copy-pasting this file's contents
  * into a browser console or into client-side JavaScript
  *
- * Version: 5.0.8
+ * Version: 5.0.9
  * Description: Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
 */
 
@@ -41,11 +41,11 @@ async function startUserRoutine() {
 }
 
 /*
-# Usage
+Usage
 
 User Routine is served as a function named `userRoutine`.
 
-**Some simple examples:**
+## Simple Examples
 
 Run a test:
 
@@ -53,10 +53,10 @@ Run a test:
 userRoutine([
   'click button.btn', // Target using CSS selectors
   'await div.result Result Text', // Await result text
-], { message: 'Testing the Button' });
+], { message: 'Testing the button' });
 ```
 
-Start a tutorial:
+Display a tutorial:
 
 ```javascript
 userRoutine([
@@ -65,27 +65,24 @@ userRoutine([
 ], { message: 'Tutorial', tutorialMode: true });
 ```
 
-More actions and options:
+Customize options to run a fast regression test:
 
 ```javascript
-userRoutine(
-  [
-    'fill input.class Some Text', // fill input value
-    'wait 500', // wait half a second
-    'click button.some-class', // click a button
-    '!await .spinner', // await disappearance of a loading spinner
-    'await div.output With this text', // await output message text
-  ], {
-    message: 'Example Test', // name of routine
-    awaitTimeout: 2000, // maximum time to await
-    continueOnFailure: true, // don't stop on errors
-    displayProgress: false, // don't show progress tooltips
-    globalDelay: 100, // shorten time between actions to 0.1 seconds
-  },
-);
+userRoutine([
+  'fill form>input Mock input text',
+  'click button.submit',
+  'await div.some-expected-result',
+  // etc...
+], {
+  message: 'Testing the button',
+  displayProgress: false, // default is true
+  logProgress: false, // default is true
+  globalDelay: 50, // default is 500 (0.5 seconds)
+  awaitTimeout: 1500, // default is 15000 (15 seconds)
+});
 ```
 
-Input parameter details:
+## Input Parameter Details
 
 * 1: Actions List (*String* (separate actions by new lines) or *Array of strings/functions*, required)
   * Action strings & examples:
@@ -152,7 +149,7 @@ Input parameter details:
   * `simultaneousAllowed`: (*default: false*) Allow the User Routine to run even if one is already running
   * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
-Output details:
+## Output Details
 
 * The `userRoutine` function returns a Promise resolving to type `UserRoutineReturn`:
   * `export type UserRoutineReturn = { success: boolean, log: string[], message: string, configuration: UserRoutineOptions };`
@@ -168,7 +165,7 @@ Output details:
   Result: { success: true, log: Array(4), message: 'Message' }
 ```
 
-# 
+
 */
 
 /* Minified User Routine code, provides function 'userRoutine' */ /* @ts-ignore */

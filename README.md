@@ -1,7 +1,7 @@
 
 # User Routine
 
-Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.
+Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup.
 
 Example:
 
@@ -9,9 +9,32 @@ Example:
 userRoutine([
   'fill form>input.name Cory',
   'click button.submit',
-  'await div.result',
+  'exists div.expected-result',
 ]);
 ```
+
+
+**Table of Contents**
+
+- [User Routine](#user-routine)
+- [Access](#access)
+- [Usage](#usage)
+  - [Simple Examples](#simple-examples)
+  - [Input Parameter Details](#input-parameter-details)
+  - [Output Details](#output-details)
+- [Examples](#examples)
+  - [Template](#template)
+  - [Use-cases](#use-cases)
+    - [Fill inputs with `fill` and interact with `click` using Selectors:](#fill-inputs-with-fill-and-interact-with-click-using-selectors)
+    - [Validate the DOM with `exists` and `value`:](#validate-the-dom-with-exists-and-value)
+    - [Deal with timing using `await` and `wait`:](#deal-with-timing-using-await-and-wait)
+    - [Navigate within a single-page application using `nav`:](#navigate-within-a-single-page-application-using-nav)
+    - [Add notes with `append`, `log`, and `write`:](#add-notes-with-append-log-and-write)
+    - [Pass options as a second argument:](#pass-options-as-a-second-argument)
+- [Development](#development)
+  - [Maintainers](#maintainers)
+    - [Getting Started](#getting-started)
+    - [Continuous Development](#continuous-development)
 
 # Access
 
@@ -21,7 +44,7 @@ Options:
 
 ```javascript
 import { userRoutine } from 'user-routine';
-// or
+// OR
 const { userRoutine } = require('user-routine');
 ```
 
@@ -30,7 +53,7 @@ const { userRoutine } = require('user-routine');
 ```html
 <!-- Provides `userRoutine` function from CDN -->
 <script src="https://cdn.jsdelivr.net/gh/CoryLR/user-routine/dist/user-routine.blob.js"></script>
-
+<!-- OR -->
 <!-- Provides `userRoutine` function from local file -->
 <script src="/user-routine.blob.js"></script>
 
@@ -40,11 +63,12 @@ const { userRoutine } = require('user-routine');
 
 * ^ This works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
+
 # Usage
 
 User Routine is served as a function named `userRoutine`.
 
-**Some simple examples:**
+## Simple Examples
 
 Run a test:
 
@@ -52,10 +76,10 @@ Run a test:
 userRoutine([
   'click button.btn', // Target using CSS selectors
   'await div.result Result Text', // Await result text
-], { message: 'Testing the Button' });
+], { message: 'Testing the button' });
 ```
 
-Start a tutorial:
+Display a tutorial:
 
 ```javascript
 userRoutine([
@@ -64,27 +88,24 @@ userRoutine([
 ], { message: 'Tutorial', tutorialMode: true });
 ```
 
-More actions and options:
+Customize options to run a fast regression test:
 
 ```javascript
-userRoutine(
-  [
-    'fill input.class Some Text', // fill input value
-    'wait 500', // wait half a second
-    'click button.some-class', // click a button
-    '!await .spinner', // await disappearance of a loading spinner
-    'await div.output With this text', // await output message text
-  ], {
-    message: 'Example Test', // name of routine
-    awaitTimeout: 2000, // maximum time to await
-    continueOnFailure: true, // don't stop on errors
-    displayProgress: false, // don't show progress tooltips
-    globalDelay: 100, // shorten time between actions to 0.1 seconds
-  },
-);
+userRoutine([
+  'fill form>input Mock input text',
+  'click button.submit',
+  'await div.some-expected-result',
+  // etc...
+], {
+  message: 'Testing the button',
+  displayProgress: false, // default is true
+  logProgress: false, // default is true
+  globalDelay: 50, // default is 500 (0.5 seconds)
+  awaitTimeout: 1500, // default is 15000 (15 seconds)
+});
 ```
 
-Input parameter details:
+## Input Parameter Details
 
 * 1: Actions List (*String* (separate actions by new lines) or *Array of strings/functions*, required)
   * Action strings & examples:
@@ -151,7 +172,7 @@ Input parameter details:
   * `simultaneousAllowed`: (*default: false*) Allow the User Routine to run even if one is already running
   * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
-Output details:
+## Output Details
 
 * The `userRoutine` function returns a Promise resolving to type `UserRoutineReturn`:
   * `export type UserRoutineReturn = { success: boolean, log: string[], message: string, configuration: UserRoutineOptions };`

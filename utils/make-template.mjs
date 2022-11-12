@@ -7,7 +7,8 @@ const exampleTests = fs.readFileSync('test/tests.js', 'utf8');
 
 /* Extract usage documentation */
 const readme = fs.readFileSync('README.md', 'utf8');
-const usage = readme.match(/# (Usage[\s\S]*?)# /gm);
+const usageRegex = RegExp(/# (Usage[\s\S]*?)(# Examples)/, 'gm');
+const usage = usageRegex.exec(readme);
 const packageJson = JSON.parse(fs.readFileSync('package.json'));
 const version = packageJson.version;
 const description = packageJson.description;
@@ -35,7 +36,7 @@ ${addIndent(exampleTests)}
 }
 
 /*
-${usage}
+${usage[1]}
 */
 
 /* Minified User Routine code, provides function 'userRoutine' */ /* @ts-ignore */
