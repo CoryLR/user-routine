@@ -139,6 +139,7 @@ function syntaxHighlightCodeCards() {
     const codeString = stringWithQuotes.substring(1, stringWithQuotes.length - 1);
     const actionParts = codeString.split(' ');
     const actionCode = actionParts[0].substring(0, 3);
+    /* TODO: Figure out why there is a space after button.duplicate */
     if (isLowerCase(actionCode[0]) && actionCodesWithSelectors.includes(actionCode)) {
       const newActionParts = ['', '', ''];
       newActionParts[0] = `<span class="action-keyword" title="Action keyword"
@@ -153,8 +154,8 @@ function syntaxHighlightCodeCards() {
       }
       stringElement.innerHTML = `'${newActionParts.join(' ')}'`;
       state.actionStringIdCounter++;
+
     } else if (isLowerCase(actionCode[0]) && actionCodesWithoutSelectors.includes(actionCode)) {
-      /* TODO: Make this work for log, nav, and wait */
       const newActionParts = ['', ''];
       const parts = [...actionParts];
       const argumentString = parts.splice(2).join(' ');
@@ -162,7 +163,10 @@ function syntaxHighlightCodeCards() {
         data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`
       newActionParts[1] = `<span class="argument" title="Data used by action"
         data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`;
+      stringElement.innerHTML = `'${newActionParts.join(' ')}'`;
+      state.actionStringIdCounter++;  
     }
+
   });
 }
 

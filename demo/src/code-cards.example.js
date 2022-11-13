@@ -1,18 +1,18 @@
 // Test a Feature
 userRoutine([
-  'fill input.text Hi',
+  'fill input.text Well',
   'fill input.count 3',
   'click button.duplicate',
-  'exists .output Hi Hi Hi',
+  'exists .output Well Well Well',
 ])
 // Display a Tutorial
 userRoutine([
   'log Welcome to the demo',
   'comment .code-carousel Examples',
-  'comment nav Link to documentation',
+  'comment nav Links to docs & more',
 ], {
   message: 'Display a Tutorial',
-  tutorialMode: true
+  tutorialMode: true,
 })
 // Await a Process
 userRoutine([
