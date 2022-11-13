@@ -8,10 +8,10 @@ userRoutine([
 // Display a Tutorial
 userRoutine([
   'log Welcome to the demo',
-  'comment .code-carousel Try one',
-  'comment nav Link to docs here',
+  'comment .code-carousel Examples',
+  'comment nav Link to documentation',
 ], {
-  message: 'User Routine Tutorial',
+  message: 'Display a Tutorial',
   tutorialMode: true
 })
 // Await a Process
@@ -19,4 +19,4 @@ userRoutine([
   'click button Long process',
   '!await .result processing...',
   'await .result process complete',
-], { message: 'Testing await' })
+], { message: 'Await a Process' })

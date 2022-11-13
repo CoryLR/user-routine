@@ -47,24 +47,25 @@ svg {
   display: flex;
   flex-direction: column;
   width: 310px;
-  height: 200px;
+  height: 235px;
   background-color: rgb(240, 240, 240);
   border-radius: 15px;
 }
 .code-carousel .code-card .code-card-header {
-  background-color: rgb(220,220,220);
-  padding: 10px 15px 5px 15px;
-  border-radius: 15px 15px 0 0;
+  background-color: rgb(220, 220, 220);
+  padding: 10px 10px 5px 10px;
+  border-radius: 10px 10px 0 0;
   flex: 0 1 auto;
 }
 .code-carousel .code-card pre {
   flex: 0 1 auto;
-  padding: 5px 15px 0 15px;
+  padding: 5px 10px 0 10px;
   margin: 0;
 }
 .code-carousel .code-card pre code {
   background-color: inherit;
   padding: 0;
+  line-height: 18px;
 }
 .code-carousel .code-card .buttons {
   flex: 1 1 auto;
@@ -81,7 +82,7 @@ svg {
   margin: 0 5px;
   border-radius: 8px;
   padding: 8px;
-  background-color: rgb(220,220,220);
+  background-color: rgb(220, 220, 220);
   border-width: 0;
   cursor: pointer;
 }
@@ -103,6 +104,19 @@ svg {
 }
 .hljs-string {
   color: rgb(0, 0, 0);
+}
+.hljs-string .action-keyword {
+  background-color: rgb(255, 219, 202);
+  cursor: pointer;
+}
+.hljs-string .selector {
+  background-color: rgb(219, 233, 255);
+  cursor: pointer;
+  font-style: italic;
+}
+.hljs-string .argument {
+  background-color: rgb(228, 255, 232);
+  cursor: pointer;
 }
 .hljs-attr {
   color: rgb(0, 91, 152);

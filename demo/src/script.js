@@ -13,6 +13,7 @@ import { codeCardFunctionArray } from './code-cards.min';
 
 const state = {
   processTime: 2000,
+  actionStringIdCounter: 0,
 }
 
 function main() {
@@ -20,8 +21,7 @@ function main() {
   /* Enable userRoutine access from console */
   window.userRoutine = userRoutine;
 
-  /* Add syntax highlighting to code cards */
-  hljs.highlightAll();
+  syntaxHighlightCodeCards();
 
   /*
    * Handle URL parameters
@@ -45,6 +45,15 @@ function main() {
   document.querySelectorAll('button.copy-link').forEach((copyButton) => {
     copyButton.addEventListener('click', copyLinkOnClick)
   });
+  document.querySelectorAll('code span.action-keyword').forEach((actionKeywordSpan) => {
+    actionKeywordSpan.addEventListener('click', showTooltipOnActionKeywordClick);
+  });
+  document.querySelectorAll('code span.selector').forEach((selectorSpan) => {
+    selectorSpan.addEventListener('click', showTooltipOnSelectorClick);
+  });
+  document.querySelectorAll('code span.argument').forEach((argumentSpan) => {
+    argumentSpan.addEventListener('click', showTooltipOnArgumentClick);
+  });
 
   /* Add mock-app event listeners */
   document.querySelector('button.duplicate').addEventListener('click', duplicateText);
@@ -66,13 +75,9 @@ function copyCodeOnClick(event) {
   const codeCardId = Number(codeCard.getAttribute('data-card-id'));
   const code = codeCard.querySelector('pre > code').textContent;
   navigator.clipboard.writeText(code);
-  userRoutine(
-    `comment figure:nth-child(${codeCardId + 1})>>button.copy-code ✔️ Code copied!`,
-    {
-      displayMessage: false, logProgress: false,
-      logResult: false, simultaneousAllowed: true, keyboardControls: false,
-      globalDelay: 0, displaySpeed: 1.5
-    }
+  showUserRoutineTooltip(
+    `figure:nth-child(${codeCardId + 1}) button.copy-code`,
+    '✔️ Code copied!'
   );
 }
 
@@ -82,14 +87,88 @@ function copyLinkOnClick(event) {
   const figureId = codeCard.parentNode.id;
   const link = location.protocol + '//' + location.host + location.pathname + '#' + figureId;
   navigator.clipboard.writeText(link);
+  showUserRoutineTooltip(
+    `figure:nth-child(${codeCardId + 1}) button.copy-link`,
+    '✔️ Link copied!',
+  );
+}
+
+function showTooltipOnActionKeywordClick(event) {
+  const selectorId = event.target.getAttribute('data-action-keyword-id');
+  showUserRoutineTooltip(
+    `[data-action-keyword-id="${selectorId}"]`,
+    'Action keyword',
+  );
+}
+function showTooltipOnSelectorClick(event) {
+  const selectorId = event.target.getAttribute('data-selector-id');
+  showUserRoutineTooltip(
+    `[data-selector-id="${selectorId}"]`,
+    'CSS selector',
+  );
+}
+function showTooltipOnArgumentClick(event) {
+  const selectorId = event.target.getAttribute('data-argument-id');
+  showUserRoutineTooltip(
+    `[data-argument-id="${selectorId}"]`,
+    'Data used by action',
+  );
+}
+
+function showUserRoutineTooltip(cssSelector, message, speed = 1.5) {
   userRoutine(
-    `comment figure:nth-child(${codeCardId + 1})>>button.copy-link ✔️ Link copied!`,
+    `comment ${cssSelector.replaceAll(' ', '>>')} ${message}`,
     {
       displayMessage: false, logProgress: false,
       logResult: false, simultaneousAllowed: true, keyboardControls: false,
-      globalDelay: 0, displaySpeed: 1.5
+      globalDelay: 0, displaySpeed: speed
     }
   );
+}
+
+function syntaxHighlightCodeCards() {
+  hljs.highlightAll();
+
+  /* Custom highlight action string */
+  const actionCodesWithSelectors = [
+    'app', 'awa', '!aw', 'cli', 'com', 'exi', '!ex', 'fil', 'val', 'wri',
+  ];
+  const actionCodesWithoutSelectors = ['log', 'nav', 'wai'];
+  document.querySelectorAll('.hljs .hljs-string').forEach((stringElement) => {
+    const stringWithQuotes = stringElement.textContent;
+    const codeString = stringWithQuotes.substring(1, stringWithQuotes.length - 1);
+    const actionParts = codeString.split(' ');
+    const actionCode = actionParts[0].substring(0, 3);
+    if (isLowerCase(actionCode[0]) && actionCodesWithSelectors.includes(actionCode)) {
+      const newActionParts = ['', '', ''];
+      newActionParts[0] = `<span class="action-keyword" title="Action keyword"
+        data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`
+      newActionParts[1] = `<span class="selector" title="CSS selector"
+        data-selector-id="${state.actionStringIdCounter}">${actionParts[1]}</span>`;
+      if (actionParts[2]) {
+        const parts = [...actionParts];
+        const argumentString = parts.splice(2).join(' ');
+        newActionParts[2] = `<span class="argument" title="Data used by action"
+          data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`;
+      }
+      stringElement.innerHTML = `'${newActionParts.join(' ')}'`;
+      state.actionStringIdCounter++;
+    } else if (isLowerCase(actionCode[0]) && actionCodesWithoutSelectors.includes(actionCode)) {
+      /* TODO: Make this work for log, nav, and wait */
+      const newActionParts = ['', ''];
+      const parts = [...actionParts];
+      const argumentString = parts.splice(2).join(' ');
+      newActionParts[0] = `<span class="action-keyword" title="Action keyword"
+        data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`
+      newActionParts[1] = `<span class="argument" title="Data used by action"
+        data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`;
+    }
+  });
+}
+
+function isLowerCase(string) {
+  console.log('string === string.toLowerCase()', string === string.toLowerCase());
+  return string === string.toLowerCase();
 }
 
 /* Mock App Functions */

@@ -286,6 +286,7 @@ userRoutine([
 
 * Make changes to [lib/user-routine.ts](./lib/user-routine.ts)
 * Run `npm run build:local`
+  * If only editing the demo itself (`demo/src/`), you can just run `npm run build:demo`
 * To test changes, edit either [demo/src/regression-tests.js](./demo/src/regression-tests.js) or [demo/src/script.js](./demo/src/script.js)
 * Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
 * Before each commit, run the full `npm run build`

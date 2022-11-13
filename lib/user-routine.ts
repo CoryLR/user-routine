@@ -522,7 +522,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
         top: 0;
         right: 10%;
         color: black;
-        background-color: rgba(250,250,250,0.8);
+        background-color: rgba(250,250,250,0.9);
         text-align: center;
         border-radius: 0 0 12px 12px;
         max-width: 80vw;
@@ -574,14 +574,14 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
         background-color: rgb(191, 191, 191);
       }
       body .user-routine-footer .user-routine-play:hover .user-routine-play-icon {
-        border-left: 8px solid rgb(80, 80, 80);
+        border-left: 8px solid rgb(68, 68, 68);
       }
       body .user-routine-footer .user-routine-pause:hover .user-routine-pause-icon {
-        border-left: 3px solid rgb(80, 80, 80);
-        border-right: 3px solid rgb(80, 80, 80);
+        border-left: 3px solid rgb(68, 68, 68);
+        border-right: 3px solid rgb(68, 68, 68);
       }
       body .user-routine-footer .user-routine-stop:hover .user-routine-stop-icon {
-        background-color: rgb(80, 80, 80);
+        background-color: rgb(68, 68, 68);
       }
       body > .user-routine > .user-routine-footer > .user-routine-status,
       body > .user-routine > .user-routine-footer > .user-routine-attribution {
