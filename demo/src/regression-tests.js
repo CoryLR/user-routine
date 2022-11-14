@@ -7,7 +7,9 @@ export async function runRegressionTests(
   interactiveTests = false,
 ) {
 
-  await userRoutine([
+  const results = {}
+
+  results.features = await userRoutine([
     'log Tests starting',
     'fill input.text Hello, world!',
     'value input.text',
@@ -33,7 +35,7 @@ export async function runRegressionTests(
     awaitTimeout: displayProgress ? 9000 : 1500,
   });
 
-  await userRoutine([
+  results.errors = await userRoutine([
     'log Expect success: false',
     'click does-not-exist',
     'invalidkeyword test',
@@ -47,7 +49,7 @@ export async function runRegressionTests(
     continueOnFailure: true, awaitTimeout: 150, logProgress
   });
 
-  await userRoutine([
+  results.gracefulFail = await userRoutine([
     'log Expect success: false, should halt after next error',
     'click does-not-exist',
     'log If you see this, it did not work',
@@ -57,7 +59,7 @@ export async function runRegressionTests(
   });
 
   if (interactiveTests) {
-    await userRoutine([
+    results.tutorial = await userRoutine([
       'log Hey there, ready to get started?',
       'comment input.text First, enter some text here',
       'comment input.count Now put a number here',
@@ -67,6 +69,16 @@ export async function runRegressionTests(
     ], { message: 'Tutorial Test', tutorialMode: true });
   }
 
-  console.log('Done!');
+  if (
+    results.features.success === true
+    && results.errors.log > 9
+    && !results.gracefulFail.log.some((msg) => msg.toLowerCase().includes('did not work'))
+    && results.tutorial ? results.tutorial.success === true : true
+  ) {
+    console.log('Regression Tests PASSED');
+  } else {
+    console.log('Regression Tests FAILED');
+  }
+
 
 }

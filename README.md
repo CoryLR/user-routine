@@ -280,7 +280,7 @@ userRoutine([
 ### Getting Started
 
 * Install dependencies for the Demo using `npm install`
-* Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
+* Open the Demo with the `quick-regression-test` url parameter: [demo/dist/index.html?action=quick-regression-test](./demo/dist/index.html?action=quick-regression-test)
 
 ### Continuous Development
 
@@ -288,7 +288,7 @@ userRoutine([
 * Run `npm run build:local`
   * If only editing the demo itself (`demo/src/`), you can just run `npm run build:demo`
 * To test changes, edit either [demo/src/regression-tests.js](./demo/src/regression-tests.js) or [demo/src/script.js](./demo/src/script.js)
-* Open the Demo with the `quick-regression` url parameter: [demo/dist/index.html?test=quick-regression](./demo/dist/index.html?test=quick-regression)
+* Open the Demo with the `quick-regression-test` url parameter: [demo/dist/index.html?action=quick-regression-test](./demo/dist/index.html?action=quick-regression-test)
 * Before each commit, run the full `npm run build`
 
 To publish:

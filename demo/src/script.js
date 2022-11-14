@@ -24,13 +24,19 @@ function main() {
   syntaxHighlightCodeCards();
 
   /*
-   * Handle URL parameters
+   * URL parameters
    */
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('test') === 'quick-regression') {
+  console.log(`URL parameter options:
+  * action=quick-regression-test
+  * action=full-regression-test
+  `);
+  if (urlParams.get('action') === 'quick-regression-test') {
+    console.log('Quick regression tests activated');
     runRegressionTests();
     state.processTime = 20;
-  } else if (urlParams.get('test') === 'full-regression') {
+  } else if (urlParams.get('action') === 'full-regression-test') {
+    console.log('Full regression tests activated');
     runRegressionTests(500, true, true, true);
     state.processTime = 2000;
   }
@@ -171,7 +177,6 @@ function syntaxHighlightCodeCards() {
 }
 
 function isLowerCase(string) {
-  console.log('string === string.toLowerCase()', string === string.toLowerCase());
   return string === string.toLowerCase();
 }
 
