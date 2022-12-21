@@ -4,7 +4,7 @@ userRoutine([
   'fill input.count 3',
   'click button.duplicate',
   'exists .output Well Well Well',
-])
+], { message: 'Test Feature' });
 // Display a Tutorial
 userRoutine([
   'log Welcome to the demo',
@@ -13,10 +13,10 @@ userRoutine([
 ], {
   message: 'Display a Tutorial',
   tutorialMode: true,
-})
+});
 // Await a Process
 userRoutine([
   'click button Long process',
   '!await .result processing...',
   'await .result process complete',
-], { message: 'Await a Process' })
+], { message: 'Await a Process' });

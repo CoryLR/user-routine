@@ -307,5 +307,6 @@ TO DO:
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
 * [ ] Separate actions into externally-callable functions
 * [ ] (Maybe) Add count action to count instances of a particular CSS selector
+* [ ] (Maybe) Add copy/paste actions
 * [ ] (Maybe) Add ability to keybind user routine(s) to keys
 * [ ] (Maybe) Add copy/paste actions

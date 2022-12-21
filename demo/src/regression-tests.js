@@ -70,10 +70,10 @@ export async function runRegressionTests(
   }
 
   if (
-    results.features.success === true
-    && results.errors.log > 9
-    && !results.gracefulFail.log.some((msg) => msg.toLowerCase().includes('did not work'))
-    && results.tutorial ? results.tutorial.success === true : true
+    results.features.success === true // Features worked
+    && results.errors.log > 9 // Should error at least 9 times
+    && !results.gracefulFail.log.some((msg) => msg.toLowerCase().includes('did not work')) // String should be skipped
+    && results.tutorial ? results.tutorial.success === true : true // Tutorial should work, if enabled
   ) {
     console.log('Regression Tests PASSED');
   } else {

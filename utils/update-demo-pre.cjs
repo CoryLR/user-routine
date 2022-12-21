@@ -2,7 +2,7 @@
 const fs = require('fs')
 const { parse } = require('node-html-parser');
 
-const examplesString = fs.readFileSync('./demo/src/code-cards.example.js', 'utf8');
+const examplesString = fs.readFileSync('./demo/src/code-cards.src.js', 'utf8');
 
 const examplesData = getExamplesData(examplesString);
 
