@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
 }
 main {
   width: 80%;
@@ -18,7 +19,6 @@ svg {
 h1 {
   margin: 20px 0 10px 0;
 }
-
 h3 {
   margin-bottom: 0;
 }
@@ -27,7 +27,6 @@ nav {
   display: flex;
   flex-wrap: wrap;
 }
-
 header > nav > a {
   display: block;
   text-decoration: none;
@@ -35,7 +34,6 @@ header > nav > a {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-
 nav > a:hover {
   background-color: rgb(240, 240, 240);
 }
@@ -76,23 +74,23 @@ nav > a:hover {
   background-color: rgb(240, 240, 240);
   border-radius: 15px;
 }
-.code-carousel .code-card .code-card-header {
+.code-card .code-card-header {
   background-color: rgb(220, 220, 220);
   padding: 10px 10px 5px 10px;
   border-radius: 10px 10px 0 0;
   flex: 0 1 auto;
 }
-.code-carousel .code-card pre {
+.code-card pre {
   flex: 0 1 auto;
   padding: 5px 10px 0 10px;
   margin: 0;
 }
-.code-carousel .code-card pre code {
+.code-card pre code {
   background-color: inherit;
   padding: 0;
   line-height: 18px;
 }
-.code-carousel .code-card .buttons {
+.code-card .buttons {
   flex: 1 1 auto;
   align-self: center;
   width: 100%;
@@ -102,7 +100,7 @@ nav > a:hover {
   align-items: flex-end;
   margin-bottom: 15px;
 }
-.code-carousel .code-card .buttons button,
+.code-card .buttons button,
 nav a {
   display: inline-block;
   margin-right: 8px;
@@ -112,14 +110,14 @@ nav a {
   border-width: 0;
   cursor: pointer;
 }
-.code-carousel .code-card .buttons button:first-child {
+.code-card .buttons button:first-child {
   margin-left: 15px;
   margin-right: auto;
 }
-.code-carousel .code-card .buttons button:last-child {
+.code-card .buttons button:last-child {
   margin-right: 15px;
 }
-.code-carousel .code-card .buttons button:hover {
+.code-card .buttons button:hover {
   background-color: white;
 }
 
@@ -128,7 +126,6 @@ nav a {
   color: rgb(0, 91, 152);
   font-weight: 600;
 }
-
 .hljs-string {
   color: rgb(0, 0, 0);
 }
@@ -208,9 +205,61 @@ nav a {
 }
 
 /* Mock Application */
+.mock-app-columns {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.mock-app .code-card {
+  flex: 0 1 250px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(240, 240, 240);
+  border-radius: 15px;
+  min-width: 160px;
+}
+.mock-app .code-card-header {
+  background-color: rgb(220, 220, 220);
+  padding: 10px 10px 5px 10px;
+  border-radius: 10px 10px 0 0;
+  flex: 0 1 auto;
+}
+.mock-app .code-card-content {
+  padding: 5px 10px 10px 10px;
+  flex: 1 0 auto;
+}
+.mock-app .code-card-inputs {
+  min-height: 80px;
+}
+.mock-app .code-card-inputs p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.mock-app .count {
+  width: 62px;
+}
+.mock-app .code-card .output,
+.mock-app .code-card .result {
+  white-space: break-spaces;
+  overflow-x: auto;
+  word-wrap: break-word;
+  display: block;
+  padding: 5px;
+  background-color: white;
+  margin-top: 5px;
+  min-height: 19px;
+}
+
 pre.output-duplicate {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+.mock-app label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 5px;
 }
 
 @media (max-width: 1024px) {

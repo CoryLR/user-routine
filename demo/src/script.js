@@ -148,6 +148,8 @@ function showUserRoutineTooltip(cssSelector, message, speed = 1.5) {
 function syntaxHighlightCodeCards() {
   hljs.highlightAll();
 
+  // TODO: Figure out why "Welcome" in "Welcome to the demo" is disappearing
+
   /* Custom highlight action string */
   const actionCodesWithSelectors = [
     'app', 'awa', '!aw', 'cli', 'com', 'exi', '!ex', 'fil', 'val', 'wri',
@@ -183,7 +185,7 @@ function syntaxHighlightCodeCards() {
     } else if (isActionStringWithoutSelector) {
       const newActionParts = [];
       const parts = [...actionParts];
-      const argumentString = parts.splice(2).join(' ');
+      const argumentString = parts.splice(1).join(' ');
       newActionParts.push(`<span class="action-keyword" title="Action keyword"
         data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`);
       newActionParts.push(`<span class="argument" title="Data used by action"
