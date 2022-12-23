@@ -1,5 +1,5 @@
 
-# User Routine
+# User-Routine
 
 Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup.
 
@@ -17,7 +17,7 @@ userRoutine([
 
 **Table of Contents**
 
-- [User Routine](#user-routine)
+- [User-Routine](#user-routine)
 - [Access](#access)
 - [Usage](#usage)
   - [Simple Examples](#simple-examples)
@@ -49,7 +49,7 @@ import { userRoutine } from 'user-routine';
 const { userRoutine } = require('user-routine');
 ```
 
-**2.** Or include the User Routine script file (`user-routine.blob.js`) in your HTML:
+**2.** Or include the User-Routine script file (`user-routine.blob.js`) in your HTML:
 
 ```html
 <!-- Provides `userRoutine` function from CDN -->
@@ -67,7 +67,7 @@ const { userRoutine } = require('user-routine');
 
 # Usage
 
-User Routine is served as a function named `userRoutine`.
+User-Routine is served as a function named `userRoutine`.
 
 ## Simple Examples
 
@@ -168,11 +168,11 @@ function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions
   * `logCollapse`: (*default: false*) Initializes the console group collapsed
   * `logProgress`: (*default: true*) Show real-time progress in the browser console
   * `logResult`: (*default: true*) Show the final result in the browser console
-  * `message`: (*default: 'User Routine'*) Label to show in the console and in the DOM
-  * `messageAttribution`: (*default: 'User Routine'*) Subtitle text shown when custom message is provided
-  * `overrideCss`: (*default: ''*) Override default User Routine CSS, target classes such as .user-routine-message, .user-routine-focus-box, or .user-routine-tooltip
+  * `message`: (*default: 'User-Routine'*) Label to show in the console and in the DOM
+  * `messageAttribution`: (*default: 'User-Routine'*) Subtitle text shown when custom message is provided
+  * `overrideCss`: (*default: ''*) Override default User-Routine CSS, target classes such as .user-routine-message, .user-routine-focus-box, or .user-routine-tooltip
   * `separator`: (*default: ' ' (space)*) Choose different text to separate the different parts of the action string. For example, with `separator` set to `'; '`, you could write an action string like `'await; .container div[name="Result Box"]; Result Text'`.
-  * `simultaneousAllowed`: (*default: false*) Allow the User Routine to run even if one is already running
+  * `simultaneousAllowed`: (*default: false*) Allow the User-Routine to run even if one is already running
   * `tutorialMode`: (*default: false*) Add a "Next" button to tooltips, and only show tooltips for "log" and "comment" actions
 
 ## Output Details
@@ -182,7 +182,7 @@ function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions
 * Updates are also logged to the browser console like so:
 
 ```
-[User Routine] Message
+[User-Routine] Message
   * Filled the value of form>input.name to 'Cory'
   * Clicked on button[type="submit"]
   * Awaiting 'div.success-message'...
@@ -303,10 +303,10 @@ TO DO:
 
 * [ ] Finish the Demo page
   * Started Code Cards, need to load them into the JS & HTML appropriately
-* [ ] Add a tutorial walk-through to the demo page, using User Routine to showcase User Routine
+* [ ] Add a tutorial walk-through to the demo page, using User-Routine to showcase User-Routine
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
 * [ ] Separate actions into externally-callable functions
 * [ ] (Maybe) Add count action to count instances of a particular CSS selector
 * [ ] (Maybe) Add copy/paste actions
-* [ ] (Maybe) Add ability to keybind user routine(s) to keys
+* [ ] (Maybe) Add ability to keybind User-Routine(s) to keys
 * [ ] (Maybe) Add copy/paste actions

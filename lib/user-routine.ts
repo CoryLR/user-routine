@@ -13,8 +13,8 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     logCollapse: false,
     logProgress: true,
     logResult: true,
-    message: 'User Routine',
-    messageAttribution: 'User Routine',
+    message: 'User-Routine',
+    messageAttribution: 'User-Routine',
     overrideCss: '',
     separator: ' ',
     simultaneousAllowed: false,
@@ -22,15 +22,15 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
   };
   if (options.tutorialMode === true && options.displayProgress === false) {
     options.displayProgress = true;
-    console.warn(`[User Routine] WARN: 'displayProgress' changed to 'true' because 'tutorialMode' is enabled`);
+    console.warn(`[User-Routine] WARN: 'displayProgress' changed to 'true' because 'tutorialMode' is enabled`);
   };
   if (options.tutorialMode === true && options.keyboardControls === true) {
     options.keyboardControls = false;
-    console.warn(`[User Routine] WARN: 'keyboardControls' changed to 'false' because 'tutorialMode' is enabled`);
+    console.warn(`[User-Routine] WARN: 'keyboardControls' changed to 'false' because 'tutorialMode' is enabled`);
   };
   const config: typeof defaultConfig = Object.freeze({ ...defaultConfig, ...options });
   const updateList: string[] = [];
-  const userRoutineLogTitle = config.message !== defaultConfig.message ? `[User Routine] ${config.message}` : '[User Routine]';
+  const userRoutineLogTitle = config.message !== defaultConfig.message ? `[User-Routine] ${config.message}` : '[User-Routine]';
 
   const state = {
     paused: false,
@@ -455,7 +455,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
 
   function checkIfShouldStart() {
     if (typeof document === 'undefined') {
-      let errorMessage = 'FAIL: document is undefined. User Routine can only be used in the browser. Halting execution.';
+      let errorMessage = 'FAIL: document is undefined. User-Routine can only be used in the browser. Halting execution.';
       if (config.logProgress) console.error(errorMessage);
       updateList.push(errorMessage);
       return false
@@ -465,7 +465,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       const otherUserRoutine = document.querySelector('body > .user-routine');
       if (otherUserRoutine) {
         const otherMessage = otherUserRoutine.querySelector('.user-routine-message').textContent;
-        let errorMessage = `FAIL: User Routine '${otherMessage}' is already running. Halting execution.`;
+        let errorMessage = `FAIL: User-Routine '${otherMessage}' is already running. Halting execution.`;
         if (config.logProgress) console.error(errorMessage);
         updateList.push(errorMessage);
         return false
@@ -740,7 +740,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       }
       state.documentKeyDownSet = true;
     } else if (document.onkeydown !== null) {
-      console.warn('[User Routine] document.onkeydown already set, keyboard controls disabled');
+      console.warn('[User-Routine] document.onkeydown already set, keyboard controls disabled');
     }
   }
 

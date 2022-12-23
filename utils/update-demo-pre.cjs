@@ -17,10 +17,14 @@ exampleJsArrayString += ']';
 fs.writeFileSync('./demo/src/code-cards.min.js', exampleJsArrayString, { encoding: 'utf8', flag: 'w' });
 
 const htmlDocument = parse(fs.readFileSync('./demo/src/index.html', 'utf8'));
-htmlDocument.querySelector('*[data-fill-tests]')
-  .set_content(exampleHtmlString);
-fs.writeFileSync('./demo/src/index.html', htmlDocument.toString(), { encoding: 'utf8', flag: 'w' });
+htmlDocument.querySelector('[data-fill-tests]').set_content(exampleHtmlString);
 
+/* Update index.html description */
+const packageJson = JSON.parse(fs.readFileSync('package.json'));
+const description = packageJson.description;
+htmlDocument.querySelector('[data-fill-description]').set_content(description);
+
+fs.writeFileSync('./demo/src/index.html', htmlDocument.toString(), { encoding: 'utf8', flag: 'w' });
 
 function getJsArrayItemString(codeString) {
   return `async () => { await ${codeString} },`

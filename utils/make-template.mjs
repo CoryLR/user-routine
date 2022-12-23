@@ -1,4 +1,4 @@
-/* Create a User Routine template that's easy to copy-paste */
+/* Create a User-Routine template that's easy to copy-paste */
 /* Run from root */
 
 import fs from 'fs';
@@ -19,7 +19,7 @@ function addIndent(text, prepend = '  ') {
 
 const template =`
 /* 
- * User Routine Template
+ * User-Routine Template
  *
  * Run tests with zero setup by copy-pasting this file's contents
  * into a browser console or into client-side JavaScript
@@ -29,7 +29,7 @@ const template =`
 */
 
 /**
- * User Routine examples, replace with your tests
+ * User-Routine examples, replace with your tests
 */
 async function startUserRoutine() {
 ${addIndent(exampleTests)}
@@ -39,7 +39,7 @@ ${addIndent(exampleTests)}
 ${usage[1]}
 */
 
-/* Minified User Routine code, provides function 'userRoutine' */ /* @ts-ignore */
+/* Minified User-Routine code, provides function 'userRoutine' */ /* @ts-ignore */
 ${userRoutineJsBlob}
 
 startUserRoutine();
