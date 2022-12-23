@@ -201,6 +201,7 @@ function startMockLongProcess() {
   }, state.processTime);
   setTimeout(() => {
     processOutput.textContent = 'Process complete!';
+    /* Reset process time after any automated tests */
     state.processTime = 2000;
   }, state.processTime * 2);
 }

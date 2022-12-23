@@ -16,11 +16,11 @@ svg {
 }
 
 h1 {
-  margin: 20px 0;
+  margin: 20px 0 10px 0;
 }
 
-h1 > i {
-  
+h3 {
+  margin-bottom: 0;
 }
 
 nav {

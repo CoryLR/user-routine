@@ -18,24 +18,24 @@
       <nav>
         <a href="https://github.com/CoryLR/user-routine#readme" target="_blank">Documentation</a>
         <a href="https://www.npmjs.com/package/user-routine" target="_blank">NPM</a>
-        <a href="https://github.com/CoryLR/user-routine/blob/main/user-routine.template.js" target="_blank">Template</a>
+        <a href="https://github.com/CoryLR/user-routine/blob/main/dist/user-routine.template.js" target="_blank">Template</a>
       </nav>
 
-      <b>About</b>
-      <p data-fill-description>Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup. Click buttons, fill values, await results, comment on elements, etc.</p>
+      <h3>About</h3>
+      <p data-fill-description>Automate user actions & routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Small, portable, and zero setup.</p>
     </header>
 
-    <br>
+    <h3>Demos</h3>
 
     <section data-fill-tests class="code-carousel" data-flickity='{ "contain": true, "hash": true }'>
       <figure id="test-a-feature">
         <div class="code-card" data-card-id="0">
           <div class="code-card-header">Test a Feature</div>
           <pre><code class="hljs language-javascript">userRoutine([
-  'fill input.text Well',
+  'fill input.text Hey',
   'fill input.count 3',
   'click button.duplicate',
-  'exists .output Well Well Well',
+  'exists .output Hey Hey Hey',
 ], { message: 'Test Feature' });</code></pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
@@ -67,7 +67,6 @@
           <div class="code-card-header">Await a Process</div>
           <pre><code class="hljs language-javascript">userRoutine([
   'click button Long process',
-  '!await .result processing...',
   'await .result process complete',
 ], { message: 'Await a Process' });</code></pre>
           <div class="buttons">
@@ -94,7 +93,7 @@
       <div class="result"></div>
     </section>
 
-    <br><br>
+    <br><br><br><br><br><br>
   </main>
 </body>
 

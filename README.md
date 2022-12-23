@@ -1,7 +1,7 @@
 
 # User-Routine
 
-Automate user actions & routines on web pages for testing and creating tutorials. Small, portable, and zero setup.
+Automate user actions & routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Small, portable, and zero setup.
 
 Example:
 
@@ -89,7 +89,7 @@ userRoutine([
 ], { message: 'Tutorial', tutorialMode: true });
 ```
 
-Customize options to run a fast regression test:
+Customize options to run quickly and quietly:
 
 ```javascript
 userRoutine([

@@ -38,6 +38,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     continueActions: true,
     documentKeyDownSet: false,
     nextButtonPressed: false,
+    currentStep: 0,
   }
 
   let clickableTextElement: HTMLElement | undefined = undefined;
@@ -74,6 +75,10 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
 
   const actionList = makeActionList(actions);
 
+  const stepInfo = {
+    lastTutorialIndex: findLastTutorialIndex(),
+  }
+
   /* Event Loop */
   for (const action of actionList) {
     if (!state.continueActions) { return finish(); }
@@ -83,6 +88,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     } catch (error) {
       await raiseError('Unexpected error: ' + error.message);
     }
+    state.currentStep++;
   }
   return finish();
 
@@ -453,6 +459,14 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     return regularSplit;
   }
 
+  function findLastTutorialIndex(): number | undefined {
+    for (let i = actionList.length; i >= 0; i--) {
+      if (typeof actionList[i] !== 'string') continue;
+      const actionCode = (actionList[0] as string).substring(0, 3);
+      if (['com', 'log'].includes(actionCode)) return i;
+    }
+  }
+
   function checkIfShouldStart() {
     if (typeof document === 'undefined') {
       let errorMessage = 'FAIL: document is undefined. User-Routine can only be used in the browser. Halting execution.';
@@ -658,17 +672,17 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       }
       body > .user-routine-fade-in {
         visibility: visible;
-        animation: userRoutinefadeIn ${ANIMATION_FADE_TIME}ms; 
+        animation: userRoutineFadeIn ${ANIMATION_FADE_TIME}ms; 
       }
       body > .user-routine-fade-out {
         opacity: 0;
-        animation: userRoutinefadeOut ${ANIMATION_FADE_TIME}ms; 
+        animation: userRoutineFadeOut ${ANIMATION_FADE_TIME}ms; 
       }
-      @keyframes userRoutinefadeIn {
+      @keyframes userRoutineFadeIn {
         0% { opacity: 0; }
         100% { opacity: 1; }
       }
-      @keyframes userRoutinefadeOut {
+      @keyframes userRoutineFadeOut {
         0% { opacity: 1; }
         100% { opacity: 0; }
       }
@@ -788,9 +802,10 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     if (type === 'error') domElements.tooltip.classList.add('user-routine-tooltip-error');
     domElements.tooltip.textContent = actionMessage.replace(/>>/g, ' ');
 
+
     if (config.tutorialMode) {
       domElements.nextButton = document.createElement('button');
-      domElements.nextButton.textContent = "Next";
+      domElements.nextButton.textContent = getNextButtonText();
       domElements.nextButton.classList.add('user-routine-next-button');
       domElements.nextButton.addEventListener('click', async () => {
         await next();
@@ -843,7 +858,10 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     document.body.appendChild(domElements.arrowShadow);
     document.body.appendChild(domElements.tooltipShadow);
 
-    if(config.displayProgress) await scrollIntoViewIfNeeded(domElements.tooltip);
+    if(config.displayProgress) {
+      await scrollIntoViewIfNeeded(domElements.focusBox, pinnedOverride);
+      await scrollIntoViewIfNeeded(domElements.tooltip, pinnedOverride);
+    }
 
     domElements.focusBox.classList.add('user-routine-fade-in');
     domElements.arrowShadow.classList.add('user-routine-fade-in');
@@ -870,17 +888,26 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     domElements.arrowShadow.remove();
   }
 
-  async function scrollIntoViewIfNeeded(element: HTMLElement) {
-    if (!checkVisible(element)) {
+  function getNextButtonText() {
+    if (!stepInfo.lastTutorialIndex) return;
+    if (state.currentStep === stepInfo.lastTutorialIndex) {
+      return "Finish"
+    } else {
+      return "Next";
+    }
+  }
+
+  async function scrollIntoViewIfNeeded(element: HTMLElement, pinnedOverride = false) {
+    if (!checkVisible(element, pinnedOverride)) {
       element.scrollIntoView({ behavior: 'smooth' });
       await advanceDelay(700);
     }
   }
 
-  function checkVisible(element: HTMLElement): boolean {
-    var rect = element.getBoundingClientRect();
-    var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+  function checkVisible(element: HTMLElement, pinnedOverride = false): boolean {
+    const rect = element.getBoundingClientRect();
+    const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+    return rect.bottom < viewHeight && rect.top > 0;
   }
 
   async function validateInputs(actionList: UserRoutineAction[] | string, options?: UserRoutineOptions): Promise<boolean> {
