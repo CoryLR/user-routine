@@ -31,7 +31,7 @@ export async function runRegressionTests(
     'await .result Process complete!',
   ], {
     message: 'Testing Features', globalDelay,
-    displayProgress, logProgress, displaySpeed: 2,
+    displayProgress, logProgress, displaySpeed: 1,
     awaitTimeout: displayProgress ? 9000 : 1500,
   });
 

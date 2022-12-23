@@ -27,7 +27,7 @@ function main() {
    * URL parameters
    */
   const urlParams = new URLSearchParams(window.location.search);
-  console.log(`URL parameter options:
+  console.info(`URL parameter options:
   * action=quick-regression-test
   * action=full-regression-test
   `);
@@ -65,8 +65,21 @@ function main() {
   document.querySelector('button.duplicate').addEventListener('click', duplicateText);
   document.querySelector('button.process').addEventListener('click', startMockLongProcess);
 
+  /* Add initial highlight removal event listener; click helps with mobile */
+  document.querySelector('.code-carousel').addEventListener('mouseover', removeInitialCodeHighlightIfNeeded);
+  document.querySelector('.code-carousel').addEventListener('click', removeInitialCodeHighlightIfNeeded);
+
 }
 
+function removeInitialCodeHighlightIfNeeded(event) {
+  if(event.target.classList.contains('custom-highlight')) {
+    document.querySelectorAll('.initial-highlight').forEach(element => {
+      element.classList.remove('initial-highlight');
+    });
+    document.querySelector('.code-carousel').removeEventListener('mouseover', removeInitialCodeHighlightIfNeeded);
+    document.querySelector('.code-carousel').removeEventListener('click', removeInitialCodeHighlightIfNeeded);
+  }
+}
 
 /* Code Card Functions */
 
@@ -140,35 +153,41 @@ function syntaxHighlightCodeCards() {
     'app', 'awa', '!aw', 'cli', 'com', 'exi', '!ex', 'fil', 'val', 'wri',
   ];
   const actionCodesWithoutSelectors = ['log', 'nav', 'wai'];
+
   document.querySelectorAll('.hljs .hljs-string').forEach((stringElement) => {
     const stringWithQuotes = stringElement.textContent;
     const codeString = stringWithQuotes.substring(1, stringWithQuotes.length - 1);
     const actionParts = codeString.split(' ');
     const actionCode = actionParts[0].substring(0, 3);
-    /* TODO: Figure out why there is a space after button.duplicate */
-    if (isLowerCase(actionCode[0]) && actionCodesWithSelectors.includes(actionCode)) {
-      const newActionParts = ['', '', ''];
-      newActionParts[0] = `<span class="action-keyword" title="Action keyword"
-        data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`
-      newActionParts[1] = `<span class="selector" title="CSS selector"
-        data-selector-id="${state.actionStringIdCounter}">${actionParts[1]}</span>`;
+
+    const isActionStringWithSelector = isLowerCase(actionCode[0]) && actionCodesWithSelectors.includes(actionCode);
+    const isActionStringWithoutSelector = isLowerCase(actionCode[0]) && actionCodesWithoutSelectors.includes(actionCode);
+
+    const initHighlightClass = state.actionStringIdCounter === 0 ? 'custom-highlight initial-highlight' : 'custom-highlight';
+
+    if (isActionStringWithSelector) {
+      const newActionParts = [];
+      newActionParts.push(`<span class="action-keyword ${initHighlightClass}"
+        data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`);
+      newActionParts.push(`<span class="selector ${initHighlightClass}"
+        data-selector-id="${state.actionStringIdCounter}">${actionParts[1]}</span>`);
       if (actionParts[2]) {
         const parts = [...actionParts];
         const argumentString = parts.splice(2).join(' ');
-        newActionParts[2] = `<span class="argument" title="Data used by action"
-          data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`;
+        newActionParts.push(`<span class="argument ${initHighlightClass}"
+          data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`);
       }
       stringElement.innerHTML = `'${newActionParts.join(' ')}'`;
       state.actionStringIdCounter++;
 
-    } else if (isLowerCase(actionCode[0]) && actionCodesWithoutSelectors.includes(actionCode)) {
-      const newActionParts = ['', ''];
+    } else if (isActionStringWithoutSelector) {
+      const newActionParts = [];
       const parts = [...actionParts];
       const argumentString = parts.splice(2).join(' ');
-      newActionParts[0] = `<span class="action-keyword" title="Action keyword"
-        data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`
-      newActionParts[1] = `<span class="argument" title="Data used by action"
-        data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`;
+      newActionParts.push(`<span class="action-keyword" title="Action keyword"
+        data-action-keyword-id="${state.actionStringIdCounter}">${actionParts[0]}</span>`);
+      newActionParts.push(`<span class="argument" title="Data used by action"
+        data-argument-id="${state.actionStringIdCounter}">${argumentString}</span>`);
       stringElement.innerHTML = `'${newActionParts.join(' ')}'`;
       state.actionStringIdCounter++;  
     }
