@@ -7,7 +7,7 @@ import '@fortawesome/fontawesome-free/js/solid.min.js';
 import hljs from 'highlight.js/lib/common';
 
 import './style.css';
-import { userRoutine } from '../../dist/user-routine.min';
+import { userRoutine } from '../dist/user-routine.min';
 import { runRegressionTests } from './regression-tests';
 import { codeCardFunctionArray } from './code-cards.min';
 

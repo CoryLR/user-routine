@@ -1,4 +1,4 @@
-import { userRoutine } from '../../dist/user-routine.min';
+import { userRoutine } from '../dist/user-routine.min';
 
 export async function runRegressionTests(
   globalDelay = 10,

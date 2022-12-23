@@ -2,7 +2,7 @@
 const fs = require('fs')
 const { parse } = require('node-html-parser');
 
-const examplesString = fs.readFileSync('./demo/src/code-cards.src.js', 'utf8');
+const examplesString = fs.readFileSync('./demo/code-cards.src.js', 'utf8');
 
 const examplesData = getExamplesData(examplesString);
 
@@ -14,9 +14,9 @@ for (let i = 0; i < examplesData.length; i++) {
 }
 exampleJsArrayString += ']';
 
-fs.writeFileSync('./demo/src/code-cards.min.js', exampleJsArrayString, { encoding: 'utf8', flag: 'w' });
+fs.writeFileSync('./demo/code-cards.min.js', exampleJsArrayString, { encoding: 'utf8', flag: 'w' });
 
-const htmlDocument = parse(fs.readFileSync('./demo/src/index.html', 'utf8'));
+const htmlDocument = parse(fs.readFileSync('./demo/index.html', 'utf8'));
 htmlDocument.querySelector('[data-fill-tests]').set_content(exampleHtmlString);
 
 /* Update index.html description */
@@ -24,7 +24,7 @@ const packageJson = JSON.parse(fs.readFileSync('package.json'));
 const description = packageJson.description;
 htmlDocument.querySelector('[data-fill-description]').set_content(description);
 
-fs.writeFileSync('./demo/src/index.html', htmlDocument.toString(), { encoding: 'utf8', flag: 'w' });
+fs.writeFileSync('./demo/index.html', htmlDocument.toString(), { encoding: 'utf8', flag: 'w' });
 
 function getJsArrayItemString(codeString) {
   return `async () => { await ${codeString} },`
