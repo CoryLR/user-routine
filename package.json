@@ -1,6 +1,6 @@
 {
   "name": "user-routine",
-  "version": "5.0.10",
+  "version": "5.1.0",
   "description": "User-Routine is a JavaScript library to automate user routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Very easy to use.",
   "main": "./lib/user-routine.min.js",
   "types": "./lib/user-routine.d.ts",
@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/CoryLR/user-routine/issues"
   },
-  "homepage": "https://github.com/CoryLR/user-routine#readme",
+  "homepage": "https://corylr.github.io/user-routine/",
   "keywords": [
     "JavaScript",
     "SPA",
@@ -35,8 +35,10 @@
     "click",
     "e2e",
     "end to end",
-    "user-routine",
-    "test"
+    "spa-check",
+    "test",
+    "tutorial",
+    "user-routine"
   ],
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.2.0",

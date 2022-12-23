@@ -4,6 +4,7 @@ userRoutine([
   'fill input.count 3',
   'click button.duplicate',
   'exists .output Hey Hey Hey',
+  'log Done!',
 ], { message: 'Test Feature' });
 // Display a Tutorial
 userRoutine([

@@ -3,6 +3,8 @@
 
 User-Routine is a JavaScript library to automate user routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Very easy to use.
 
+See the [Live Demo](https://corylr.github.io/user-routine/).
+
 Example:
 
 ```javascript
@@ -24,6 +26,7 @@ userRoutine([
   - [Input Parameter Details](#input-parameter-details)
   - [Output Details](#output-details)
 - [Examples](#examples)
+  - [Live Demo](#live-demo)
   - [Template](#template)
   - [Use-cases](#use-cases)
     - [Fill inputs with `fill` and interact with `click` using Selectors:](#fill-inputs-with-fill-and-interact-with-click-using-selectors)
@@ -193,6 +196,10 @@ function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions
 
 # Examples
 
+## Live Demo
+
+See the [Live Demo](https://corylr.github.io/user-routine/).
+
 ## Template
 
 See the [user-routine.template.js](./dist/user-routine.template.js) for examples of running multiple sequential tests using async/await.
@@ -297,7 +304,8 @@ To publish:
 2. `npm i`
 3. `npm run build`
 4. Test one last time
-5. `npm publish --access public`
+5. Fix any issues then commit changes
+6. `npm publish --access public`
 
 TO DO:
 
