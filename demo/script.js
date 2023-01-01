@@ -152,7 +152,7 @@ function syntaxHighlightCodeCards() {
 
   /* Custom highlight action string */
   const actionCodesWithSelectors = [
-    'app', 'awa', '!aw', 'cli', 'com', 'exi', '!ex', 'fil', 'val', 'wri',
+    'app', 'awa', '!aw', 'cli', 'com', 'exi', '!ex', 'fil', 'val', '!va', 'wri',
   ];
   const actionCodesWithoutSelectors = ['log', 'nav', 'wai'];
 

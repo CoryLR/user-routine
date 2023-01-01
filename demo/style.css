@@ -1,5 +1,15 @@
 @import '~flickity/css/flickity';
 
+/* Variables */
+:root {
+  --color-primary-blue: rgb(0, 91, 152);
+  --color-light-gray-1: rgb(240, 240, 240);
+  --color-light-gray-2: rgb(220, 220, 220);
+  --color-highlight-red: rgb(255, 220, 204);
+  --color-highlight-blue: rgb(205, 224, 255);
+  --color-highlight-green: rgb(221, 255, 226);
+}
+
 /* Full page */
 body {
   margin: 0;
@@ -35,7 +45,7 @@ header > nav > a {
   margin-bottom: 5px;
 }
 nav > a:hover {
-  background-color: rgb(240, 240, 240);
+  background-color: var(--color-light-gray-1);
 }
 
 /* Code Carousel with Flickity */
@@ -44,7 +54,8 @@ nav > a:hover {
   width: 100vw;
 }
 .flickity-button:disabled {
-  opacity: 0;
+  /* Prevents accidental events on clickable elements underneath arrows */
+  pointer-events: initial;
 }
 .flickity-page-dots {
   bottom: -15px;
@@ -71,11 +82,11 @@ nav > a:hover {
   flex-direction: column;
   width: 310px;
   height: 235px;
-  background-color: rgb(240, 240, 240);
+  background-color: var(--color-light-gray-1);
   border-radius: 15px;
 }
 .code-card .code-card-header {
-  background-color: rgb(220, 220, 220);
+  background-color: var(--color-light-gray-2);
   padding: 10px 10px 5px 10px;
   border-radius: 10px 10px 0 0;
   flex: 0 1 auto;
@@ -106,9 +117,20 @@ nav a {
   margin-right: 8px;
   border-radius: 8px;
   padding: 8px;
-  background-color: rgb(220, 220, 220);
+  background-color: var(--color-light-gray-2);
   border-width: 0;
   cursor: pointer;
+}
+/* .code-card .buttons button:hover {
+  background-color: white;
+} */
+.code-card .buttons button.run {
+  font-weight: 900;
+  color: rgb(255, 255, 255);
+  background-color: var(--color-primary-blue);
+}
+.code-card .buttons button:hover {
+  filter: brightness(140%);
 }
 .code-card .buttons button:first-child {
   margin-left: 15px;
@@ -117,13 +139,10 @@ nav a {
 .code-card .buttons button:last-child {
   margin-right: 15px;
 }
-.code-card .buttons button:hover {
-  background-color: white;
-}
 
 /* Highlight.js */
 .hljs-title {
-  color: rgb(0, 91, 152);
+  color: var(--color-primary-blue);
   font-weight: 600;
 }
 .hljs-string {
@@ -134,34 +153,34 @@ nav a {
   color: rgb(90, 90, 90);
 }
 .hljs-string:hover .action-keyword {
-  background-color: rgb(255, 220, 204);
+  background-color: var(--color-highlight-red);
   cursor: pointer;
 }
 .hljs-string:hover .selector {
-  background-color: rgb(205, 224, 255);
+  background-color: var(--color-highlight-blue);
   cursor: pointer;
   font-style: italic;
 }
 .hljs-string:hover .argument {
-  background-color: rgb(221, 255, 226);
+  background-color: var(--color-highlight-green);
   cursor: pointer;
 }
 .hljs-string .action-keyword.initial-highlight {
-  background-color: rgb(255, 220, 204);
+  background-color: var(--color-highlight-red);
   cursor: pointer;
 }
 .hljs-string .selector.initial-highlight {
-  background-color: rgb(205, 224, 255);
+  background-color: var(--color-highlight-blue);
   cursor: pointer;
   font-style: italic;
 }
 .hljs-string .argument.initial-highlight {
-  background-color: rgb(221, 255, 226);
+  background-color: var(--color-highlight-green);
   cursor: pointer;
 }
 
 .hljs-attr {
-  color: rgb(0, 91, 152);
+  color: var(--color-primary-blue);
 }
 
 /* CSS */
@@ -215,12 +234,12 @@ nav a {
   flex: 0 1 250px;
   display: flex;
   flex-direction: column;
-  background-color: rgb(240, 240, 240);
+  background-color: var(--color-light-gray-1);
   border-radius: 15px;
   min-width: 160px;
 }
 .mock-app .code-card-header {
-  background-color: rgb(220, 220, 220);
+  background-color: var(--color-light-gray-2);
   padding: 10px 10px 5px 10px;
   border-radius: 10px 10px 0 0;
   flex: 0 1 auto;

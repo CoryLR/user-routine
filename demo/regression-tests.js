@@ -14,6 +14,7 @@ export async function runRegressionTests(
     'fill input.text Hello, world!',
     'value input.text',
     'value input.text Hello, world!',
+    '!value input.text Goodbye, world!',
     'fill input.count 2',
     'click button.duplicate',
     'exists pre.output Hello, world! Hello, world! ',

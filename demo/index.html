@@ -28,7 +28,7 @@
 
     </header>
 
-    <h3>Demos</h3>
+    <h3 id="demos">Demos</h3>
 
     <section data-fill-tests class="code-carousel" data-flickity='{ "contain": true, "hash": true }'>
       <figure id="test-a-feature">
@@ -40,7 +40,7 @@
   'click button.duplicate',
   'exists .output Hey Hey Hey',
   'log Done!',
-], { message: 'Test Feature' });</code></pre>
+], { message: 'Test a Feature' });</code></pre>
           <div class="buttons">
             <button class="run"><i class="fa-solid fa-play"></i> Run</button>
             <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
@@ -79,12 +79,46 @@
             <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
           </div>
         </div>
+      </figure>
+      <figure id="verify-content">
+        <div class="code-card" data-card-id="3">
+          <div class="code-card-header">Verify Content</div>
+          <pre><code class="hljs language-javascript">userRoutine([
+  'exists nav documentation',
+  '!exist nav Rick Astley',
+  'fill .text Bluebird',
+  'value input.text Bluebird',
+  '!value input.text Crow',
+], { message: 'Verify Content' });</code></pre>
+          <div class="buttons">
+            <button class="run"><i class="fa-solid fa-play"></i> Run</button>
+            <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+            <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
+          </div>
+        </div>
+      </figure>
+      <figure id="navigate-with-hash-links">
+        <div class="code-card" data-card-id="4">
+          <div class="code-card-header">Navigate With Hash-Links</div>
+          <pre><code class="hljs language-javascript">userRoutine([
+  'nav #bottom',
+  'nav #',
+  'nav #demos',
+], {
+  message: 'Navigate With Hash-Links'
+});</code></pre>
+          <div class="buttons">
+            <button class="run"><i class="fa-solid fa-play"></i> Run</button>
+            <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+            <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
+          </div>
+        </div>
       </figure></section>
 
     <br>
     <section class="mock-app">
       <h3>Mock Applications</h3>
-      <p>The above demonstrations may use these mock applications.</p>
+      <p>The above demos may use these mock applications.</p>
 
       <div class="mock-app-columns">
         <div class="code-card">
@@ -113,7 +147,7 @@
       </div>
     </section>
 
-    <br><br><br><br>
+    <br><br><br><br id="bottom">
   </main>
 </body>
 

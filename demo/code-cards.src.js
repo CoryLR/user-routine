@@ -5,7 +5,7 @@ userRoutine([
   'click button.duplicate',
   'exists .output Hey Hey Hey',
   'log Done!',
-], { message: 'Test Feature' });
+], { message: 'Test a Feature' });
 // Display a Tutorial
 userRoutine([
   'log Welcome to the demo',
@@ -20,3 +20,19 @@ userRoutine([
   'click button Long process',
   'await .result process complete',
 ], { message: 'Await a Process' });
+// Verify Content
+userRoutine([
+  'exists nav documentation',
+  '!exist nav Rick Astley',
+  'fill .text Bluebird',
+  'value input.text Bluebird',
+  '!value input.text Crow',
+], { message: 'Verify Content' });
+// Navigate With Hash-Links
+userRoutine([
+  'nav #bottom',
+  'nav #',
+  'nav #demos',
+], {
+  message: 'Navigate With Hash-Links'
+});

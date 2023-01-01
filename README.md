@@ -3,7 +3,7 @@
 
 User-Routine is a JavaScript library to automate user routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Very easy to use.
 
-See the [Live Demo](https://corylr.github.io/user-routine/).
+✨ See the [Live Demo](https://corylr.github.io/user-routine/) ✨
 
 Example:
 
@@ -25,6 +25,7 @@ userRoutine([
   - [Simple Examples](#simple-examples)
   - [Input Parameter Details](#input-parameter-details)
   - [Output Details](#output-details)
+  - [More Resources](#more-resources)
 - [Examples](#examples)
   - [Live Demo](#live-demo)
   - [Template](#template)
@@ -131,13 +132,13 @@ function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions
       * Show a tooltip to point something out
       * `'comment input.name Type your name here'`
     * `exists`
-      * Check to see if something exists
+      * Check to see if something exists in any css selector matches
       * `'exists .class-name'` or `'exists h1 With This Text'`
     * `!exists`
-      * Check to see if something doesn't exist
+      * Check to see if something doesn't exist in any css selector matches
       * `'!exists h1 Incorrect text'`
     * `fill`
-      * Fill the value attribute of an element
+      * Fill the value attribute of a specific element
       * `'fill form>input.name Cory Rahman'`
     * `log`
       * Record a message
@@ -146,7 +147,7 @@ function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions
       * Use hash navigation
       * `'nav #id'` or `'nav #/some/hash/routing/path'`
     * `value`
-      * Check the value attribute of an element
+      * Check the value attribute of a specific element
       * `'value input.required'` or `'value input.name Test User 1'`
     * `wait`
       * Wait for some time
@@ -194,15 +195,21 @@ function userRoutine(actions: *string[] OR string*, options: *UserRoutineOptions
   Result: { success: true, log: Array(4), message: 'Message' }
 ```
 
+## More Resources
+
+* Full documentation: https://github.com/CoryLR/user-routine#readme
+* Live demo: https://corylr.github.io/user-routine/
+
+
 # Examples
 
 ## Live Demo
 
-See the [Live Demo](https://corylr.github.io/user-routine/).
+✨ See the [Live Demo](https://corylr.github.io/user-routine/) ✨
 
 ## Template
 
-See the [user-routine.template.js](./dist/user-routine.template.js) for examples of running multiple sequential tests using async/await.
+See the [user-routine.template.js](./dist/user-routine.template.js) for examples of running multiple sequential tests using async/await. This template also works with zero setup if you copy-paste the contents into a browser console or into client-side JavaScript
 
 ## Use-cases
 
@@ -309,11 +316,10 @@ To publish:
 
 TO DO:
 
-* [ ] Finish the Demo page
-  * Started Code Cards, need to load them into the JS & HTML appropriately
 * [ ] Add a tutorial walk-through to the demo page, using User-Routine to showcase User-Routine
 * [ ] Improve tutorialMode by automating progress via `await` and other actions instead of relying on the Next button
 * [ ] Separate actions into externally-callable functions
+* [ ] Add global case-sensitivity option
 * [ ] (Maybe) Add count action to count instances of a particular CSS selector
 * [ ] (Maybe) Add copy/paste actions
 * [ ] (Maybe) Add ability to keybind User-Routine(s) to keys

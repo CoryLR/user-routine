@@ -57,9 +57,13 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     status: undefined,
   }
 
+  /* Time constants */
   const ANIMATION_FADE_TIME = 150;
   const COMPREHEND_ACTION_RESULT_TIME = 500; // Time given to comprehend a visual change on the page
   const FIND_TOOLTIP_TIME = 500; // Time it takes for eye movement to begin (200ms) plus movement duration (est. 300-500ms)
+  const READ_TIME_PER_LETTER = 40; // Average reading speed is one letter per 30ms in sentences, extra time given for content complexity
+  const MAX_READ_TIME = 3000;
+
   const ANIMATION_TOOLTIP_MAX_WIDTH = 200;
 
   const shouldStart = checkIfShouldStart();
@@ -225,7 +229,10 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
       log(`Filled the value of ${selector} to '${value}'`);
 
     } else if (actionCode === 'val') {
-      const [_, selector, value] = await argSplitComplex(action);
+      const [_, selector, valueFromUser] = await argSplitComplex(action);
+      let notOperator = false;
+      if (action[0] === '!') notOperator = true;
+
       const element = await select(selector);
       if (!element) return;
       if (element.value === undefined || element.value === null) {
@@ -233,7 +240,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
         if (!config.tutorialMode) await animateTooltipClose();
         await raiseError(`Element ${selector} (${element.tagName.toLowerCase()}) did not have a value attribute`)
       };
-      if (value === undefined || value === null) {
+      if (valueFromUser === undefined || valueFromUser === null) {
         if (element.value !== '') {
           if (!config.tutorialMode) await animateTooltipOpen(element, `Confirmed has a value`, 'info');
           if (!config.tutorialMode) await animateTooltipClose();
@@ -244,14 +251,22 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
           await raiseError(`Element '${selector}' did not have a value`);
         }
       } else {
-        if (element.value === value) {
+        if (!notOperator && element.value === valueFromUser) {
           if (!config.tutorialMode) await animateTooltipOpen(element, `Value is correct`, 'info');
           if (!config.tutorialMode) await animateTooltipClose();
           log(`Element '${selector}' has the correct value: '${element.value}'`);
-        } else {
-          if (!config.tutorialMode) await animateTooltipOpen(element, `Expected a value of '${value}'`, 'error');
+        } else if (!notOperator && element.value !== valueFromUser) {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Expected a value of '${valueFromUser}'`, 'error');
           if (!config.tutorialMode) await animateTooltipClose();
-          await raiseError(`Element '${selector}' has an incorrect value, expected '${value}' but saw '${element.value}'`);
+          await raiseError(`Element '${selector}' has an incorrect value, expected '${valueFromUser}' but saw '${element.value}'`);
+        } else if (notOperator && element.value === valueFromUser) {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Expected not a value of '${valueFromUser}'`, 'error');
+          if (!config.tutorialMode) await animateTooltipClose();
+          await raiseError(`Element '${selector}' has an incorrect value, expected '${valueFromUser}' but saw '${element.value}'`);
+        } else if (notOperator && element.value !== valueFromUser) {
+          if (!config.tutorialMode) await animateTooltipOpen(element, `Value is correctly not '${valueFromUser}'`, 'info');
+          if (!config.tutorialMode) await animateTooltipClose();
+          log(`Element '${selector}' correctly does not have the value: '${element.value}'`);
         }
       }
 
@@ -773,7 +788,7 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
   async function stop(source) {
     const stopConfirmation = confirm(`[${config.messageAttribution}]: Are you sure you would like to stop '${config.message}'?`);
     if (stopConfirmation) {
-      domElements.status.textContent = 'Stopping';
+      domElements.status.textContent = 'Stopping...';
       await interruptExecution(`Stopped by user (${source})`)
     };
   }
@@ -868,7 +883,10 @@ export async function userRoutine(actions: UserRoutineAction[] | string, options
     domElements.tooltipShadow.classList.add('user-routine-fade-in');
     domElements.arrow.classList.add('user-routine-fade-in');
     domElements.tooltip.classList.add('user-routine-fade-in');
-    let readTime = actionMessage.length * 30 < 2500 ? actionMessage.length * 30 : 2500; // Reading covers one letter per 30ms in sentences
+    let readTime =
+      actionMessage.length * READ_TIME_PER_LETTER < MAX_READ_TIME
+      ? actionMessage.length * READ_TIME_PER_LETTER
+      : MAX_READ_TIME;
     await advanceDelay((ANIMATION_FADE_TIME + FIND_TOOLTIP_TIME + readTime) / config.displaySpeed);
   }
 
