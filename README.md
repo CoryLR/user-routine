@@ -1,7 +1,7 @@
 
 # User-Routine
 
-User-Routine is a JavaScript library to automate user routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Very easy to use.
+User-Routine is a JavaScript library to automate user routines on web pages. You can easily test features or create tutorials with actions such as click, await, and fill.
 
 ✨ See the [Live Demo](https://corylr.github.io/user-routine/) ✨
 

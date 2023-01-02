@@ -6,7 +6,7 @@
  * into a browser console or into client-side JavaScript
  *
  * Version: 5.1.1
- * Description: User-Routine is a JavaScript library to automate user routines on web pages. Test features or create tutorials with actions such as click, await, and fill. Very easy to use.
+ * Description: User-Routine is a JavaScript library to automate user routines on web pages. You can easily test features or create tutorials with actions such as click, await, and fill.
 */
 
 /**
