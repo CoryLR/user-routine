@@ -1,6 +1,6 @@
 {
   "name": "user-routine",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "User-Routine is a JavaScript library to automate user routines on web pages. You can easily test features or create tutorials with actions such as click, await, and fill.",
   "main": "./lib/user-routine.min.js",
   "types": "./lib/user-routine.d.ts",

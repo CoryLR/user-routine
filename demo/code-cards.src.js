@@ -36,3 +36,12 @@ userRoutine([
 ], {
   message: 'Navigate With Hash-Links'
 });
+// Examples of Failure
+userRoutine([
+  'click .does-not-exist',
+  'value .count fake-number',
+  'exists nav>>button Fake Link',
+], {
+  message: 'Examples of Failure',
+  continueOnFailure: true,
+});

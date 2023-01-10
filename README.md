@@ -30,12 +30,6 @@ userRoutine([
   - [Live Demo](#live-demo)
   - [Template](#template)
   - [Use-cases](#use-cases)
-    - [Fill inputs with `fill` and interact with `click` using Selectors:](#fill-inputs-with-fill-and-interact-with-click-using-selectors)
-    - [Validate the DOM with `exists` and `value`:](#validate-the-dom-with-exists-and-value)
-    - [Deal with timing using `await` and `wait`:](#deal-with-timing-using-await-and-wait)
-    - [Navigate within a single-page application using `nav`:](#navigate-within-a-single-page-application-using-nav)
-    - [Add notes with `append`, `log`, and `write`:](#add-notes-with-append-log-and-write)
-    - [Pass options as a second argument:](#pass-options-as-a-second-argument)
 - [Development](#development)
   - [Maintainers](#maintainers)
     - [Getting Started](#getting-started)
@@ -56,11 +50,11 @@ const { userRoutine } = require('user-routine');
 **2.** Or include the User-Routine script file (`user-routine.blob.js`) in your HTML:
 
 ```html
-<!-- Provides `userRoutine` function from CDN -->
+<!-- Declares function `userRoutine` (CDN) -->
 <script src="https://cdn.jsdelivr.net/gh/CoryLR/user-routine/dist/user-routine.blob.js"></script>
 <!-- OR -->
-<!-- Provides `userRoutine` function from local file -->
-<script src="/user-routine.blob.js"></script>
+<!-- Declares function `userRoutine` (local file) -->
+<script src="./user-routine.blob.js"></script>
 
 ```
 
@@ -213,7 +207,7 @@ See the [user-routine.template.js](./dist/user-routine.template.js) for examples
 
 ## Use-cases
 
-### Fill inputs with `fill` and interact with `click` using Selectors:
+**Fill inputs with `fill` and interact with `click` using Selectors:**
 
 ```javascript
 userRoutine([
@@ -228,7 +222,7 @@ userRoutine([
 
 * Note: To use spaces in CSS selectors, either replace the spaces with `>>` (like `body>>.class` instead of `body .class`) or define a custom separator using the `separator` option (like `separator: '; '`).
 
-### Validate the DOM with `exists` and `value`:
+**Validate the DOM with `exists` and `value`:**
 
 ```javascript
 userRoutine([
@@ -241,21 +235,21 @@ userRoutine([
 ]);
 ```
 
-### Deal with timing using `await` and `wait`:
+**Deal with timing using `await` and `wait`:**
 
 ```javascript
 userRoutine([
   'await div.some-popup', // Awaits the existence of this element
-  'await div.some-popup With certain text', // Also waits for it to include certain text
+  'await div.some-popup With certain text', // Awaits for it to include certain text
   '!await div.some-spinner', // Awaits the non-existence of this element
-  '!await div.some-popup With certain text', // Also waits for it to not include certain text
+  '!await div.some-popup With certain text', // Awaits for it to not include certain text
   'wait 3000', // waits 3 seconds
 ]);
 ```
 
 * Note: The default await timeout is 15000 ms (15 seconds), overwrite using the `awaitTimeout` option.
 
-### Navigate within a single-page application using `nav`:
+**Navigate within a single-page application using `nav`:**
 
 ```javascript
 userRoutine([
@@ -265,7 +259,7 @@ userRoutine([
 ]);
 ```
 
-### Add notes with `append`, `log`, and `write`:
+**Add notes with `append`, `log`, and `write`:**
 
 ```javascript
 userRoutine([
@@ -275,7 +269,7 @@ userRoutine([
 ]);
 ```
 
-### Pass options as a second argument:
+**Pass options as a second argument:**
 
 ```javascript
 userRoutine([

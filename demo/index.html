@@ -113,12 +113,30 @@
             <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
           </div>
         </div>
+      </figure>
+      <figure id="examples-of-failure">
+        <div class="code-card" data-card-id="5">
+          <div class="code-card-header">Examples of Failure</div>
+          <pre><code class="hljs language-javascript">userRoutine([
+  'click .does-not-exist',
+  'value .count fake-number',
+  'exists nav>>button Fake Link',
+], {
+  message: 'Examples of Failure',
+  continueOnFailure: true,
+});</code></pre>
+          <div class="buttons">
+            <button class="run"><i class="fa-solid fa-play"></i> Run</button>
+            <button class="copy-code" title="Copy Code"><i class="fa-regular fa-copy"></i></button>
+            <button class="copy-link" title="Copy Link"><i class="fa-solid fa-link"></i></button>
+          </div>
+        </div>
       </figure></section>
 
     <br>
     <section class="mock-app">
       <h3>Mock Applications</h3>
-      <p>The above demos may use these mock applications.</p>
+      <p>These are functional mini-apps for use by the demos above. You can use them too if you want.</p>
 
       <div class="mock-app-columns">
         <div class="code-card">

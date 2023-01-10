@@ -3,7 +3,6 @@
 
 import fs from 'fs';
 const userRoutineJsBlob = fs.readFileSync('dist/user-routine.blob.js', 'utf8');
-const exampleTests = fs.readFileSync('test/tests.js', 'utf8');
 
 /* Extract usage documentation */
 const readme = fs.readFileSync('README.md', 'utf8');
@@ -12,10 +11,6 @@ const usage = usageRegex.exec(readme);
 const packageJson = JSON.parse(fs.readFileSync('package.json'));
 const version = packageJson.version;
 const description = packageJson.description;
-
-function addIndent(text, prepend = '  ') {
-  return prepend + text.replaceAll(/\n/g, '\n' + prepend);
-}
 
 const template =`
 /* 
@@ -29,17 +24,36 @@ const template =`
 */
 
 /**
- * User-Routine examples, replace with your tests
+ * User-Routine examples, replace with your routines
 */
 async function startUserRoutine() {
-${addIndent(exampleTests)}
+
+  await userRoutine([
+    'fill input.text Hey',
+    'fill input.count 3',
+    'click button.duplicate',
+    'exists .output Hey Hey Hey',
+    'log Done!',
+  ], {
+    message: 'Test a Feature'
+  });
+
+  await userRoutine([
+    'log Welcome to the demo',
+    'comment .code-carousel Examples',
+    'comment nav Links to docs & more',
+  ], {
+    message: 'Display a Tutorial',
+    tutorialMode: true,
+  });
+
 }
 
 /*
 ${usage[1]}
 */
 
-/* Minified User-Routine code, provides function 'userRoutine' */ /* @ts-ignore */
+/* Minified User-Routine code, declares function 'userRoutine' */ /* @ts-ignore */
 ${userRoutineJsBlob}
 
 startUserRoutine();
