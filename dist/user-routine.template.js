@@ -2,18 +2,22 @@
 /* 
  * User-Routine Template
  *
- * Run tests with zero setup by copy-pasting this file's contents
- * into a browser console or into client-side JavaScript
+ * Run tests with zero setup by copy-pasting this file's contents into a 
+ * browser console or into client-side JavaScript.
  *
  * Version: 5.1.2
  * Description: User-Routine is a JavaScript library to automate user routines on web pages. You can easily test features or create tutorials with actions such as click, await, and fill.
 */
 
 /**
- * User-Routine examples, replace with your routines
-*/
+ * This startUserRoutine function is called after the minified User-Routine
+ * code at the bottom of this file. Replace the example with your own routine.
+ * You can also copy-paste just the minified code at the bottom of this file
+ * and call the userRoutine function yourself.
+ */
 async function startUserRoutine() {
 
+  // User-Routine example, replace with your own
   await userRoutine([
     'fill input.text Hey',
     'fill input.count 3',
@@ -22,15 +26,6 @@ async function startUserRoutine() {
     'log Done!',
   ], {
     message: 'Test a Feature'
-  });
-
-  await userRoutine([
-    'log Welcome to the demo',
-    'comment .code-carousel Examples',
-    'comment nav Links to docs & more',
-  ], {
-    message: 'Display a Tutorial',
-    tutorialMode: true,
   });
 
 }
