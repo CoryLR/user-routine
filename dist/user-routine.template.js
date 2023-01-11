@@ -11,7 +11,10 @@
 
 /**
  * This startUserRoutine function is called after the minified User-Routine
- * code at the bottom of this file. Replace the example with your own routine.
+ * code at the bottom of the file. Replace the example with your own routine
+ * and then copy-paste the whole file's contents into a browser console or
+ * into client-side JavaScript.
+ * 
  * You can also copy-paste just the minified code at the bottom of this file
  * and call the userRoutine function yourself.
  */
